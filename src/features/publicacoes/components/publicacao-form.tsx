@@ -85,14 +85,14 @@ export function PublicacaoForm({
     >
       <fieldset disabled={isSubmitting} className="flex flex-col gap-6">
         <Campo
-          id="titulo"
+          id="publicacao-titulo"
           rotulo={textos.campos.titulo}
           erro={errors.titulo?.message}
           limite={LIMITES_PUBLICACAO.titulo}
           valor={titulo}
         >
           <Input
-            id="titulo"
+            id="publicacao-titulo"
             aria-invalid={errors.titulo !== undefined}
             {...registroTitulo}
             onChange={(evento) => {
@@ -106,7 +106,7 @@ export function PublicacaoForm({
         </Campo>
 
         <Campo
-          id="slug"
+          id="publicacao-slug"
           rotulo={textos.campos.slug}
           ajuda={textos.ajuda.slug}
           erro={errors.slug?.message}
@@ -114,7 +114,7 @@ export function PublicacaoForm({
           valor={slug}
         >
           <Input
-            id="slug"
+            id="publicacao-slug"
             aria-invalid={errors.slug !== undefined}
             {...registroSlug}
             onChange={(evento) => {
@@ -125,14 +125,14 @@ export function PublicacaoForm({
         </Campo>
 
         <Campo
-          id="resumo"
+          id="publicacao-resumo"
           rotulo={textos.campos.resumo}
           erro={errors.resumo?.message}
           limite={LIMITES_PUBLICACAO.resumo}
           valor={resumo}
         >
           <Textarea
-            id="resumo"
+            id="publicacao-resumo"
             rows={3}
             aria-invalid={errors.resumo !== undefined}
             {...register("resumo")}
@@ -140,28 +140,30 @@ export function PublicacaoForm({
         </Campo>
 
         <Campo
-          id="corpo"
+          id="publicacao-corpo"
           rotulo={textos.campos.corpo}
           erro={errors.corpo?.message}
           limite={LIMITES_PUBLICACAO.corpo}
           valor={corpo}
         >
           <Textarea
-            id="corpo"
+            id="publicacao-corpo"
             rows={14}
             aria-invalid={errors.corpo !== undefined}
             {...register("corpo")}
           />
         </Campo>
 
+        {/* Sem contador: o teto de 2048 do endereço é técnico, não editorial —
+            contá-lo só encheria a tela de número sem uso. */}
         <Campo
-          id="imagemUrl"
+          id="publicacao-imagemUrl"
           rotulo={textos.campos.imagemUrl}
           ajuda={textos.ajuda.imagemUrl}
           erro={errors.imagemUrl?.message}
         >
           <Input
-            id="imagemUrl"
+            id="publicacao-imagemUrl"
             inputMode="url"
             aria-invalid={errors.imagemUrl !== undefined}
             {...register("imagemUrl")}
@@ -169,14 +171,14 @@ export function PublicacaoForm({
         </Campo>
 
         <Campo
-          id="tag"
+          id="publicacao-tag"
           rotulo={textos.campos.tag}
           erro={errors.tag?.message}
           limite={LIMITES_PUBLICACAO.tag}
           valor={tag}
         >
           <Input
-            id="tag"
+            id="publicacao-tag"
             aria-invalid={errors.tag !== undefined}
             {...register("tag")}
           />

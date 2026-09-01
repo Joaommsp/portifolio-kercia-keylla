@@ -1,11 +1,11 @@
 import { getDocs } from "firebase/firestore";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
+import { listarNoPainel } from "@/features/publicacoes/painel";
 import {
-  listarNoPainel,
+  LIMITE_PUBLICACOES_HOME,
   LIMITE_PUBLICACOES_PAINEL,
-} from "@/features/publicacoes/painel";
-import { LIMITE_PUBLICACOES_HOME } from "@/features/publicacoes/schemas";
+} from "@/features/publicacoes/schemas";
 import { obterDb } from "@/lib/firebase/client";
 import {
   type ConsultaFalsa,

@@ -13,7 +13,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import { SectionMessage } from "@/components/layout/section-message";
 import { painel } from "@/content/site";
@@ -28,6 +28,7 @@ import type {
   Publicacao,
   PublicacaoFormulario,
 } from "@/features/publicacoes/schemas";
+import { useCarga } from "@/hooks/use-carga";
 import type { Resultado } from "@/lib/resultado";
 import { CAMINHO_PAINEL, ID_NOVA_PUBLICACAO } from "@/lib/rotas";
 
@@ -40,32 +41,10 @@ export function PublicacaoEditor({ id }: { id: string }) {
   const router = useRouter();
   const ehNova = id === ID_NOVA_PUBLICACAO;
 
-  const [resultado, setResultado] = useState<Resultado<
-    Publicacao | null
-  > | null>(ehNova ? NOVA : null);
+  const ler = useCallback(() => obterNoPainel(id), [id]);
+  const { resultado: lido } = useCarga(ehNova ? null : ler);
 
-  useEffect(() => {
-    if (ehNova) {
-      return;
-    }
-
-    // A guarda evita gravar estado de uma leitura que voltou depois da tela
-    // sair — o que deixaria o carregamento pendurado no lugar errado.
-    let ativo = true;
-
-    void (async () => {
-      const lido = await obterNoPainel(id);
-
-      if (ativo) {
-        setResultado(lido);
-      }
-    })();
-
-    return () => {
-      ativo = false;
-    };
-  }, [id, ehNova]);
-
+  const resultado = ehNova ? NOVA : lido;
   const publicacao =
     resultado !== null && "dados" in resultado ? resultado.dados : null;
 

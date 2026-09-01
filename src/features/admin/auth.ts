@@ -1,14 +1,15 @@
 "use client";
 
 /**
- * Entrada no painel.
+ * Entrada e saída da sessão da autora.
  *
- * A tradução do erro acontece aqui, e não na tela: a mensagem exibida é sempre
- * a que corresponde ao código do Firebase, e credencial recusada nunca diz se
- * o e-mail existe (ADM-03).
+ * As duas escritas de sessão moram no mesmo lugar, e a tradução do erro
+ * acontece aqui, não na tela: a mensagem exibida é sempre a que corresponde ao
+ * código do Firebase, e credencial recusada nunca diz se o e-mail existe
+ * (ADM-03).
  */
 
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 import { obterAuth } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
@@ -21,6 +22,16 @@ export async function entrar(
 ): Promise<Resultado<null>> {
   try {
     await signInWithEmailAndPassword(obterAuth(), email, senha);
+    return { dados: null };
+  } catch (falha) {
+    return { erro: traduzirErroFirebase(falha) };
+  }
+}
+
+/** Encerra a sessão. Não lança: devolve `{ erro }` com a mensagem traduzida. */
+export async function sair(): Promise<Resultado<null>> {
+  try {
+    await signOut(obterAuth());
     return { dados: null };
   } catch (falha) {
     return { erro: traduzirErroFirebase(falha) };

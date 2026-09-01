@@ -25,6 +25,7 @@ import {
   formacaoSchema,
   LIMITES_FORMACAO,
   ORDEM_MAXIMA_FORMACAO,
+  ORDEM_MINIMA_FORMACAO,
   STATUS_FORMACAO,
   type FormacaoFormulario,
 } from "@/features/formacoes/schemas";
@@ -150,7 +151,7 @@ export function FormacaoForm({
               id="formacao-ordem"
               type="number"
               inputMode="numeric"
-              min={0}
+              min={ORDEM_MINIMA_FORMACAO}
               max={ORDEM_MAXIMA_FORMACAO}
               aria-invalid={errors.ordem !== undefined}
               {...register("ordem", { valueAsNumber: true })}

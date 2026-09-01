@@ -30,18 +30,12 @@ import {
 } from "@/features/publicacoes/converter";
 import {
   COLECAO_PUBLICACOES,
+  LIMITE_PUBLICACOES_PAINEL,
   type Publicacao,
 } from "@/features/publicacoes/schemas";
 import { obterDb } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
 import type { Resultado } from "@/lib/resultado";
-
-/**
- * Teto de documentos que o painel carrega de uma vez. É uma trava de tráfego,
- * não uma paginação: a base é de uma autora só. O limite da home é outro
- * (`LIMITE_PUBLICACOES_HOME`) e não vale aqui — o painel lista tudo.
- */
-export const LIMITE_PUBLICACOES_PAINEL = 200;
 
 /** Todas as publicações, no ar e em rascunho, da mais recente para a mais antiga. */
 export async function listarNoPainel(

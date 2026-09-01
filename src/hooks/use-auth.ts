@@ -12,12 +12,12 @@
  * seção em vez de derrubar a página (AD-011).
  */
 
-import { onAuthStateChanged, signOut, type Auth, type User } from "firebase/auth";
-import { useCallback, useEffect, useState } from "react";
+import { onAuthStateChanged, type Auth, type User } from "firebase/auth";
+import { useEffect, useState } from "react";
 
+import { sair } from "@/features/admin/auth";
 import { obterAuth } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
-import type { Resultado } from "@/lib/resultado";
 
 export type Sessao = {
   /** Usuária autenticada, ou `null` quando não há sessão. */
@@ -27,7 +27,7 @@ export type Sessao = {
   /** Mensagem do Firebase quando nem foi possível consultar a sessão. */
   readonly erro: string | null;
   /** Encerra a sessão. Não lança: devolve `{ erro }` quando falha. */
-  readonly sair: () => Promise<Resultado<null>>;
+  readonly sair: typeof sair;
 };
 
 type Inicio =
@@ -72,14 +72,7 @@ export function useAuth(): Sessao {
     );
   }, [inicio.auth]);
 
-  const sair = useCallback(async (): Promise<Resultado<null>> => {
-    try {
-      await signOut(obterAuth());
-      return { dados: null };
-    } catch (falha) {
-      return { erro: traduzirErroFirebase(falha) };
-    }
-  }, []);
-
+  // `sair` vem de `features/admin/auth`, junto com o `entrar`: escrita de
+  // sessão é serviço, não estado do hook.
   return { usuario, carregando, erro, sair };
 }

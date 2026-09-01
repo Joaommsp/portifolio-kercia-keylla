@@ -16,6 +16,9 @@ export const LIMITES_FORMACAO = {
   descricao: 220,
 } as const;
 
+/** Menor ordem aceita: a primeira posição da lista. */
+export const ORDEM_MINIMA_FORMACAO = 0;
+
 /**
  * Maior ordem aceita. O teto existe para o sentinela de "sem ordem" do
  * converter (`ORDEM_NO_FIM`) ser inválido no formulário: gravá-lo faria a
@@ -64,7 +67,9 @@ export const formacaoSchema = z.object({
   ordem: z
     .number({ message: "Informe a ordem." })
     .int({ message: "A ordem deve ser um número inteiro." })
-    .min(0, { message: "A ordem não pode ser negativa." })
+    .min(ORDEM_MINIMA_FORMACAO, {
+      message: "A ordem não pode ser negativa.",
+    })
     .max(ORDEM_MAXIMA_FORMACAO, {
       message: `A ordem deve ser no máximo ${ORDEM_MAXIMA_FORMACAO}.`,
     }),

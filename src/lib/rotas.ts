@@ -18,17 +18,17 @@ export function caminhoDaPublicacao(slug: string): string {
 export const CAMINHO_PAINEL = "/admin";
 
 /** Tela de entrada do painel. */
-export const CAMINHO_LOGIN = "/admin/login";
+export const CAMINHO_LOGIN = `${CAMINHO_PAINEL}/login`;
 
 /** Tela de manutenção das formações. */
-export const CAMINHO_PAINEL_FORMACOES = "/admin/formacoes";
+export const CAMINHO_PAINEL_FORMACOES = `${CAMINHO_PAINEL}/formacoes`;
 
 /** Id que a rota de edição usa para dizer "publicação nova" (ADM-05). */
 export const ID_NOVA_PUBLICACAO = "nova";
 
 /** Caminho do formulário de uma publicação no painel. */
 export function caminhoDaEdicao(id: string): string {
-  return `/admin/publicacoes/${id}`;
+  return `${CAMINHO_PAINEL}${PREFIXO_PUBLICACOES}/${id}`;
 }
 
 /** Caminho do formulário de uma publicação ainda inexistente. */

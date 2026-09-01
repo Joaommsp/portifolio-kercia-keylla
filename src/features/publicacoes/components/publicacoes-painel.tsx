@@ -9,7 +9,7 @@
  */
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { SectionMessage } from "@/components/layout/section-message";
 import { buttonVariants } from "@/components/ui/button";
@@ -21,40 +21,16 @@ import {
 } from "@/features/publicacoes/mutations";
 import { listarNoPainel } from "@/features/publicacoes/painel";
 import type { Publicacao } from "@/features/publicacoes/schemas";
+import { useCarga } from "@/hooks/use-carga";
 import type { Resultado } from "@/lib/resultado";
 import { CAMINHO_NOVA_PUBLICACAO } from "@/lib/rotas";
 
 const { listaDePublicacoes: textos } = painel;
 
 export function PublicacoesPainel() {
-  const [resultado, setResultado] = useState<Resultado<Publicacao[]> | null>(
-    null,
-  );
+  const { resultado, recarregar } = useCarga(listarNoPainel);
   const [idOcupado, setIdOcupado] = useState<string | null>(null);
   const [erroDaAcao, setErroDaAcao] = useState<string | null>(null);
-
-  /** Relê a lista. Usada depois de cada ação que deu certo. */
-  const carregar = useCallback(async () => {
-    setResultado(await listarNoPainel());
-  }, []);
-
-  useEffect(() => {
-    // A guarda evita gravar estado de uma leitura que voltou depois da tela
-    // sair — o que deixaria o carregamento pendurado no lugar errado.
-    let ativo = true;
-
-    void (async () => {
-      const lido = await listarNoPainel();
-
-      if (ativo) {
-        setResultado(lido);
-      }
-    })();
-
-    return () => {
-      ativo = false;
-    };
-  }, []);
 
   /** Roda a ação da linha e recarrega a lista quando ela dá certo. */
   async function executar(
@@ -69,7 +45,7 @@ export function PublicacoesPainel() {
     if ("erro" in efeito) {
       setErroDaAcao(efeito.erro);
     } else {
-      await carregar();
+      await recarregar();
     }
 
     setIdOcupado(null);

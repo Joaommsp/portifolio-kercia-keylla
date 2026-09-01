@@ -108,6 +108,29 @@ describe("FormacoesPainel", () => {
     await waitFor(() => expect(listar).toHaveBeenCalledTimes(2));
   });
 
+  it("sugere a próxima ordem livre da lista já carregada, e não zero", async () => {
+    listar.mockResolvedValue({
+      dados: [formacao("f1", { ordem: 0 }), formacao("f2", { ordem: 4 })],
+    });
+
+    render(<FormacoesPainel />);
+
+    await waitFor(() =>
+      expect(campo(textos.campos.ordem)).toHaveValue(5),
+    );
+
+    fireEvent.change(campo(textos.campos.titulo), {
+      target: { value: "Pós em Neuropsicologia" },
+    });
+    fireEvent.change(campo(textos.campos.instituicao), {
+      target: { value: "Universidade Exemplo" },
+    });
+    await userEvent.click(botao(textos.acoes.salvar));
+
+    await waitFor(() => expect(criar).toHaveBeenCalledTimes(1));
+    expect(criar.mock.calls[0][0].ordem).toBe(5);
+  });
+
   it("carrega a formação escolhida no formulário e atualiza pelo id dela", async () => {
     render(<FormacoesPainel />);
 

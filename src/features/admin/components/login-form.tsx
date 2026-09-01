@@ -13,10 +13,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { Campo } from "@/components/form/campo";
 import { SectionMessage } from "@/components/layout/section-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { painel } from "@/content/site";
 import { entrar } from "@/features/admin/auth";
 import { CAMINHO_PAINEL } from "@/lib/rotas";
@@ -55,33 +55,33 @@ export function LoginForm() {
   return (
     <form noValidate onSubmit={enviar} className="flex flex-col gap-5">
       <fieldset disabled={isSubmitting} className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">{login.email.rotulo}</Label>
+        <Campo
+          id="login-email"
+          rotulo={login.email.rotulo}
+          erro={errors.email?.message}
+        >
           <Input
-            id="email"
+            id="login-email"
             type="email"
             autoComplete="email"
             aria-invalid={errors.email !== undefined}
             {...register("email", { required: login.email.obrigatorio })}
           />
-          {errors.email === undefined ? null : (
-            <p className="text-sm text-destructive">{errors.email.message}</p>
-          )}
-        </div>
+        </Campo>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="senha">{login.senha.rotulo}</Label>
+        <Campo
+          id="login-senha"
+          rotulo={login.senha.rotulo}
+          erro={errors.senha?.message}
+        >
           <Input
-            id="senha"
+            id="login-senha"
             type="password"
             autoComplete="current-password"
             aria-invalid={errors.senha !== undefined}
             {...register("senha", { required: login.senha.obrigatorio })}
           />
-          {errors.senha === undefined ? null : (
-            <p className="text-sm text-destructive">{errors.senha.message}</p>
-          )}
-        </div>
+        </Campo>
 
         <Button type="submit" size="lg">
           {isSubmitting ? login.acao.emAndamento : login.acao.rotulo}

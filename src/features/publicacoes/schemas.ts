@@ -16,6 +16,13 @@ export const COLECAO_PUBLICACOES = "publicacoes";
 /** Quantas publicações a home exibe (PUB-01). */
 export const LIMITE_PUBLICACOES_HOME = 6;
 
+/**
+ * Teto de documentos que o painel carrega de uma vez. É uma trava de tráfego,
+ * não uma paginação: a base é de uma autora só. Fica ao lado do limite da home
+ * para a diferença entre os dois ser visível de uma vez (AD-015).
+ */
+export const LIMITE_PUBLICACOES_PAINEL = 200;
+
 /** Limites de tamanho de cada campo de texto, em caracteres. */
 export const LIMITES_PUBLICACAO = {
   titulo: 120,
