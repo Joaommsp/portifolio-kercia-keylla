@@ -60,7 +60,9 @@ let ambiente: RulesTestEnvironment;
 
 beforeAll(async () => {
   ambiente = await initializeTestEnvironment({
-    projectId: "demo-portfolio-keylla",
+    // O `emulators:exec` exporta o `--project` do script; o literal é só a
+    // saída para quem rodar a suíte com o emulador já de pé.
+    projectId: process.env.GCLOUD_PROJECT ?? "demo-portfolio-keylla",
     firestore: { rules: REGRAS },
   });
 });

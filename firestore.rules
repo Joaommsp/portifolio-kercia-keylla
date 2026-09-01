@@ -23,6 +23,9 @@ service cloud.firestore {
     // A allowlist mora NAS REGRAS, nunca em campo de documento: a autora tem
     // escrita na coleção e poderia promover a si mesma se o papel morasse no
     // banco. Para adicionar alguém, basta mais um uid nesta lista.
+    //
+    // `tests/rules/firestore.rules.test.ts` lê os uids DESTA lista por texto,
+    // esperando aspas simples — mantenha o formato ao editar.
     function autoras() {
       return [
         'COLE_AQUI_O_UID_DA_AUTORA'
