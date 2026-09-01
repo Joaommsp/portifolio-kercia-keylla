@@ -553,7 +553,7 @@ T38 → T39
 
 ---
 
-### T25: Seção de formação
+### T25: Seção de formação ✅
 
 **What**: Seção de formação com rótulo de status e ocultação total quando não há registros.
 **Where**: `src/features/formacoes/components/formacoes-section.tsx`
@@ -563,9 +563,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Lista vazia não renderiza nem o título da seção
-- [ ] "Em andamento" e "Concluído" visualmente distintos
-- [ ] Erro exibe a mensagem do Firebase
+- [x] Lista vazia não renderiza nem o título da seção
+- [x] "Em andamento" e "Concluído" visualmente distintos
+- [x] Erro exibe a mensagem do Firebase
 
 **Tests**: unit
 **Gate**: quick

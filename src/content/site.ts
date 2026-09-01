@@ -134,6 +134,10 @@ export const secaoSobre = {
 export const secaoFormacao = {
   eyebrow: "Trajetória",
   titulo: "Formação e certificações",
+  /** Une instituição e descrição na mesma linha da formação. */
+  separador: " · ",
+  /** Acompanha o ano de uma formação ainda em curso: "2026 —". */
+  sufixoEmAndamento: " —",
   rotulos: {
     concluido: "Concluído",
     em_andamento: "Em andamento",
