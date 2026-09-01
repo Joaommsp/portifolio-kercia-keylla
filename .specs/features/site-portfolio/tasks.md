@@ -315,7 +315,7 @@ T38 → T39
 
 ---
 
-### T12: Seção Sobre
+### T12: Seção Sobre ✅
 
 **What**: Bloco sobre a profissional, com assinatura e espaço de foto em contexto.
 **Where**: `src/features/site/sections/sobre.tsx`
