@@ -61,10 +61,10 @@ describe("home", () => {
 
 describe("seções da home (SIT-01, SIT-03)", () => {
   it("apresenta as seções na ordem da spec", async () => {
-    // A seção de formação some quando não há nada cadastrado (FOR-04), então a
-    // ordem só se observa com as duas leituras respondendo com conteúdo.
+    // A seção de formação some quando não há nada cadastrado (FOR-04); a de
+    // publicações fica de pé nos três estados (AD-018). Então basta uma
+    // formação para a home mostrar as seis seções.
     listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
-    listarPublicadasFalso.mockResolvedValue({ dados: [] });
 
     const { container } = await renderizarHome();
 
