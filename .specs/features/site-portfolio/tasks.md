@@ -406,7 +406,7 @@ T38 → T39
 
 ---
 
-### T17: Schema de publicação
+### T17: Schema de publicação ✅
 
 **What**: Schema Zod com os limites da spec e mensagens em pt-BR, mais o tipo derivado.
 **Where**: `src/features/publicacoes/schemas.ts`
@@ -416,9 +416,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Título ≤120 inclusivo, resumo ≤220, corpo ≤20000
-- [ ] `imagemUrl` aceita vazio ou URL https de host permitido
-- [ ] Slug validado por `[a-z0-9-]`
+- [x] Título ≤120 inclusivo, resumo ≤220, corpo ≤20000
+- [x] `imagemUrl` aceita vazio ou URL https de host permitido
+- [x] Slug validado por `[a-z0-9-]`
 
 **Tests**: unit
 **Gate**: quick
