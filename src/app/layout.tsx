@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Karla, Parisienne } from "next/font/google";
+
+import { siteUrl } from "@/content/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -22,6 +24,9 @@ const parisienne = Parisienne({
 });
 
 export const metadata: Metadata = {
+  // Resolve todo caminho relativo de metadata (canonical, Open Graph, sitemap)
+  // contra a origem real do site — sem isto o Next cairia em localhost.
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Keylla Melo · Assistente Terapêutica",
     template: "%s · Keylla Melo",

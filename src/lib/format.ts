@@ -17,6 +17,27 @@ export function formatDateBR(data: Date): string {
   return formatadorDataLonga.format(data);
 }
 
+/** Pontuação que une dois dados na mesma linha ("Instituição · 180 horas"). */
+export const SEPARADOR_DE_META = " · ";
+
+/**
+ * Junta as partes não vazias de uma linha de metadados. Parte ausente some sem
+ * deixar separador solto — a regra do vazio é decidida aqui, e não em cada
+ * componente que monta uma linha dessas.
+ */
+export function juntarMeta(
+  ...partes: ReadonlyArray<string | null | undefined>
+): string {
+  return partes
+    .filter((parte): parte is string => typeof parte === "string" && parte !== "")
+    .join(SEPARADOR_DE_META);
+}
+
+/** `formatDateBR` tolerante a ausência de data: sem data, nada a exibir. */
+export function formatDateBROuNulo(data: Date | null): string | null {
+  return data === null ? null : formatDateBR(data);
+}
+
 /**
  * Converte um texto livre em slug de URL: minúsculo, sem acento e restrito a
  * `[a-z0-9-]`, com hífens colapsados e sem hífen nas pontas.

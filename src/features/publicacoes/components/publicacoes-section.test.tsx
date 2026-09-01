@@ -57,9 +57,6 @@ describe("PublicacoesSection", () => {
   it("mostra o aviso de vazio, e não a lista, quando não há publicação", () => {
     render(<PublicacoesSection resultado={{ dados: [] }} />);
 
-    expect(
-      screen.getByText("Nenhuma publicação por aqui ainda."),
-    ).toBeInTheDocument();
     expect(screen.getByText(secaoPublicacoes.vazio)).toBeInTheDocument();
     expect(screen.queryByRole("article")).not.toBeInTheDocument();
   });

@@ -6,7 +6,7 @@
  * (telefone, e-mail, cidade e o texto do "Sobre" escrito por ela).
  */
 
-import { formatarTelefoneBR } from "@/lib/format";
+import { formatarTelefoneBR, juntarMeta } from "@/lib/format";
 
 export const PENDENTE = "PENDENTE" as const;
 
@@ -131,9 +131,6 @@ export const secaoSobre = {
   legendaFoto: "Foto em contexto",
 } as const;
 
-/** Pontuação que une dois dados na mesma linha ("Instituição · 180 horas"). */
-export const separadorDeMeta = " · ";
-
 export const secaoFormacao = {
   eyebrow: "Trajetória",
   titulo: "Formação e certificações",
@@ -216,16 +213,10 @@ export const canaisContato = [
 ] satisfies readonly CanalContato[];
 
 export const rodape = {
-  copyright: (ano: number) => `© ${ano} ${perfil.nome} · ${perfil.papel}`,
+  copyright: (ano: number) =>
+    juntarMeta(`© ${ano} ${perfil.nome}`, perfil.papel),
   assinatura: "Feito com carinho pelo filho",
 } as const;
-
-/**
- * Hosts permitidos para a imagem externa das publicações. A lista mora em
- * `@/content/imagens` porque o `next.config.ts` também precisa dela e não
- * resolve o alias `@/` — aqui ela é só reexportada.
- */
-export { hostsDeImagemPermitidos } from "./imagens";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://keyllamelo.com.br";

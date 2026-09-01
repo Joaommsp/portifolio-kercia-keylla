@@ -9,15 +9,20 @@
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { propsLinkExterno } from "@/lib/link";
+import { imagemExibivel } from "@/features/publicacoes/schemas";
+import { ehDestinoExterno, propsLinkExterno } from "@/lib/link";
+
+/**
+ * O título da página já é o `h1`, então o `#` do markdown desce um nível e
+ * divide a aparência com o `##`.
+ */
+function Titulo2({ children }: { children?: React.ReactNode }) {
+  return <h2 className="mt-10 font-display text-2xl text-olive">{children}</h2>;
+}
 
 const COMPONENTES: Components = {
-  h1: ({ children }) => (
-    <h2 className="mt-10 font-display text-2xl text-olive">{children}</h2>
-  ),
-  h2: ({ children }) => (
-    <h2 className="mt-10 font-display text-2xl text-olive">{children}</h2>
-  ),
+  h1: Titulo2,
+  h2: Titulo2,
   h3: ({ children }) => (
     <h3 className="mt-8 font-display text-xl text-ink">{children}</h3>
   ),
@@ -26,11 +31,33 @@ const COMPONENTES: Components = {
     <a
       href={href}
       className="text-olive underline underline-offset-4 hover:text-brass"
-      {...propsLinkExterno(true)}
+      {...propsLinkExterno(ehDestinoExterno(href))}
     >
       {children}
     </a>
   ),
+  // A imagem do markdown passa pela mesma allowlist do card e do topo do
+  // detalhe: fora dela, some, em vez de virar um destino de terceiro no meio
+  // do texto.
+  img: ({ src, alt }) => {
+    const permitida = imagemExibivel(typeof src === "string" ? src : null);
+
+    if (permitida === null) {
+      return null;
+    }
+
+    // O markdown não traz as dimensões que o `next/image` exige, então aqui a
+    // imagem é uma tag comum.
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={permitida}
+        alt={alt ?? ""}
+        loading="lazy"
+        className="mt-6 w-full rounded-xs border border-line"
+      />
+    );
+  },
   ul: ({ children }) => (
     <ul className="mt-4 list-disc space-y-2 pl-5 text-ink-soft">{children}</ul>
   ),
@@ -44,11 +71,16 @@ const COMPONENTES: Components = {
       {children}
     </blockquote>
   ),
-  code: ({ children }) => (
-    <code className="rounded-xs bg-surface-2 px-1.5 py-0.5 text-sm">
-      {children}
-    </code>
-  ),
+  // O mesmo `code` chega solto no meio da frase e dentro do `pre`. Só o solto
+  // vira chip; dentro do bloco a moldura já é do `pre`.
+  code: ({ className, children }) =>
+    className === undefined ? (
+      <code className="rounded-xs bg-surface-2 px-1.5 py-0.5 text-sm">
+        {children}
+      </code>
+    ) : (
+      <code className={className}>{children}</code>
+    ),
   pre: ({ children }) => (
     <pre className="mt-4 overflow-x-auto rounded-xs border border-line bg-surface-2 p-4 text-sm">
       {children}

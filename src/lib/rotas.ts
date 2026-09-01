@@ -3,6 +3,9 @@
  * o card, o detalhe e o sitemap não escreverem o mesmo prefixo três vezes.
  */
 
+/** Página inicial do site. */
+export const CAMINHO_HOME = "/";
+
 /** Prefixo das rotas de publicação. */
 export const PREFIXO_PUBLICACOES = "/publicacoes";
 

@@ -7,7 +7,7 @@
 
 import { z } from "zod/v4";
 
-import { hostsDeImagemPermitidos } from "@/content/site";
+import { hostsDeImagemPermitidos } from "@/content/imagens";
 import { textoObrigatorio, textoOpcional } from "@/lib/validacao";
 
 /** Nome da coleção no Firestore. */

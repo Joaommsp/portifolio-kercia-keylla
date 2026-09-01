@@ -38,7 +38,6 @@ describe("PublicacaoCard", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("A recusa raramente é birra.")).toBeInTheDocument();
     expect(screen.getByText("Rotina")).toBeInTheDocument();
-    expect(screen.getByText("22 de agosto de 2026")).toBeInTheDocument();
     expect(screen.getByText(formatDateBR(PUBLICADO_EM))).toBeInTheDocument();
     expect(screen.getByRole("link")).toHaveAttribute(
       "href",

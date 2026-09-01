@@ -41,4 +41,37 @@ describe("CorpoMarkdown", () => {
     expect(screen.getByText("Antes")).toBeInTheDocument();
     expect(screen.getByText("Depois")).toBeInTheDocument();
   });
+
+  it("abre em aba nova só o link que sai do site", () => {
+    render(
+      <CorpoMarkdown
+        corpo={"[fora](https://exemplo.com) e [dentro](/publicacoes/outro)"}
+      />,
+    );
+
+    expect(screen.getByRole("link", { name: "fora" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(screen.getByRole("link", { name: "fora" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(
+      screen.getByRole("link", { name: "dentro" }),
+    ).not.toHaveAttribute("target");
+  });
+
+  it("só exibe imagem do markdown que esteja na allowlist de hosts", () => {
+    render(
+      <CorpoMarkdown
+        corpo={
+          "![permitida](https://images.unsplash.com/a.jpg)\n\n![barrada](https://cdn.exemplo-qualquer.com/b.jpg)"
+        }
+      />,
+    );
+
+    expect(screen.getAllByRole("img")).toHaveLength(1);
+    expect(screen.getByRole("img", { name: "permitida" })).toBeInTheDocument();
+  });
 });

@@ -10,19 +10,24 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { imagemExibivel } from "@/features/publicacoes/schemas";
-import type { Publicacao } from "@/features/publicacoes/schemas";
-import { formatDateBR } from "@/lib/format";
+import {
+  imagemExibivel,
+  type Publicacao,
+} from "@/features/publicacoes/schemas";
+import { formatDateBROuNulo } from "@/lib/format";
 import { caminhoDaPublicacao } from "@/lib/rotas";
 
-/** Larguras que a miniatura ocupa em cada faixa da grade de publicações. */
-const TAMANHOS_DA_MINIATURA = "(max-width: 880px) 100vw, 33vw";
+/**
+ * Larguras que a miniatura ocupa. O ponto de quebra espelha
+ * `--breakpoint-grade` (53.75rem), onde a grade vira três colunas; `sizes` não
+ * aceita `var()`, então o valor do token vem escrito.
+ */
+const TAMANHOS_DA_MINIATURA = "(max-width: 53.75rem) 100vw, 33vw";
 
 export function PublicacaoCard({ publicacao }: { publicacao: Publicacao }) {
   const imagem = imagemExibivel(publicacao.imagemUrl);
 
-  const data =
-    publicacao.publicadoEm === null ? null : formatDateBR(publicacao.publicadoEm);
+  const data = formatDateBROuNulo(publicacao.publicadoEm);
 
   return (
     <article className="flex overflow-hidden rounded-xs border border-line bg-surface shadow-cartao transition-transform hover:-translate-y-0.5">
