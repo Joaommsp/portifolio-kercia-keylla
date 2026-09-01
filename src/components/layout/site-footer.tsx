@@ -8,9 +8,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-line py-6 text-xs text-ink-soft">
       <Container className="flex flex-wrap items-center justify-between gap-4">
-        <span>
-          © {ano} {rodape.descricao}
-        </span>
+        <span>{rodape.copyright(ano)}</span>
         <span>{rodape.assinatura}</span>
       </Container>
     </footer>

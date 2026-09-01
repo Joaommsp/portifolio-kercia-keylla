@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatDateBR, slugify } from "@/lib/format";
+import { formatarTelefoneBR, formatDateBR, slugify } from "@/lib/format";
 
 describe("formatDateBR", () => {
   it("exibe a data por extenso em pt-BR", () => {
@@ -56,5 +56,23 @@ describe("slugify", () => {
 
   it("devolve string vazia quando o texto não tem caractere aproveitável", () => {
     expect(slugify("—  ·  !")).toBe("");
+  });
+});
+
+describe("formatarTelefoneBR", () => {
+  it("formata um celular E.164 com o codigo do pais", () => {
+    expect(formatarTelefoneBR("5511987654321")).toBe("(11) 98765-4321");
+  });
+
+  it("formata um telefone fixo de oito digitos", () => {
+    expect(formatarTelefoneBR("551133334444")).toBe("(11) 3333-4444");
+  });
+
+  it("aceita numero ja pontuado, ignorando a pontuacao", () => {
+    expect(formatarTelefoneBR("+55 (11) 98765-4321")).toBe("(11) 98765-4321");
+  });
+
+  it("devolve o valor original quando o numero nao bate com o padrao", () => {
+    expect(formatarTelefoneBR("123")).toBe("123");
   });
 });

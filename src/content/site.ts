@@ -6,6 +6,8 @@
  * (telefone, e-mail, cidade e o texto do "Sobre" escrito por ela).
  */
 
+import { formatarTelefoneBR } from "@/lib/format";
+
 export const PENDENTE = "PENDENTE" as const;
 
 export const perfil = {
@@ -138,7 +140,6 @@ export const contato = {
     numero: "5500000000000",
     mensagem: "Olá, Keylla! Vim pelo seu site e gostaria de conversar.",
   },
-  telefoneExibicao: "(00) 00000-0000",
   email: "contato@exemplo.com.br",
   instagram: "keylla_melo",
   regiao: "Cidade / atendimento a domicílio e em escolas",
@@ -170,7 +171,7 @@ export const canaisContato = [
   },
   {
     icone: "telefone",
-    rotulo: contato.telefoneExibicao,
+    rotulo: formatarTelefoneBR(contato.whatsapp.numero),
     href: linksContato.whatsapp,
     externo: true,
   },
@@ -189,7 +190,7 @@ export const canaisContato = [
 ] satisfies readonly CanalContato[];
 
 export const rodape = {
-  descricao: `${perfil.nome} · ${perfil.papel}`,
+  copyright: (ano: number) => `© ${ano} ${perfil.nome} · ${perfil.papel}`,
   assinatura: "Feito com carinho pelo filho",
 } as const;
 

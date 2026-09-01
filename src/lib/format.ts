@@ -30,3 +30,21 @@ export function slugify(texto: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+/**
+ * Formata um número no padrão E.164 brasileiro como telefone legível —
+ * `5511987654321` vira `(11) 98765-4321`. Números fora do padrão voltam
+ * como vieram, para nunca exibir um telefone truncado.
+ */
+export function formatarTelefoneBR(numero: string): string {
+  const digitos = numero.replace(/\D/g, "");
+  const nacional = digitos.startsWith("55") ? digitos.slice(2) : digitos;
+  const correspondencia = /^(\d{2})(\d{4,5})(\d{4})$/.exec(nacional);
+
+  if (!correspondencia) {
+    return numero;
+  }
+
+  const [, ddd, prefixo, sufixo] = correspondencia;
+  return `(${ddd}) ${prefixo}-${sufixo}`;
+}
