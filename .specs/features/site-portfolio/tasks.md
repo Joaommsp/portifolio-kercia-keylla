@@ -1026,7 +1026,7 @@ T4 → T51
 
 > Quatro tasks abertas pela re-verificação independente (iteração 2, `validation.md` de 2026-09-01): as sete correções da Fase 7 fecharam, mas quatro mutantes novos sobreviveram — todos de teste que não discrimina o valor que a spec fixa. Numeração continua de T47.
 
-### T48: Contagem dos seis pilares sob teste
+### T48: Contagem dos seis pilares sob teste ✅
 
 **What**: Teste da seção "O que faz uma AT" asserindo os 6 pilares que a spec fixa — a contagem como literal da spec, não como `pilares.length` — e que cada título na tela vem do conteúdo.
 **Where**: `src/features/site/sections/o-que-faz-uma-at.test.tsx`
@@ -1036,10 +1036,10 @@ T4 → T51
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `secaoAt.pilares` tem exatamente 6 itens, comparados com o literal 6 da spec
-- [ ] A seção renderiza 6 cards, comparados com o mesmo literal
-- [ ] Os títulos renderizados são exatamente os títulos do conteúdo, na ordem
-- [ ] Remover um pilar do conteúdo (M52) e `pilares.slice(0, 3)` no componente (M53) reprovam
+- [x] `secaoAt.pilares` tem exatamente 6 itens, comparados com o literal 6 da spec
+- [x] A seção renderiza 6 cards, comparados com o mesmo literal
+- [x] Os títulos renderizados são exatamente os títulos do conteúdo, na ordem
+- [x] Remover um pilar do conteúdo (M52) e `pilares.slice(0, 3)` no componente (M53) reprovam
 
 **Tests**: unit
 **Gate**: quick
