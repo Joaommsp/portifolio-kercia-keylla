@@ -243,7 +243,7 @@ T38 → T39
 
 ---
 
-### T8: Cabeçalho do site
+### T8: Cabeçalho do site ✅
 
 **What**: Header fixo com marca, menu âncora das seções e botão de contato.
 **Where**: `src/components/layout/site-header.tsx`

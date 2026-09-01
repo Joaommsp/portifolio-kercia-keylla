@@ -62,6 +62,20 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Tokens autorais do layout aprovado: espacamento entre letras dos rotulos em
+   caixa alta e os pontos de quebra das grades de duas e tres colunas. */
+@theme {
+  --tracking-titulo: -0.02em;
+  --tracking-marca: 0.02em;
+  --tracking-rotulo: 0.14em;
+  --tracking-sobretitulo: 0.22em;
+  --tracking-papel: 0.34em;
+
+  --breakpoint-cartao: 35rem;
+  --breakpoint-duo: 51.25rem;
+  --breakpoint-grade: 53.75rem;
+}
+
 :root {
   --ground: oklch(0.9555 0.0208 124.66); /* #EDF3E4 */
   --surface: oklch(0.9823 0.0138 124.55); /* #F7FBF1 */
@@ -118,6 +132,11 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
+  :focus-visible {
+    @apply rounded-xs outline-2 outline-offset-3 outline-brass;
   }
 }
 @layer base {

@@ -26,6 +26,11 @@ export const navegacao = [
   { rotulo: "Contato", href: "#contato" },
 ] as const;
 
+export const cabecalho = {
+  rotuloNavegacao: "Seções do site",
+  acao: { rotulo: "Fale comigo", href: "#contato" },
+} as const;
+
 export const acoesHero = {
   primaria: { rotulo: "Conversar comigo", href: "#contato" },
   secundaria: { rotulo: "Entenda o trabalho de uma AT", href: "#at" },

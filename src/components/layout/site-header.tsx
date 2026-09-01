@@ -1,0 +1,39 @@
+import { ActionLink } from "@/components/layout/action-link";
+import { Container } from "@/components/layout/container";
+import { cabecalho, navegacao, perfil } from "@/content/site";
+
+/** Cabeçalho fixo: marca, menu âncora das seções e chamada para o contato. */
+export function SiteHeader() {
+  return (
+    <header className="sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur-md">
+      <Container className="flex h-17 items-center justify-between gap-6">
+        <a
+          href="#topo"
+          aria-label={perfil.nome}
+          className="font-display text-2xl tracking-marca text-olive"
+        >
+          {perfil.nome.charAt(0)}
+        </a>
+
+        <nav aria-label={cabecalho.rotuloNavegacao}>
+          <ul className="hidden items-center gap-7 duo:flex">
+            {navegacao.map((item) => (
+              <li key={item.href}>
+                <a
+                  href={item.href}
+                  className="block py-1.5 text-xs uppercase tracking-rotulo text-ink-soft transition-colors hover:text-olive"
+                >
+                  {item.rotulo}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <ActionLink href={cabecalho.acao.href} variant="ghost">
+          {cabecalho.acao.rotulo}
+        </ActionLink>
+      </Container>
+    </header>
+  );
+}
