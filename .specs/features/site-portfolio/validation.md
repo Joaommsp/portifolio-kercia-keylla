@@ -299,8 +299,18 @@ vira revisão manual assumida; e desambiguar SIT-06 na spec.
 | 8 | SIT-01..SIT-06 sem evidência (Minor) | fora de task | `src/app/(site)/page.test.tsx:71` — ordem dos ids das seções `toEqual([topo, at, sobre, formacao, publicacoes, contato])`; `:98` — cada âncora do menu encontra a seção na home | ⚠️ SIT-01 e SIT-03 cobertos; SIT-02 e SIT-05 seguem por inspeção; **SIT-04 e SIT-06 são UAT** (abaixo) |
 | 9 | SIT-06 com três sentidos (Minor) | fora de task | `spec.md` (AC 6 da P1 e a varredura de dimensões implícitas), `src/lib/firebase/config.ts:6` | ✅ SIT-06 é só reduced-motion; falha externa e variável ausente viraram edge cases sem ID |
 
-**Suítes**: 292 testes em 37 arquivos (`npm test -- --run`) + 10 testes de regra
+**Suítes**: 294 testes em 36 arquivos (`npm test -- --run`) + 10 testes de regra
 (`npm run test:rules`). Antes da Fase 7: 272 em 33 arquivos.
+
+**Revisores da Fase 7** (`revisor-reuso-padroes` + `revisor-arquitetura`, em paralelo sobre
+`e83d4ef..HEAD`): 0 bloqueantes, 2 importantes apontados pelos dois e corrigidos —
+(a) o `<title>` e a `description` do layout raiz eram literais enquanto o Open Graph novo
+derivava de `perfil`, duas fontes para o mesmo texto: viraram `metadadosDoSite` em
+`content/site.ts`, lido pelos dois lados; (b) a home montava metadados na feature e a rota do
+texto montava os dela dentro de `app/`, contra o AD-002: `metadadosDaPublicacao` saiu para
+`features/publicacoes/seo.ts`. Menores fechados junto: `<` escapado no JSON-LD, cartão do
+Twitter sem imagem vira `summary`, id do projeto do emulador lido de `GCLOUD_PROJECT`,
+`@firebase/rules-unit-testing` e `firebase-tools` pinados exatos.
 
 ## Verificação manual (UAT) — não coberto por teste
 

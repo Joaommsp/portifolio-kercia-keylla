@@ -184,7 +184,8 @@ Aguardam os dados reais da Keylla e estão marcados com `PENDENTE` em
 
 - telefone/WhatsApp (hoje `5500000000000`)
 - e-mail (hoje `contato@exemplo.com.br`)
-- perfil do Instagram e cidade de atendimento
+- perfil do Instagram e cidade de atendimento — os dois entram também nos dados
+  estruturados da home (`sameAs` e `areaServed`), então valem para o buscador
 - texto do "Sobre", escrito por ela
 - fotos do hero e da seção "Sobre" — hoje são molduras vazias
 
