@@ -2,9 +2,14 @@ import { AtSign, type LucideIcon, Mail, MapPin, Phone } from "lucide-react";
 
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
-import { propsLinkExterno } from "@/lib/link";
 import { SectionHeading } from "@/components/layout/section-heading";
-import { canaisContato, secaoContato, type IconeContato } from "@/content/site";
+import {
+  ancoras,
+  canaisContato,
+  secaoContato,
+  type IconeContato,
+} from "@/content/site";
+import { propsLinkExterno } from "@/lib/link";
 
 const ICONES: Record<IconeContato, LucideIcon> = {
   email: Mail,
@@ -17,7 +22,7 @@ const ICONES: Record<IconeContato, LucideIcon> = {
 export function Contato() {
   return (
     <section
-      id="contato"
+      id={ancoras.contato}
       className="scroll-mt-cabecalho bg-olive py-12 text-on-olive duo:py-20"
     >
       <Container className="grid items-center gap-8 duo:grid-cols-2 duo:gap-16">

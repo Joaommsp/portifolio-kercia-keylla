@@ -1,6 +1,6 @@
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
-import { cabecalho, idTopo, navegacao, perfil } from "@/content/site";
+import { ancoras, cabecalho, navegacao, perfil } from "@/content/site";
 
 /** Cabeçalho fixo: marca, menu âncora das seções e chamada para o contato. */
 export function SiteHeader() {
@@ -8,7 +8,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur-md">
       <Container className="flex h-cabecalho items-center justify-between gap-6">
         <a
-          href={`#${idTopo}`}
+          href={`#${ancoras.topo}`}
           aria-label={perfil.nome}
           className="font-display text-2xl tracking-marca text-olive"
         >

@@ -10,8 +10,20 @@ import { formatarTelefoneBR } from "@/lib/format";
 
 export const PENDENTE = "PENDENTE" as const;
 
-/** Id da âncora de topo, alvo da marca no cabeçalho. */
-export const idTopo = "topo";
+/**
+ * Ids das âncoras da página única. O `id` da seção e o `href` que aponta para
+ * ela saem daqui, para renomear uma seção não exigir acertar os dois lados.
+ */
+export const ancoras = {
+  topo: "topo",
+  at: "at",
+  sobre: "sobre",
+  formacao: "formacao",
+  publicacoes: "publicacoes",
+  contato: "contato",
+} as const;
+
+const ancora = (id: string) => `#${id}`;
 
 export const perfil = {
   nome: "Keylla Melo",
@@ -24,24 +36,27 @@ export const perfil = {
 } as const;
 
 export const navegacao = [
-  { rotulo: "O que é uma AT", href: "#at" },
-  { rotulo: "Sobre", href: "#sobre" },
-  { rotulo: "Formação", href: "#formacao" },
-  { rotulo: "Publicações", href: "#publicacoes" },
-  { rotulo: "Contato", href: "#contato" },
+  { rotulo: "O que é uma AT", href: ancora(ancoras.at) },
+  { rotulo: "Sobre", href: ancora(ancoras.sobre) },
+  { rotulo: "Formação", href: ancora(ancoras.formacao) },
+  { rotulo: "Publicações", href: ancora(ancoras.publicacoes) },
+  { rotulo: "Contato", href: ancora(ancoras.contato) },
 ] as const;
 
 export const cabecalho = {
   marca: "K",
   rotuloNavegacao: "Seções do site",
-  acao: { rotulo: "Fale comigo", href: "#contato" },
+  acao: { rotulo: "Fale comigo", href: ancora(ancoras.contato) },
 } as const;
 
 export const secaoHero = {
   legendaFoto: "Foto de apresentação",
   acoes: {
-    primaria: { rotulo: "Conversar comigo", href: "#contato" },
-    secundaria: { rotulo: "Entenda o trabalho de uma AT", href: "#at" },
+    primaria: { rotulo: "Conversar comigo", href: ancora(ancoras.contato) },
+    secundaria: {
+      rotulo: "Entenda o trabalho de uma AT",
+      href: ancora(ancoras.at),
+    },
   },
 } as const;
 

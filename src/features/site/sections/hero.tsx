@@ -1,12 +1,12 @@
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
 import { PhotoFrame } from "@/components/layout/photo-frame";
-import { idTopo, perfil, secaoHero } from "@/content/site";
+import { ancoras, perfil, secaoHero } from "@/content/site";
 
 /** Abertura da página: saudação, nome, papel, apresentação e os dois CTAs. */
 export function Hero() {
   return (
-    <section id={idTopo} className="scroll-mt-cabecalho pt-10 duo:pt-20">
+    <section id={ancoras.topo} className="scroll-mt-cabecalho pt-10 duo:pt-20">
       <Container>
         <div className="grid items-center gap-8 duo:grid-cols-2 duo:gap-16">
           <div>
