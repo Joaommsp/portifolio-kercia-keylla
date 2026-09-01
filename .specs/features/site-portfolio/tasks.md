@@ -170,7 +170,7 @@ T38 → T39
 
 ---
 
-### T4: Tokens da paleta aprovada
+### T4: Tokens da paleta aprovada ✅
 
 **What**: Declarar em `@theme inline` os tokens de cor, fonte e raio da paleta aprovada (ground `#EDF3E4`, surface `#F7FBF1`, surface-2 `#E1EAD3`, ink, ink-soft, olive, olive-deep, brass, line) e aplicar no `body`.
 **Where**: `src/app/globals.css`
