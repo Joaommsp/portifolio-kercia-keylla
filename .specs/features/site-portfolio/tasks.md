@@ -188,7 +188,7 @@ T38 → T39
 
 ---
 
-### T5: Layout raiz com as fontes
+### T5: Layout raiz com as fontes ✅
 
 **What**: Carregar Fraunces, Karla e Parisienne via `next/font/google`, expor como variáveis CSS e definir metadados base do site.
 **Where**: `src/app/layout.tsx`
