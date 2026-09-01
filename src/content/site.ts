@@ -40,6 +40,19 @@ export const perfil = {
   selo: ["Presença que", "constrói", "autonomia"],
 } as const;
 
+/**
+ * Como o site se apresenta a buscador e a rede social. Mora aqui como todo
+ * texto fixo (AD-004): o `<title>` do layout raiz, o Open Graph da home e o
+ * `Person` do JSON-LD leem daqui, e não de literal espalhado.
+ */
+export const metadadosDoSite = {
+  titulo: juntarMeta(perfil.nome, perfil.papel),
+  /** `%s` é o título da página; o Next completa o resto. */
+  gabaritoDeTitulo: `%s · ${perfil.nome}`,
+  descricao:
+    "Assistente Terapêutica: acompanhamento de crianças e adolescentes na escola e na rotina, com vínculo, mediação e incentivo à autonomia.",
+} as const;
+
 export const navegacao = [
   { rotulo: "O que é uma AT", href: ancora(ancoras.at) },
   { rotulo: "Sobre", href: ancora(ancoras.sobre) },

@@ -9,13 +9,14 @@
 
 import type { Metadata } from "next";
 
-import { contato, linksContato, perfil } from "@/content/site";
-import { juntarMeta } from "@/lib/format";
+import {
+  contato,
+  linksContato,
+  metadadosDoSite,
+  perfil,
+} from "@/content/site";
 import { CAMINHO_HOME } from "@/lib/rotas";
 import { urlDoSite } from "@/lib/url";
-
-/** Como o site se apresenta ao ser compartilhado: "Nome · Papel". */
-export const TITULO_DA_HOME = juntarMeta(perfil.nome, perfil.papel);
 
 /**
  * Open Graph e Twitter da home. O caminho vai relativo: o `metadataBase` do
@@ -27,14 +28,16 @@ export const metadadosDaHome: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: perfil.nome,
-    title: TITULO_DA_HOME,
-    description: perfil.apresentacao,
+    title: metadadosDoSite.titulo,
+    description: metadadosDoSite.descricao,
     url: CAMINHO_HOME,
   },
   twitter: {
-    card: "summary_large_image",
-    title: TITULO_DA_HOME,
-    description: perfil.apresentacao,
+    // Sem imagem de compartilhamento ainda (as fotos são PENDENTE), e cartão
+    // grande sem imagem sai pior do que cartão pequeno.
+    card: "summary",
+    title: metadadosDoSite.titulo,
+    description: metadadosDoSite.descricao,
   },
 };
 
@@ -48,11 +51,18 @@ export const pessoaDaAutora = {
   "@type": "Person",
   name: perfil.nome,
   jobTitle: perfil.papel,
-  description: perfil.apresentacao,
+  description: metadadosDoSite.descricao,
   url: urlDoSite(CAMINHO_HOME),
   sameAs: [linksContato.instagram],
   areaServed: contato.regiao,
 } as const;
 
-/** O JSON-LD como ele vai para dentro do `<script>` da home. */
-export const jsonLdDaAutora = JSON.stringify(pessoaDaAutora);
+/**
+ * O JSON-LD como ele vai para dentro do `<script>` da home. O `<` sai escapado
+ * porque um "</script" em qualquer campo de texto fecharia a tag no meio do
+ * bloco — e esses campos são editoriais, feitos para serem reescritos.
+ */
+export const jsonLdDaAutora = JSON.stringify(pessoaDaAutora).replaceAll(
+  "<",
+  "\\u003c",
+);
