@@ -1068,7 +1068,7 @@ T4 → T51
 
 ---
 
-### T50: Rodapé dentro da ordem dos sete blocos
+### T50: Rodapé dentro da ordem dos sete blocos ✅
 
 **What**: Estender a asserção de ordem de SIT-01 para os 7 blocos da spec, renderizando a home dentro da moldura que traz o rodapé.
 **Where**: `src/app/(site)/page.test.tsx`
@@ -1078,9 +1078,9 @@ T4 → T51
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] A ordem asserida cobre hero, AT, Sobre, Formação, Publicações, contato e rodapé
-- [ ] O rodapé é localizado por papel (`contentinfo`), depois do conteúdo principal
-- [ ] Tirar o rodapé do layout (M55) reprova
+- [x] A ordem asserida cobre hero, AT, Sobre, Formação, Publicações, contato e rodapé
+- [x] O rodapé é localizado por papel (`contentinfo`), depois do conteúdo principal
+- [x] Tirar o rodapé do layout (M55) reprova
 
 **Tests**: unit
 **Gate**: quick
