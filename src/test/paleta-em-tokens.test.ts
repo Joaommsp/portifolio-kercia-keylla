@@ -4,83 +4,57 @@ import { join, relative, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 
 /**
- * Trava de SIT-05: a paleta aprovada entra por token de tema, e nenhum
- * componente escreve cor à mão.
+ * Trava de SIT-05: a paleta aprovada entra por token de tema, e nenhum arquivo
+ * de código escreve cor à mão.
  *
- * A varredura cobre TODO `.tsx` de `src/`, os componentes de `src/components/ui`
- * inclusive — eles vieram do shadcn mas foram reescritos nas variáveis do tema,
- * então não há exceção a justificar. Fora do escopo fica só `globals.css`: é lá
- * que os tokens são definidos, e um token precisa nascer de um valor literal em
- * algum lugar. Arquivo `.css` também não é varrido por não ser `.tsx`.
+ * A varredura lê o arquivo inteiro, não só o que está em `className` ou em
+ * `style`: classe montada dentro de `cva(...)`, guardada em constante de módulo
+ * ou citada em comentário conta igual — o valor aprovado tem um lugar só.
+ *
+ * Escopo: todo `.ts` e `.tsx` de `src/`, os componentes de `src/components/ui`
+ * inclusive. Duas exceções, ambas deliberadas:
+ *
+ * 1. `globals.css` (e qualquer `.css`) fica de fora porque é lá que os tokens
+ *    são definidos, e um token precisa nascer de um valor literal.
+ * 2. Os próprios arquivos de teste ficam de fora porque cor literal é insumo
+ *    legítimo deles — os casos do detector, logo abaixo, são a prova. Teste não
+ *    pinta tela, que é o que SIT-05 protege.
  */
 const RAIZ = join(process.cwd(), "src");
 
 /** Cor escrita à mão: hexadecimal ou função de cor do CSS. */
-const COR_LITERAL = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lch|lab)\(/;
+const COR_LITERAL = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lch|lab)\(/g;
 
 /** Arquivo conhecido, para a varredura não passar por ter lido a pasta errada. */
-const COMPONENTE_CONHECIDO = "features/site/sections/o-que-faz-uma-at.tsx";
+const COMPONENTE_CONHECIDO = "app/layout.tsx";
 
-/** Valor do atributo que começa em `inicio`: string entre aspas ou bloco `{}`. */
-function valorDoAtributo(fonte: string, inicio: number): string {
-  let i = fonte.indexOf("=", inicio);
-  if (i === -1) return "";
-
-  i += 1;
-  while (i < fonte.length && /\s/.test(fonte[i])) i += 1;
-
-  const abertura = fonte[i];
-
-  if (abertura === '"' || abertura === "'") {
-    const fim = fonte.indexOf(abertura, i + 1);
-    return fim === -1 ? fonte.slice(i) : fonte.slice(i + 1, fim);
-  }
-
-  if (abertura === "{") {
-    let nivel = 0;
-    for (let j = i; j < fonte.length; j += 1) {
-      if (fonte[j] === "{") nivel += 1;
-      else if (fonte[j] === "}") {
-        nivel -= 1;
-        if (nivel === 0) return fonte.slice(i + 1, j);
-      }
-    }
-  }
-
-  return "";
-}
-
-/** Só os dois lugares onde uma cor literal pintaria a tela: `className` e `style`. */
-function trechosDeEstilo(fonte: string): string[] {
-  return Array.from(fonte.matchAll(/\b(?:className|style)\s*=/g)).map((achado) =>
-    valorDoAtributo(fonte, achado.index),
-  );
-}
-
-/** Trechos de estilo do arquivo que trazem cor escrita à mão. */
+/** Cores escritas à mão no arquivo. */
 function coresLiteraisEm(fonte: string): string[] {
-  return trechosDeEstilo(fonte).filter((trecho) => COR_LITERAL.test(trecho));
+  return fonte.match(COR_LITERAL) ?? [];
 }
 
-function arquivosTsx(pasta: string): string[] {
+/** Código de `src/`, sem os arquivos de teste. */
+function arquivosDeCodigo(pasta: string): string[] {
   return readdirSync(pasta, { withFileTypes: true }).flatMap((entrada) => {
     const caminho = join(pasta, entrada.name);
-    if (entrada.isDirectory()) return arquivosTsx(caminho);
-    return entrada.name.endsWith(".tsx") ? [caminho] : [];
+    if (entrada.isDirectory()) return arquivosDeCodigo(caminho);
+    const ehCodigo = /\.tsx?$/.test(entrada.name);
+    const ehTeste = /\.test\.tsx?$/.test(entrada.name);
+    return ehCodigo && !ehTeste ? [caminho] : [];
   });
 }
 
-const arquivos = arquivosTsx(RAIZ).map((caminho) =>
+const arquivos = arquivosDeCodigo(RAIZ).map((caminho) =>
   relative(RAIZ, caminho).split(sep).join("/"),
 );
 
 describe("paleta em tokens (SIT-05)", () => {
-  it("varre os componentes do site", () => {
+  it("varre o código do site", () => {
     expect(arquivos.length).toBeGreaterThan(10);
     expect(arquivos).toContain(COMPONENTE_CONHECIDO);
   });
 
-  it("não deixa cor literal em className nem em style inline", () => {
+  it("não deixa cor literal em nenhum arquivo de código", () => {
     const infratores = arquivos
       .map((caminho) => ({
         caminho,
@@ -98,7 +72,12 @@ describe("detector de cor literal", () => {
     expect(coresLiteraisEm('<p style={{ color: "#8E7A32" }} />')).toHaveLength(1);
     expect(coresLiteraisEm('<p className="text-[rgb(76,91,52)]" />')).toHaveLength(1);
     expect(coresLiteraisEm("<p style={{ background: `hsl(80 20% 30%)` }} />")).toHaveLength(1);
-    expect(coresLiteraisEm('<p className={cn(base, "border-[oklch(0.5_0.1_120)]")} />')).toHaveLength(1);
+  });
+
+  it("acusa cor escondida na classe montada fora do JSX", () => {
+    expect(coresLiteraisEm('const variantes = cva("bg-[#EDF3E4] rounded-lg");')).toHaveLength(1);
+    expect(coresLiteraisEm('const CLASSE = "border-[oklch(0.5_0.1_120)]";')).toHaveLength(1);
+    expect(coresLiteraisEm("/* fundo aprovado: #EDF3E4 */")).toHaveLength(1);
   });
 
   it("não acusa âncora, token de tema nem classe utilitária", () => {
@@ -106,5 +85,8 @@ describe("detector de cor literal", () => {
     expect(coresLiteraisEm("<a href={`#${ancoras.topo}`}>Topo</a>")).toEqual([]);
     expect(coresLiteraisEm('<p className="border-line bg-surface text-ink-soft" />')).toEqual([]);
     expect(coresLiteraisEm("<p style={{ animationDelay: `${i * 60}ms` }} />")).toEqual([]);
+    expect(
+      coresLiteraisEm('"hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]"'),
+    ).toEqual([]);
   });
 });

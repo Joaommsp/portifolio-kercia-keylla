@@ -134,6 +134,7 @@ T11 → T48
 T24 → T49
 T26 → T50
 T4 → T51
+T51 → T52
 ```
 
 ---
@@ -1101,6 +1102,26 @@ T4 → T51
 - [x] A varredura conta os arquivos lidos, para não passar vazia
 - [x] O detector acusa `bg-[#EDF3E4]`, `style={{ color: "#8E7A32" }}` e `rgb(`/`hsl(`, e não acusa `href="#contato"` nem `text-brass`
 - [x] Introduzir uma cor literal em um componente reprova
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T52: Trava da paleta que enxerga a classe montada ✅
+
+**What**: Endurecer a varredura de SIT-05 para o arquivo inteiro, para cor literal dentro de `cva(...)`, de constante de módulo ou de comentário também reprovar, e alinhar o docblock ao que a trava realmente cobre.
+**Where**: `src/test/paleta-em-tokens.test.ts`
+**Depends on**: T51
+**Requirement**: SIT-05
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] A varredura lê `.ts` e `.tsx` de `src/`, menos os próprios arquivos de teste, e a exceção está justificada no arquivo
+- [x] Cor literal no `cva(...)` de `src/components/ui` reprova
+- [x] Cor literal em constante de módulo reprova
+- [x] Âncora (`#contato`), token de tema e `color-mix(in_oklch, var(--x), …)` seguem sem acusar
 
 **Tests**: unit
 **Gate**: build
