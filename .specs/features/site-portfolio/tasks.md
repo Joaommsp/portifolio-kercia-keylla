@@ -778,7 +778,7 @@ T27 → T40
 
 ---
 
-### T37: Índice composto do Firestore
+### T37: Índice composto do Firestore ✅
 
 **What**: Declarar o índice `publicacoes(publicado ASC, publicadoEm DESC)`.
 **Where**: `firestore.indexes.json`
@@ -788,7 +788,7 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Índice cobre a consulta de `listarPublicadas`
+- [x] Índice cobre a consulta de `listarPublicadas`
 
 **Tests**: none
 **Gate**: build

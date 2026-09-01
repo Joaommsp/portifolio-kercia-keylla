@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "publicacoes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "publicado", "order": "ASCENDING" },
+        { "fieldPath": "publicadoEm", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
