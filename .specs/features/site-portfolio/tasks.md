@@ -867,7 +867,7 @@ T27 → T47
 
 > Sete tasks abertas pelo relatório em `validation.md` (FAIL de 2026-09-01): um requisito sem implementação, dois mutantes sobreviventes e quatro pontos sem asserção. Numeração continua de T40 para não renumerar nada já rastreado.
 
-### T41: Open Graph e Person na home
+### T41: Open Graph e Person na home ✅
 
 **What**: Metadados Open Graph/Twitter e o bloco JSON-LD `Person` da home, montados a partir de `src/content/site.ts` e do endereço de `src/lib/url.ts`, consumidos pela rota `/`.
 **Where**: `src/features/site/seo.ts`
@@ -877,10 +877,10 @@ T27 → T47
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `openGraph` e `twitter` da home saem do conteúdo do site, com URL absoluta resolvida por `siteUrl`
-- [ ] JSON-LD `Person` com `name`, `jobTitle`, `url`, `sameAs` do Instagram e `areaServed`
-- [ ] A home exporta esses metadados e renderiza o `application/ld+json`
-- [ ] Teste asserta campo a campo, não a presença da tag
+- [x] `openGraph` e `twitter` da home saem do conteúdo do site, com URL absoluta resolvida por `siteUrl`
+- [x] JSON-LD `Person` com `name`, `jobTitle`, `url`, `sameAs` do Instagram e `areaServed`
+- [x] A home exporta esses metadados e renderiza o `application/ld+json`
+- [x] Teste asserta campo a campo, não a presença da tag
 
 **Tests**: unit
 **Gate**: build

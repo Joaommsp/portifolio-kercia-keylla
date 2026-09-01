@@ -197,7 +197,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | FOR-04 | P2: Formação | T25 | Implementing |
 | FOR-05 | P2: Formação | T20,T35 | Implementing |
 | SEO-01 | P3: Encontrabilidade | T38 | Implementing |
-| SEO-02 | P3: Encontrabilidade | T5,T27 | Implementing |
+| SEO-02 | P3: Encontrabilidade | T41 | Implementing |
 | SEC-01 | P1: Keylla publica | T36 | Implementing |
 
 **Coverage:** 30 total, 30 mapped to tasks, 0 unmapped
