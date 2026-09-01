@@ -7,7 +7,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 import { paraFormacao } from "@/features/formacoes/converter";
 import { COLECAO_FORMACOES, type Formacao } from "@/features/formacoes/schemas";
-import { db } from "@/lib/firebase/client";
+import { obterDb } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
 import type { Resultado } from "@/lib/resultado";
 
@@ -50,7 +50,7 @@ export function ordenarFormacoes(
  */
 export async function listarFormacoes(): Promise<Resultado<Formacao[]>> {
   try {
-    const resultado = await getDocs(collection(db, COLECAO_FORMACOES));
+    const resultado = await getDocs(collection(obterDb(), COLECAO_FORMACOES));
 
     const formacoes = resultado.docs.map((documento) =>
       paraFormacao(documento.id, documento.data()),

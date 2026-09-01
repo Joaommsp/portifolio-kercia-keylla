@@ -3,9 +3,13 @@ import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
 import { ORDEM_NO_FIM } from "@/features/formacoes/converter";
 import { listarFormacoes } from "@/features/formacoes/queries";
+import { obterDb } from "@/lib/firebase/client";
 import { criarSnapshot, ErroFirestoreFalso } from "@/test/firestore";
 
-vi.mock("@/lib/firebase/client", () => ({ db: {}, auth: {} }));
+vi.mock("@/lib/firebase/client", () => ({
+  obterDb: vi.fn(() => ({})),
+  obterAuth: vi.fn(() => ({})),
+}));
 
 vi.mock("firebase/firestore", async () => {
   const { criarModuloFirestoreFalso } = await import("@/test/firestore");
@@ -14,6 +18,11 @@ vi.mock("firebase/firestore", async () => {
 
 const getDocsFalso = getDocs as unknown as Mock;
 const collectionFalso = collection as unknown as Mock;
+const obterDbFalso = obterDb as unknown as Mock;
+
+/** Mensagem que a configuração do Firebase lança quando falta uma variável. */
+const ERRO_DE_CONFIGURACAO =
+  "Configuração do Firebase incompleta. Defina a variável de ambiente: NEXT_PUBLIC_FIREBASE_API_KEY.";
 
 const documento = (
   id: string,
@@ -37,6 +46,7 @@ const idsDe = (resultado: Awaited<ReturnType<typeof listarFormacoes>>) => {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  obterDbFalso.mockReturnValue({});
 });
 
 describe("listarFormacoes", () => {
@@ -146,6 +156,16 @@ describe("listarFormacoes", () => {
 
     expect(await listarFormacoes()).toEqual({
       erro: "Você não tem permissão para esta operação.",
+    });
+  });
+
+  it("devolve erro, e não exceção, quando o Firebase não está configurado", async () => {
+    obterDbFalso.mockImplementation(() => {
+      throw new Error(ERRO_DE_CONFIGURACAO);
+    });
+
+    await expect(listarFormacoes()).resolves.toEqual({
+      erro: ERRO_DE_CONFIGURACAO,
     });
   });
 

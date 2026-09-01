@@ -6,13 +6,17 @@ import {
   listarPublicadas,
   obterPorSlug,
 } from "@/features/publicacoes/queries";
+import { obterDb } from "@/lib/firebase/client";
 import {
   type ConsultaFalsa,
   criarSnapshot,
   ErroFirestoreFalso,
 } from "@/test/firestore";
 
-vi.mock("@/lib/firebase/client", () => ({ db: {}, auth: {} }));
+vi.mock("@/lib/firebase/client", () => ({
+  obterDb: vi.fn(() => ({})),
+  obterAuth: vi.fn(() => ({})),
+}));
 
 vi.mock("firebase/firestore", async () => {
   const { criarModuloFirestoreFalso } = await import("@/test/firestore");
@@ -20,6 +24,11 @@ vi.mock("firebase/firestore", async () => {
 });
 
 const getDocsFalso = getDocs as unknown as Mock;
+const obterDbFalso = obterDb as unknown as Mock;
+
+/** Mensagem que a configuração do Firebase lança quando falta uma variável. */
+const ERRO_DE_CONFIGURACAO =
+  "Configuração do Firebase incompleta. Defina a variável de ambiente: NEXT_PUBLIC_FIREBASE_API_KEY.";
 
 /** Consulta que a função montou e entregou ao `getDocs`. */
 const consultaExecutada = (): ConsultaFalsa =>
@@ -39,6 +48,7 @@ const documento = (id: string, publicadoEm: string) => ({
 
 beforeEach(() => {
   vi.clearAllMocks();
+  obterDbFalso.mockReturnValue({});
 });
 
 describe("listarPublicadas", () => {
@@ -107,6 +117,16 @@ describe("listarPublicadas", () => {
     });
   });
 
+  it("devolve erro, e não exceção, quando o Firebase não está configurado", async () => {
+    obterDbFalso.mockImplementation(() => {
+      throw new Error(ERRO_DE_CONFIGURACAO);
+    });
+
+    await expect(listarPublicadas()).resolves.toEqual({
+      erro: ERRO_DE_CONFIGURACAO,
+    });
+  });
+
   it("não lança quando a leitura falha", async () => {
     getDocsFalso.mockRejectedValue(
       new ErroFirestoreFalso("unavailable", "Backend unavailable."),
@@ -160,6 +180,16 @@ describe("obterPorSlug", () => {
 
     expect(await obterPorSlug("at-nao-e-baba")).toEqual({
       erro: "O banco de dados está indisponível no momento. Tente de novo em instantes.",
+    });
+  });
+
+  it("devolve erro, e não exceção, quando o Firebase não está configurado", async () => {
+    obterDbFalso.mockImplementation(() => {
+      throw new Error(ERRO_DE_CONFIGURACAO);
+    });
+
+    await expect(obterPorSlug("at-nao-e-baba")).resolves.toEqual({
+      erro: ERRO_DE_CONFIGURACAO,
     });
   });
 });

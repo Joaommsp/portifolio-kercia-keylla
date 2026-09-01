@@ -17,7 +17,7 @@ import {
   COLECAO_PUBLICACOES,
   type Publicacao,
 } from "@/features/publicacoes/schemas";
-import { db } from "@/lib/firebase/client";
+import { obterDb } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
 import type { Resultado } from "@/lib/resultado";
 
@@ -33,7 +33,7 @@ export async function listarPublicadas(
 ): Promise<Resultado<Publicacao[]>> {
   try {
     const consulta = query(
-      collection(db, COLECAO_PUBLICACOES),
+      collection(obterDb(), COLECAO_PUBLICACOES),
       where("publicado", "==", true),
       orderBy("publicadoEm", "desc"),
       limitarA(limite),
@@ -60,7 +60,7 @@ export async function obterPorSlug(
 ): Promise<Resultado<Publicacao | null>> {
   try {
     const consulta = query(
-      collection(db, COLECAO_PUBLICACOES),
+      collection(obterDb(), COLECAO_PUBLICACOES),
       where("slug", "==", slug),
       where("publicado", "==", true),
       limitarA(1),
