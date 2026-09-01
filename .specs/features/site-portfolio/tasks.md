@@ -827,3 +827,21 @@ T38 → T39
 
 **Tests**: none
 **Gate**: build
+
+---
+
+### T40: Página 404 na paleta
+
+**What**: Página não encontrada usando a identidade do site, com link de volta para a home.
+**Where**: `src/app/not-found.tsx`
+**Depends on**: T27
+**Requirement**: PUB-04
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] `notFound()` da rota de publicação cai nesta página, não na padrão do Next
+- [ ] Usa os tokens do tema e o texto vem de `src/content/site.ts`
+
+**Tests**: none
+**Gate**: build
