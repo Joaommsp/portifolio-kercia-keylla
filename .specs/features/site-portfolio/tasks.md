@@ -572,7 +572,7 @@ T38 → T39
 
 ---
 
-### T26: Home compondo as seções
+### T26: Home compondo as seções ✅
 
 **What**: `page.tsx` do grupo `(site)` buscando publicações e formações no servidor e compondo todas as seções na ordem da spec.
 **Where**: `src/app/(site)/page.tsx`
@@ -582,9 +582,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `revalidate = 300`
-- [ ] Falha de uma query não impede o restante da página de renderizar
-- [ ] Ordem das seções conforme SIT-01
+- [x] `revalidate = 300`
+- [x] Falha de uma query não impede o restante da página de renderizar
+- [x] Ordem das seções conforme SIT-01
 
 **Tests**: none
 **Gate**: build
