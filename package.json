@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-portfolio-keylla \"vitest run --config vitest.rules.config.ts\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
@@ -41,6 +43,7 @@
     "@vitejs/plugin-react": "6.1.1",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "firebase-tools": "^15.28.2",
     "jsdom": "30.0.1",
     "tailwindcss": "^4",
     "typescript": "^5",

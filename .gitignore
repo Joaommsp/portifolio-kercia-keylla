@@ -43,3 +43,8 @@ yarn-error.log*
 next-env.d.ts
 
 # specs locais
+
+# emuladores do firebase
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*

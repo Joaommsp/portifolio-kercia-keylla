@@ -21,7 +21,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 | Escrita (`mutations.ts`) | unit com Firestore mockado | Criar, editar, excluir, slug duplicado, falha de escrita | `src/**/*.test.ts` | `npm test` |
 | Rotas com decisão própria (`generateMetadata`, `notFound()`, ordem das seções) | unit (Testing Library) | Metadados por campo, 404 de slug ausente e de rascunho, ordem e âncoras da home | `src/app/**/*.test.{ts,tsx}` | `npm test` |
 | Layouts / config / conteúdo estático | none | — (build gate) | — | build gate |
-| Regras do Firestore (`firestore.rules`) | none neste ambiente | Sem emulador (Java ausente) — verificação manual descrita no README, registrada em AD-033 | — | manual |
+| Regras do Firestore (`firestore.rules`) | rules (emulador) | Leitura anônima do publicado, bloqueio do rascunho, escrita só da allowlist | `tests/rules/*.test.ts` | `npm run test:rules` |
 
 ## Gate Check Commands
 
@@ -29,6 +29,7 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 | ---------- | ----------- | ------- |
 | Quick | Task com testes unitários | `npm test -- --run` |
 | Build | Task de config/rota/conteúdo e fim de fase | `npx tsc --noEmit && npm run lint && npm test -- --run && npm run build` |
+| Rules | Task que toca `firestore.rules` | `npm run test:rules` (emulador; exige Java no `PATH`) |
 
 ---
 
@@ -962,21 +963,22 @@ T27 → T47
 
 ---
 
-### T46: Verificação das regras do Firestore
+### T46: Verificação das regras do Firestore ✅
 
-**What**: Decidir e registrar como SEC-01 é verificado: emulador com `@firebase/rules-unit-testing` se houver Java, ou limitação assumida por escrito se não houver.
-**Where**: `README.md`
+**What**: Suíte das regras contra o emulador do Firestore, em runner próprio, mais o passo no README. `java -version` no `PATH` falha nesta máquina, mas há JDK instalado (OpenJDK 21 do Homebrew, *keg-only*) — o caminho do emulador era possível e foi o escolhido.
+**Where**: `tests/rules/firestore.rules.test.ts`
 **Depends on**: T36
 **Requirement**: SEC-01
 
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `java -version` decide o caminho, e a decisão fica registrada em `.specs/STATE.md`
-- [ ] Sem emulador, o README traz o passo manual de verificação das regras
-- [ ] A lacuna só é dada por fechada se existir teste executável
+- [x] Anônimo lê publicado, não lê rascunho, não lista sem filtro e não escreve
+- [x] Uid da allowlist lê rascunho e escreve; uid de fora, não
+- [x] Suíte fora de `npm test` (`npm run test:rules`), documentada no README
+- [x] Afrouxar `firestore.rules` reprova a suíte
 
-**Tests**: none
+**Tests**: rules (`npm run test:rules`)
 **Gate**: build
 
 ---

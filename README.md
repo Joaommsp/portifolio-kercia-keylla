@@ -81,6 +81,38 @@ Pelo console, se preferir sem CLI:
   É ele que a listagem da home exige, por combinar filtro com ordenação em
   outro campo.
 
+### Testar as regras
+
+As regras são a única proteção da escrita (SEC-01), então elas têm suíte
+própria, rodada contra o emulador do Firestore:
+
+```bash
+npm run test:rules
+```
+
+Ela sobe o emulador, roda `tests/rules/firestore.rules.test.ts` e derruba tudo
+no fim. O que está travado: visitante anônimo lê publicação no ar mas não lê
+rascunho, não lista a coleção sem filtrar por `publicado == true` e não escreve
+nada; o uid da allowlist lê rascunho e escreve; um uid autenticado fora dela,
+não. O uid vem lido do próprio `firestore.rules`, então trocar o placeholder
+pelo uid real não quebra a suíte.
+
+Fica fora de `npm test` de propósito, por depender de duas coisas externas:
+
+- **Java 11 ou superior** no `PATH` — é o emulador do Firestore que exige.
+  Instalado pelo Homebrew, o OpenJDK é *keg-only* e não entra no `PATH`
+  sozinho:
+
+  ```bash
+  export PATH="$(brew --prefix openjdk@21)/bin:$PATH"
+  ```
+
+- **Internet na primeira execução**, para baixar o `.jar` do emulador (o
+  `firebase-tools` guarda o arquivo em cache depois disso).
+
+Rode esta suíte sempre que mexer em `firestore.rules`: sem ela, afrouxar uma
+regra não quebra teste nenhum.
+
 ## Coleções
 
 | Coleção | Campos |
@@ -105,6 +137,7 @@ Imagem não é hospedada aqui — entra por URL, e só de um host da allowlist e
 | `npm start` | Sobe o build |
 | `npm run lint` | ESLint |
 | `npm test` | Vitest em modo observador (`npm test -- --run` para uma passada) |
+| `npm run test:rules` | Regras do Firestore no emulador (exige Java no `PATH`) |
 | `npm run typecheck` | `tsc --noEmit` |
 
 Antes de entregar qualquer alteração:
