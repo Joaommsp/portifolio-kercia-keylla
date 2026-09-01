@@ -534,7 +534,7 @@ T38 → T39
 
 ---
 
-### T24: Seção de publicações
+### T24: Seção de publicações ✅
 
 **What**: Seção que recebe o resultado da query e resolve os três estados: lista, vazio e erro.
 **Where**: `src/features/publicacoes/components/publicacoes-section.tsx`
@@ -544,9 +544,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Vazio exibe "Nenhuma publicação por aqui ainda."
-- [ ] Erro exibe a mensagem recebida do Firebase, não texto genérico
-- [ ] Máximo de 6 cards
+- [x] Vazio exibe "Nenhuma publicação por aqui ainda."
+- [x] Erro exibe a mensagem recebida do Firebase, não texto genérico
+- [x] Máximo de 6 cards
 
 **Tests**: unit
 **Gate**: quick

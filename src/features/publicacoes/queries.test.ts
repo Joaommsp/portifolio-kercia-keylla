@@ -2,10 +2,10 @@ import { getDocs } from "firebase/firestore";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
 import {
-  LIMITE_PUBLICACOES_HOME,
   listarPublicadas,
   obterPorSlug,
 } from "@/features/publicacoes/queries";
+import { LIMITE_PUBLICACOES_HOME } from "@/features/publicacoes/schemas";
 import { obterDb } from "@/lib/firebase/client";
 import {
   type ConsultaFalsa,

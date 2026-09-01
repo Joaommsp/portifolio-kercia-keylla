@@ -15,14 +15,12 @@ import {
 import { paraPublicacao } from "@/features/publicacoes/converter";
 import {
   COLECAO_PUBLICACOES,
+  LIMITE_PUBLICACOES_HOME,
   type Publicacao,
 } from "@/features/publicacoes/schemas";
 import { obterDb } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
 import type { Resultado } from "@/lib/resultado";
-
-/** Quantas publicações a home exibe (PUB-01). */
-export const LIMITE_PUBLICACOES_HOME = 6;
 
 /**
  * Publicações no ar, da mais recente para a mais antiga. Falha de leitura vira

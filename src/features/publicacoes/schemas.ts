@@ -13,6 +13,9 @@ import { textoObrigatorio, textoOpcional } from "@/lib/validacao";
 /** Nome da coleção no Firestore. */
 export const COLECAO_PUBLICACOES = "publicacoes";
 
+/** Quantas publicações a home exibe (PUB-01). */
+export const LIMITE_PUBLICACOES_HOME = 6;
+
 /** Limites de tamanho de cada campo de texto, em caracteres. */
 export const LIMITES_PUBLICACAO = {
   titulo: 120,
