@@ -666,7 +666,7 @@ T27 → T40
 
 ---
 
-### T31: Escrita de publicações
+### T31: Escrita de publicações ✅
 
 **What**: `criar`, `atualizar`, `excluir` e `alternarPublicado`, com verificação de slug único.
 **Where**: `src/features/publicacoes/mutations.ts`
@@ -676,9 +676,9 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Slug repetido é rejeitado com mensagem de slug em uso
-- [ ] Falha devolve a mensagem traduzida do Firebase
-- [ ] `atualizar` grava `atualizadoEm`
+- [x] Slug repetido é rejeitado com mensagem de slug em uso
+- [x] Falha devolve a mensagem traduzida do Firebase
+- [x] `atualizar` grava `atualizadoEm`
 
 **Tests**: unit
 **Gate**: quick
