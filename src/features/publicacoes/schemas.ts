@@ -8,6 +8,7 @@
 import { z } from "zod/v4";
 
 import { hostsDeImagemPermitidos } from "@/content/site";
+import { textoObrigatorio, textoOpcional } from "@/lib/validacao";
 
 /** Nome da coleção no Firestore. */
 export const COLECAO_PUBLICACOES = "publicacoes";
@@ -48,15 +49,6 @@ export function ehUrlDeImagemPermitida(valor: string): boolean {
   return (hostsDeImagemPermitidos as readonly string[]).includes(url.hostname);
 }
 
-const textoObrigatorio = (rotulo: string, limite: number) =>
-  z
-    .string()
-    .trim()
-    .min(1, { message: `Informe ${rotulo}.` })
-    .max(limite, {
-      message: `${rotulo[0].toUpperCase()}${rotulo.slice(1)} deve ter no máximo ${limite} caracteres.`,
-    });
-
 export const publicacaoSchema = z.object({
   titulo: textoObrigatorio("o título", LIMITES_PUBLICACAO.titulo),
   slug: textoObrigatorio("o slug", LIMITES_PUBLICACAO.slug).regex(PADRAO_SLUG, {
@@ -72,9 +64,7 @@ export const publicacaoSchema = z.object({
     .refine((valor) => valor === "" || ehUrlDeImagemPermitida(valor), {
       message: `A imagem precisa ser uma URL https de um destes domínios: ${hostsDeImagemPermitidos.join(", ")}.`,
     }),
-  tag: z.string().trim().max(LIMITES_PUBLICACAO.tag, {
-    message: `A tag deve ter no máximo ${LIMITES_PUBLICACAO.tag} caracteres.`,
-  }),
+  tag: textoOpcional("a tag", LIMITES_PUBLICACAO.tag),
   publicado: z.boolean(),
 });
 

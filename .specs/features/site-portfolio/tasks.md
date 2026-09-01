@@ -462,7 +462,7 @@ T38 → T39
 
 ---
 
-### T20: Schema de formação
+### T20: Schema de formação ✅
 
 **What**: Schema Zod de formação com limites, `status` como união e `ano` dentro do intervalo permitido.
 **Where**: `src/features/formacoes/schemas.ts`
@@ -472,8 +472,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `status` restrito a `concluido` | `em_andamento`
-- [ ] `ano` entre 1970 e ano atual + 10
+- [x] `status` restrito a `concluido` | `em_andamento`
+- [x] `ano` entre 1970 e ano atual + 10
 
 **Tests**: unit
 **Gate**: quick
