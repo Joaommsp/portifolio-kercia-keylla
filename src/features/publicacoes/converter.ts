@@ -68,3 +68,37 @@ export function paraDocumentoDePublicacao(
     publicado: formulario.publicado,
   };
 }
+
+/**
+ * Publicação em branco, como o formulário do painel começa uma nova. É uma
+ * constante estável de propósito: um objeto novo a cada render viraria
+ * dependência instável no formulário.
+ */
+export const PUBLICACAO_EM_BRANCO: PublicacaoFormulario = {
+  titulo: "",
+  slug: "",
+  resumo: "",
+  corpo: "",
+  imagemUrl: "",
+  tag: "",
+  publicado: false,
+};
+
+/**
+ * Converte a publicação lida do Firestore nos valores do formulário: o painel
+ * manipula texto vazio, nunca `null`, para o campo controlado não alternar
+ * entre controlado e não controlado.
+ */
+export function paraFormularioDePublicacao(
+  publicacao: Publicacao,
+): PublicacaoFormulario {
+  return {
+    titulo: publicacao.titulo,
+    slug: publicacao.slug,
+    resumo: publicacao.resumo,
+    corpo: publicacao.corpo,
+    imagemUrl: publicacao.imagemUrl ?? "",
+    tag: publicacao.tag ?? "",
+    publicado: publicacao.publicado,
+  };
+}

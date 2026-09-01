@@ -234,6 +234,28 @@ export const painel = {
   rotuloNavegacao: "Seções do painel",
   sair: { rotulo: "Sair", emAndamento: "Saindo…" },
   verSite: "Ver o site",
+  publicacao: {
+    novo: "Nova publicação",
+    edicao: "Editar publicação",
+    campos: {
+      titulo: "Título",
+      slug: "Endereço do texto",
+      resumo: "Resumo",
+      corpo: "Texto",
+      imagemUrl: "Endereço da imagem",
+      tag: "Tag",
+    },
+    ajuda: {
+      slug: "É o fim do link do texto. Sugerido pelo título; dá para mudar.",
+      imagemUrl: "Opcional. Cole o endereço de uma imagem já publicada na internet.",
+    },
+    acoes: {
+      publicar: "Publicar",
+      rascunho: "Salvar rascunho",
+      emAndamento: "Salvando…",
+      voltar: "Voltar para a lista",
+    },
+  },
   login: {
     titulo: "Entrar no painel",
     chamada: "Use o e-mail e a senha cadastrados no Firebase.",

@@ -685,7 +685,7 @@ T27 → T40
 
 ---
 
-### T32: Formulário de publicação
+### T32: Formulário de publicação ✅
 
 **What**: Formulário com react-hook-form + Zod, contador de caracteres, slug sugerido pelo título e ações publicar/salvar rascunho.
 **Where**: `src/features/publicacoes/components/publicacao-form.tsx`
@@ -695,9 +695,9 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Campo inválido bloqueia o envio e é apontado
-- [ ] Durante o salvamento todos os controles ficam desabilitados
-- [ ] Falha mantém os dados preenchidos
+- [x] Campo inválido bloqueia o envio e é apontado
+- [x] Durante o salvamento todos os controles ficam desabilitados
+- [x] Falha mantém os dados preenchidos
 
 **Tests**: unit
 **Gate**: quick
