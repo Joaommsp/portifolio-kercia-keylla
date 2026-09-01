@@ -109,6 +109,27 @@ describe("PublicacaoForm", () => {
     expect(publicacaoGravada().titulo).toBe(noLimite);
   });
 
+  it("o contador mostra os caracteres usados e o limite do campo, separados", () => {
+    render(<PublicacaoForm aoSalvar={aoSalvar} />);
+
+    // Cinco caracteres contra o teto de 120 do título: com os dois números
+    // diferentes, um contador que repetisse o usado no lugar do limite ("5/5")
+    // deixa de passar. Slug escrito à mão para o seu contador não colidir com
+    // o do título, que tem o mesmo teto.
+    fireEvent.change(campo(textos.campos.slug), {
+      target: { value: "slug-escrito-a-mao" },
+    });
+    fireEvent.change(campo(textos.campos.titulo), { target: { value: "Rotina" } });
+
+    expect(screen.getByText("6/120")).toBeInTheDocument();
+
+    fireEvent.change(campo(textos.campos.titulo), {
+      target: { value: "t".repeat(120) },
+    });
+
+    expect(screen.getByText("120/120")).toBeInTheDocument();
+  });
+
   it("bloqueia o envio e aponta o campo quando o título passa do limite", async () => {
     render(<PublicacaoForm aoSalvar={aoSalvar} />);
 

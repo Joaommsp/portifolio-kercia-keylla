@@ -906,7 +906,7 @@ T27 → T47
 
 ---
 
-### T43: Contador que separa usado de limite
+### T43: Contador que separa usado de limite ✅
 
 **What**: Caso de contador em que os dois números diferem, para `usados/usados` deixar de passar.
 **Where**: `src/features/publicacoes/components/publicacao-form.test.tsx`
@@ -916,8 +916,8 @@ T27 → T47
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Um caso com usado ≠ limite (5/120) e o caso de borda 120/120
-- [ ] Contador que renderize `usados/usados` reprova (mutante M30 morre)
+- [x] Um caso com usado ≠ limite (6/120) e o caso de borda 120/120
+- [x] Contador que renderize `usados/usados` reprova (mutante M30 morre)
 
 **Tests**: unit
 **Gate**: quick
