@@ -20,6 +20,7 @@ export const LIMITES_PUBLICACAO = {
   resumo: 220,
   corpo: 20000,
   tag: 40,
+  imagemUrl: 2048,
 } as const;
 
 /** Slug legível: minúsculas, dígitos e hífen simples entre os blocos. */
@@ -60,7 +61,9 @@ export const publicacaoSchema = z.object({
   imagemUrl: z
     .string()
     .trim()
-    .max(2048)
+    .max(LIMITES_PUBLICACAO.imagemUrl, {
+      message: `O endereço da imagem deve ter no máximo ${LIMITES_PUBLICACAO.imagemUrl} caracteres.`,
+    })
     .refine((valor) => valor === "" || ehUrlDeImagemPermitida(valor), {
       message: `A imagem precisa ser uma URL https de um destes domínios: ${hostsDeImagemPermitidos.join(", ")}.`,
     }),

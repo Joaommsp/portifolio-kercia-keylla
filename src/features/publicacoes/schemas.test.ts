@@ -47,7 +47,7 @@ describe("publicacaoSchema", () => {
 
   it("rejeita título com 121 caracteres apontando o limite", () => {
     expect(
-      primeiroErroDe("titulo", com({ titulo: repetir(121) })),
+      primeiroErroDe("titulo", com({ titulo: repetir(LIMITES_PUBLICACAO.titulo + 1) })),
     ).toBe("O título deve ter no máximo 120 caracteres.");
   });
 
@@ -63,7 +63,7 @@ describe("publicacaoSchema", () => {
         com({ resumo: repetir(LIMITES_PUBLICACAO.resumo) }),
       ).success,
     ).toBe(true);
-    expect(primeiroErroDe("resumo", com({ resumo: repetir(221) }))).toBe(
+    expect(primeiroErroDe("resumo", com({ resumo: repetir(LIMITES_PUBLICACAO.resumo + 1) }))).toBe(
       "O resumo deve ter no máximo 220 caracteres.",
     );
   });
@@ -74,7 +74,7 @@ describe("publicacaoSchema", () => {
         com({ corpo: repetir(LIMITES_PUBLICACAO.corpo) }),
       ).success,
     ).toBe(true);
-    expect(primeiroErroDe("corpo", com({ corpo: repetir(20001) }))).not.toBeNull();
+    expect(primeiroErroDe("corpo", com({ corpo: repetir(LIMITES_PUBLICACAO.corpo + 1) }))).not.toBeNull();
   });
 
   it.each([
@@ -118,6 +118,17 @@ describe("publicacaoSchema", () => {
     expect(
       primeiroErroDe("imagemUrl", com({ imagemUrl: "http://images.unsplash.com/foto.jpg" })),
     ).not.toBeNull();
+  });
+
+  it("rejeita imagemUrl acima do limite de caracteres", () => {
+    expect(
+      primeiroErroDe(
+        "imagemUrl",
+        com({
+          imagemUrl: `https://images.unsplash.com/${"a".repeat(LIMITES_PUBLICACAO.imagemUrl)}.jpg`,
+        }),
+      ),
+    ).toBe("O endereço da imagem deve ter no máximo 2048 caracteres.");
   });
 
   it("rejeita imagemUrl que não é uma URL", () => {

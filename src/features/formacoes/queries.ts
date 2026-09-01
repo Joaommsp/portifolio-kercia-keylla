@@ -5,39 +5,14 @@
 
 import { collection, getDocs } from "firebase/firestore";
 
-import { paraFormacao } from "@/features/formacoes/converter";
+import {
+  ordenarFormacoes,
+  paraFormacao,
+} from "@/features/formacoes/converter";
 import { COLECAO_FORMACOES, type Formacao } from "@/features/formacoes/schemas";
 import { obterDb } from "@/lib/firebase/client";
 import { traduzirErroFirebase } from "@/lib/firebase/errors";
 import type { Resultado } from "@/lib/resultado";
-
-/**
- * Ordena as formações como a home as exibe: `ordem` crescente e, no empate,
- * `ano` decrescente. Formação sem ano fica depois das que têm ano (FOR-01).
- */
-export function ordenarFormacoes(
-  formacoes: readonly Formacao[],
-): readonly Formacao[] {
-  return [...formacoes].sort((a, b) => {
-    if (a.ordem !== b.ordem) {
-      return a.ordem - b.ordem;
-    }
-
-    if (a.ano === b.ano) {
-      return 0;
-    }
-
-    if (a.ano === null) {
-      return 1;
-    }
-
-    if (b.ano === null) {
-      return -1;
-    }
-
-    return b.ano - a.ano;
-  });
-}
 
 /**
  * Todas as formações, na ordem de exibição. Falha de leitura vira `{ erro }`
@@ -56,7 +31,7 @@ export async function listarFormacoes(): Promise<Resultado<Formacao[]>> {
       paraFormacao(documento.id, documento.data()),
     );
 
-    return { dados: [...ordenarFormacoes(formacoes)] };
+    return { dados: ordenarFormacoes(formacoes) };
   } catch (erro) {
     return { erro: traduzirErroFirebase(erro) };
   }

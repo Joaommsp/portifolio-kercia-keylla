@@ -37,9 +37,8 @@ export type DocumentoFormacao = {
 };
 
 function campoStatus(valor: unknown): StatusFormacao {
-  return (STATUS_FORMACAO as readonly string[]).includes(valor as string)
-    ? (valor as StatusFormacao)
-    : STATUS_PADRAO;
+  const conhecido = STATUS_FORMACAO.find((status) => status === valor);
+  return conhecido ?? STATUS_PADRAO;
 }
 
 /** Converte o documento lido do Firestore na formação de domínio. */
@@ -65,11 +64,40 @@ export function paraDocumentoDeFormacao(
   formulario: FormacaoFormulario,
 ): DocumentoFormacao {
   return {
-    titulo: formulario.titulo.trim(),
-    instituicao: formulario.instituicao.trim(),
+    titulo: campoTexto(formulario.titulo),
+    instituicao: campoTexto(formulario.instituicao),
     descricao: campoTextoOuNulo(formulario.descricao),
     ano: formulario.ano,
     status: formulario.status,
     ordem: formulario.ordem,
   };
+}
+
+/**
+ * Ordena as formações como a home as exibe: `ordem` crescente e, no empate,
+ * `ano` decrescente. Formação sem ano fica depois das que têm ano (FOR-01).
+ *
+ * A regra é pura e mora aqui, e não na leitura, porque o painel precisa da
+ * mesma ordem e não pode importar de `queries.ts` (AD-002).
+ */
+export function ordenarFormacoes(formacoes: readonly Formacao[]): Formacao[] {
+  return [...formacoes].sort((a, b) => {
+    if (a.ordem !== b.ordem) {
+      return a.ordem - b.ordem;
+    }
+
+    if (a.ano === b.ano) {
+      return 0;
+    }
+
+    if (a.ano === null) {
+      return 1;
+    }
+
+    if (b.ano === null) {
+      return -1;
+    }
+
+    return b.ano - a.ano;
+  });
 }

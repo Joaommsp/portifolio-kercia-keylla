@@ -1,8 +1,9 @@
 /**
- * Leitura defensiva de campo vindo do Firestore.
+ * Normalização de campo na fronteira com o Firestore — usada nas duas
+ * direções, na leitura do documento e no preparo do que será gravado.
  *
- * O documento é dado externo — pode ter sido gravado por uma versão anterior
- * do painel e vir sem um campo, ou com o tipo trocado. Estes leitores nunca
+ * O documento é dado externo: pode ter sido gravado por uma versão anterior do
+ * painel e vir sem um campo, ou com o tipo trocado. Estes leitores nunca
  * lançam: devolvem o default do tipo, e ausência de valor vira `null` em vez
  * de zero, string vazia ou data inválida.
  */
@@ -22,6 +23,14 @@ function temToDate(valor: unknown): valor is ComToDate {
 /** Texto aparado; qualquer outro tipo vira string vazia. */
 export function campoTexto(valor: unknown): string {
   return typeof valor === "string" ? valor.trim() : "";
+}
+
+/**
+ * Texto preservado como veio, sem aparar. Para conteúdo em que o espaço é
+ * significativo, como o markdown do corpo de uma publicação.
+ */
+export function campoTextoBruto(valor: unknown): string {
+  return typeof valor === "string" ? valor : "";
 }
 
 /** Texto opcional: ausente e em branco são a mesma coisa — `null`. */

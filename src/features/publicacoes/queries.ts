@@ -27,6 +27,11 @@ export const LIMITE_PUBLICACOES_HOME = 6;
 /**
  * Publicações no ar, da mais recente para a mais antiga. Falha de leitura vira
  * `{ erro }` com a mensagem do Firebase, sem lançar.
+ *
+ * A ordenação roda no Firestore (índice composto `publicado` asc +
+ * `publicadoEm` desc, ver design.md), o que exige que toda publicação tenha
+ * `publicadoEm` gravada: um `orderBy` omite do resultado o documento sem o
+ * campo. Garantir isso é responsabilidade da escrita.
  */
 export async function listarPublicadas(
   limite: number = LIMITE_PUBLICACOES_HOME,

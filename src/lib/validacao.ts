@@ -10,6 +10,10 @@ import { z } from "zod/v4";
 
 /** "o título" → "O título", para abrir a frase da mensagem. */
 function comInicialMaiuscula(rotulo: string): string {
+  if (rotulo === "") {
+    return rotulo;
+  }
+
   return `${rotulo[0].toUpperCase()}${rotulo.slice(1)}`;
 }
 

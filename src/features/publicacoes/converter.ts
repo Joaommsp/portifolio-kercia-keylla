@@ -15,6 +15,7 @@ import {
   campoBooleano,
   campoData,
   campoTexto,
+  campoTextoBruto,
   campoTextoOuNulo,
 } from "@/lib/documento";
 
@@ -41,7 +42,7 @@ export function paraPublicacao(
     titulo: campoTexto(documento.titulo),
     slug: campoTexto(documento.slug),
     resumo: campoTexto(documento.resumo),
-    corpo: typeof documento.corpo === "string" ? documento.corpo : "",
+    corpo: campoTextoBruto(documento.corpo),
     imagemUrl: campoTextoOuNulo(documento.imagemUrl),
     tag: campoTextoOuNulo(documento.tag),
     publicado: campoBooleano(documento.publicado),
@@ -58,10 +59,10 @@ export function paraDocumentoDePublicacao(
   formulario: PublicacaoFormulario,
 ): DocumentoPublicacao {
   return {
-    titulo: formulario.titulo.trim(),
-    slug: formulario.slug.trim(),
-    resumo: formulario.resumo.trim(),
-    corpo: formulario.corpo,
+    titulo: campoTexto(formulario.titulo),
+    slug: campoTexto(formulario.slug),
+    resumo: campoTexto(formulario.resumo),
+    corpo: campoTextoBruto(formulario.corpo),
     imagemUrl: campoTextoOuNulo(formulario.imagemUrl),
     tag: campoTextoOuNulo(formulario.tag),
     publicado: formulario.publicado,
