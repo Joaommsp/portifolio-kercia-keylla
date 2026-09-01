@@ -176,7 +176,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | SIT-05 | P1: Visitante entende a AT | T4 | Implementing |
 | SIT-06 | P1: Visitante entende a AT | T14 | Implementing |
 | PUB-01 | P1: Visitante lê publicações | T19,T24,T37 | Implementing |
-| PUB-02 | P1: Visitante lê publicações | T27 | Implementing |
+| PUB-02 | P1: Visitante lê publicações | T27,T47 | Implementing |
 | PUB-03 | P1: Visitante lê publicações | T24 | Implementing |
 | PUB-04 | P1: Visitante lê publicações | T27,T40,T45 | Implementing |
 | PUB-05 | P1: Visitante lê publicações | T19,T24 | Implementing |

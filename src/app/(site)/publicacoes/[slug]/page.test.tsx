@@ -5,8 +5,10 @@ import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 import PaginaDaPublicacao, {
   generateMetadata,
 } from "@/app/(site)/publicacoes/[slug]/page";
+import { secaoPublicacoes } from "@/content/site";
 import { obterPorSlug } from "@/features/publicacoes/queries";
 import type { Publicacao } from "@/features/publicacoes/schemas";
+import { CAMINHO_HOME } from "@/lib/rotas";
 
 vi.mock("@/features/publicacoes/queries", () => ({
   obterPorSlug: vi.fn(),
@@ -126,5 +128,17 @@ describe("404 da publicação (PUB-04)", () => {
       screen.getByRole("heading", { name: "A AT não é babá" }),
     ).toBeInTheDocument();
     expect(notFoundFalso).not.toHaveBeenCalled();
+  });
+});
+
+describe("caminho de volta do texto (PUB-02)", () => {
+  it("leva de volta para a home, com o rótulo do conteúdo do site", async () => {
+    obterPorSlugFalso.mockResolvedValue({ dados: publicacao() });
+
+    render(await PaginaDaPublicacao(rota(SLUG)));
+
+    expect(
+      screen.getByRole("link", { name: secaoPublicacoes.voltar }),
+    ).toHaveAttribute("href", CAMINHO_HOME);
   });
 });

@@ -983,7 +983,7 @@ T27 → T47
 
 ---
 
-### T47: Link de volta do texto sob teste
+### T47: Link de volta do texto sob teste ✅
 
 **What**: Asserção do caminho de volta da página do texto para a home.
 **Where**: `src/app/(site)/publicacoes/[slug]/page.test.tsx`
@@ -993,8 +993,8 @@ T27 → T47
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Link com o texto de `secaoPublicacoes.voltar` e `href` da home
-- [ ] O texto do link vem de `src/content/site.ts`, não do teste
+- [x] Link com o texto de `secaoPublicacoes.voltar` e `href` da home
+- [x] O texto do link vem de `src/content/site.ts`, não do teste
 
 **Tests**: unit
 **Gate**: quick
