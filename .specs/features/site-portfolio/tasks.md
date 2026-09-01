@@ -795,7 +795,7 @@ T27 → T40
 
 ---
 
-### T38: Sitemap e robots
+### T38: Sitemap e robots ✅
 
 **What**: `sitemap.ts` com a home e cada publicação publicada, e `robots.ts` liberando o site e bloqueando `/admin`.
 **Where**: `src/app/sitemap.ts`
@@ -805,10 +805,10 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `/admin` fora do sitemap e bloqueado no robots
-- [ ] Publicação em rascunho não aparece
+- [x] `/admin` fora do sitemap e bloqueado no robots
+- [x] Publicação em rascunho não aparece
 
-**Tests**: none
+**Tests**: unit
 **Gate**: build
 
 ---

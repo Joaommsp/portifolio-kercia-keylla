@@ -23,6 +23,13 @@ export const LIMITE_PUBLICACOES_HOME = 6;
  */
 export const LIMITE_PUBLICACOES_PAINEL = 200;
 
+/**
+ * Teto de publicações no sitemap. Como o do painel, é trava de tráfego e não
+ * recorte editorial: o sitemap quer todas as que estão no ar (SEO-01), ao
+ * contrário da home, que mostra as seis mais recentes.
+ */
+export const LIMITE_PUBLICACOES_SITEMAP = 1000;
+
 /** Limites de tamanho de cada campo de texto, em caracteres. */
 export const LIMITES_PUBLICACAO = {
   titulo: 120,

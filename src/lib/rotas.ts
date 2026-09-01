@@ -6,6 +6,9 @@
 /** Página inicial do site. */
 export const CAMINHO_HOME = "/";
 
+/** Sitemap servido por `src/app/sitemap.ts`, apontado pelo robots. */
+export const CAMINHO_SITEMAP = "/sitemap.xml";
+
 /** Prefixo das rotas de publicação. */
 export const PREFIXO_PUBLICACOES = "/publicacoes";
 
