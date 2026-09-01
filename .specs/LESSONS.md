@@ -50,6 +50,30 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: SIT-06 .specs/features/site-portfolio/spec.md:59 (spec)
 - last seen: 2026-09-01T20:15:50Z
 
+### L-007 - Requisito que fixa uma quantidade de itens exibidos precisa de teste que conte os itens renderizados.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `secoes` · harmful: 0
+- features: site-portfolio
+- evidence: M53 src/features/site/sections/o-que-faz-uma-at.tsx:34 (secoes)
+- last seen: 2026-09-01T21:04:24Z
+
+### L-008 - Texto definido por extenso na spec deve ser asserido como literal no teste, nunca pela constante de conteudo que o renderiza.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `conteudo` · harmful: 0
+- features: site-portfolio
+- evidence: M54 src/content/site.ts:166 (conteudo)
+- last seen: 2026-09-01T21:04:24Z
+
+### L-009 - Requisito de ordem deve asserir todos os elementos que a spec lista, inclusive os que moram no layout e nao na pagina.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `layout` · harmful: 0
+- features: site-portfolio
+- evidence: M55 src/app/(site)/layout.tsx:10 (layout)
+- last seen: 2026-09-01T21:04:24Z
+
+### L-010 - Requisito de ausencia (nenhuma cor literal, nenhuma chamada nativa) fecha por check automatizado de varredura, nao por inspecao.
+- signal: `ac_gap` · recurrence: 1 feature(s) · scope: `estilo` · harmful: 0
+- features: site-portfolio
+- evidence: SIT-05 src/app/globals.css:91-98 (estilo)
+- last seen: 2026-09-01T21:04:24Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.
