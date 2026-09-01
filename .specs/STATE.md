@@ -17,15 +17,27 @@
 | AD-011 | Firebase inicializado sob demanda (`obterDb()` / `obterAuth()`), nunca no topo do módulo | Config faltando lançava na avaliação do import, fora do `try` das queries, e derrubava a rota inteira em vez de degradar a seção |
 | AD-012 | Formações são ordenadas na aplicação (`ordenarFormacoes` em `converter.ts`), não no Firestore | `orderBy` omite documento sem o campo — formação gravada sem `ordem` sumiria; e a ordem composta exigiria índice para uma coleção de poucos registros |
 
+| AD-013 | `SectionMessage` em `components/layout/`: um bloco só para o estado vazio e para o de erro das seções dinâmicas | Publicações, formação e o detalhe precisam da mesma peça; a alternativa era triplicá-la |
+| AD-014 | Allowlist de host de imagem mora em `content/imagens.ts`, módulo folha sem nenhuma importação, e é a única porta — `content/site.ts` não a reexporta | O `next.config.ts` precisa da mesma lista para os `remotePatterns` e é avaliado fora do TypeScript da aplicação, sem o alias `@/`; um re-export criaria dois caminhos para a mesma constante |
+| AD-015 | `LIMITE_PUBLICACOES_HOME` mora em `schemas.ts` e é aplicado nas duas pontas: `limit()` na consulta e `slice()` na seção | Componente não pode importar `queries.ts` (AD-002); a consulta corta o tráfego e a seção garante o contrato visual da spec, que é o que o teste trava |
+| AD-016 | No detalhe da publicação, falha de leitura NÃO vira 404: 404 é só slug inexistente ou rascunho. O estado de erro sai com `noindex` | Firestore fora do ar não significa que o texto não existe — devolver 404 mentiria para o visitante e para o buscador; o `noindex` evita indexar o erro no lugar do texto |
+| AD-017 | `lib/rotas.ts` guarda os caminhos internos (`CAMINHO_HOME`, `caminhoDaPublicacao`) | Card, detalhe e o `sitemap.ts` da T38 montam a mesma URL; deixá-la na feature faria o sitemap importar domínio só para montar caminho |
+| AD-018 | A seção de publicações mantém o título nos três estados; a de formação some inteira no vazio | Assimetria pedida pela spec (PUB-03 x FOR-04): a âncora `#publicacoes` do menu precisa existir mesmo sem texto publicado |
+| AD-019 | `metadataBase` declarado no layout raiz a partir de `siteUrl`; canonical e Open Graph passam caminho relativo | Sem `metadataBase` o Next resolve relativo contra `localhost`, e a rota de publicação existe por SEO (AD-003). Vale também para o `sitemap.ts` da T38 |
+| AD-020 | Separador e junção da linha de metadados vivem em `lib/format.ts` (`SEPARADOR_DE_META`, `juntarMeta`), não em `content/site.ts` | É formatação, não conteúdo editorial; as duas cópias inline já tinham divergido na regra do vazio |
+
 ## Handoff
 
 - **Feature**: site-portfolio
-- **Fase/task**: Fases 1, 2 e 3 concluídas (T1–T22). Próximo: Fase 4 (T23–T27).
-- **Concluído**: home estática (Fase 2) e camada de dados completa (Fase 3) — config/cliente/erros do Firebase, schemas, converters e leituras de publicações e formações. 107 testes.
-- **Próximo passo**: seções dinâmicas públicas (card e seção de publicações, seção de formações, composição da home, rota `/publicacoes/[slug]`).
-- **Bloqueios**: dados reais ainda placeholder. Seções da Fase 2 nunca foram renderizadas — conferência visual acontece na T26.
-- **Pontos herdados da Fase 3, para as fases seguintes**:
+- **Fase/task**: Fases 1 a 4 concluídas (T1–T27). Próximo: Fase 5 (T28–T35, admin).
+- **Concluído**: home estática (Fase 2), camada de dados (Fase 3) e seções dinâmicas públicas (Fase 4) — card e seção de publicações, seção de formação, home composta em `app/(site)/` e a rota `/publicacoes/[slug]`. 136 testes.
+- **Próximo passo**: `useAuth`, guarda do painel, login, escrita de publicações e o formulário (T28–T32).
+- **Conferência visual da T26**: home renderizada com dados semeados em Chromium headless e comparada ao mockup aprovado. Seções na ordem de SIT-01, paleta e tipografia batendo, formação e publicações fiéis ao layout. Sem rolagem horizontal em 360px nem em 1280px (`scrollWidth == clientWidth`, nenhum elemento fora da faixa). Nada da Fase 2 apareceu quebrado.
+- **Bloqueios**: dados reais ainda placeholder em `content/site.ts`. O projeto do Firebase responde `permission-denied` na leitura — as regras da T36 ainda não foram publicadas, então a home hoje renderiza a seção em estado de erro, que é o comportamento esperado.
+- **Pontos herdados, para as fases seguintes**:
   - A escrita (T31/T32) precisa garantir `publicadoEm` gravada: o `orderBy` da listagem omite documento sem o campo.
   - O formulário de formação (T35) não pode persistir o sentinela `ORDEM_NO_FIM` de um documento que veio sem `ordem`.
-  - `next.config.ts` ainda está sem `remotePatterns`; ao configurá-lo (T23/T39) ele precisa ler a mesma `hostsDeImagemPermitidos`, e o `next.config.ts` não resolve o alias `@/` — pode ser preciso mover a lista para um módulo sem dependência de alias.
+  - **Não existe `not-found.tsx`**: o `notFound()` da T27 cai na página padrão do Next, fora da moldura e da paleta do site. Nenhuma task cobre isso, embora o `design.md` preveja o arquivo — criar em `app/(site)/not-found.tsx`, reusando `Container` e `SectionMessage`, com o texto em `content/site.ts`.
+  - `revalidate = 300` cacheia o render de erro como cacheia o de sucesso: uma queda curta do Firestore fica servida por até 5 minutos. Aceito no MVP; revisitar se incomodar em produção.
+  - A T33 (listagem do painel) vai chamar `listarPublicadas` querendo todas — passar o limite explicitamente, já que o default é o da home (AD-015).
 - **Branch**: main · árvore limpa.
