@@ -887,7 +887,7 @@ T27 → T47
 
 ---
 
-### T42: Teto do corpo ancorado no literal da spec
+### T42: Teto do corpo ancorado no literal da spec ✅
 
 **What**: Ancorar o teto de 20.000 caracteres do corpo no valor escrito na spec, em vez de na própria constante do schema.
 **Where**: `src/features/publicacoes/schemas.test.ts`
@@ -897,9 +897,9 @@ T27 → T47
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Corpo com 20.001 caracteres é recusado com a mensagem que cita 20000
-- [ ] Corpo com exatamente 20.000 caracteres é aceito
-- [ ] Mover `LIMITES_PUBLICACAO.corpo` quebra o teste (mutante M11 morre)
+- [x] Corpo com 20.001 caracteres é recusado com a mensagem que cita 20000
+- [x] Corpo com exatamente 20.000 caracteres é aceito
+- [x] Mover `LIMITES_PUBLICACAO.corpo` quebra o teste (mutante M11 morre)
 
 **Tests**: unit
 **Gate**: quick

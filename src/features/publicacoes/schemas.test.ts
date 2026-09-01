@@ -21,6 +21,13 @@ const com = (campos: Partial<PublicacaoFormulario>) => ({ ...valida, ...campos }
 
 const repetir = (quantidade: number) => "a".repeat(quantidade);
 
+/**
+ * Teto do corpo como a spec o escreve (ADM-04). Fica em literal de propósito:
+ * ancorado em `LIMITES_PUBLICACAO.corpo`, mover a constante moveria os dois
+ * lados do teste e o limite mudaria sem ninguém notar.
+ */
+const LIMITE_DE_CORPO_DA_SPEC = 20000;
+
 const primeiroErroDe = (campo: keyof PublicacaoFormulario, dados: unknown) => {
   const resultado = publicacaoSchema.safeParse(dados);
   if (resultado.success) {
@@ -68,13 +75,17 @@ describe("publicacaoSchema", () => {
     );
   });
 
-  it("aceita corpo com exatamente 20000 caracteres e rejeita 20001", () => {
+  it("aceita corpo com exatamente 20000 caracteres", () => {
     expect(
-      publicacaoSchema.safeParse(
-        com({ corpo: repetir(LIMITES_PUBLICACAO.corpo) }),
-      ).success,
+      publicacaoSchema.safeParse(com({ corpo: repetir(LIMITE_DE_CORPO_DA_SPEC) }))
+        .success,
     ).toBe(true);
-    expect(primeiroErroDe("corpo", com({ corpo: repetir(LIMITES_PUBLICACAO.corpo + 1) }))).not.toBeNull();
+  });
+
+  it("rejeita corpo com 20001 caracteres apontando o limite", () => {
+    expect(
+      primeiroErroDe("corpo", com({ corpo: repetir(LIMITE_DE_CORPO_DA_SPEC + 1) })),
+    ).toBe("O corpo do texto deve ter no máximo 20000 caracteres.");
   });
 
   it.each([
