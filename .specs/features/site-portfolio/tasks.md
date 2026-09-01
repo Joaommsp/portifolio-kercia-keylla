@@ -262,7 +262,7 @@ T38 → T39
 
 ---
 
-### T9: Rodapé do site
+### T9: Rodapé do site ✅
 
 **What**: Rodapé com nome, papel e ano corrente.
 **Where**: `src/components/layout/site-footer.tsx`

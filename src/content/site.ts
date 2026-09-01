@@ -152,6 +152,7 @@ export const linksContato = {
 
 export const rodape = {
   descricao: `${perfil.nome} · ${perfil.papel}`,
+  assinatura: "Feito com carinho pelo filho",
 } as const;
 
 /** Hosts permitidos para a imagem externa das publicações. */
