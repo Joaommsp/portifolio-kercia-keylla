@@ -16,6 +16,7 @@ export const perfil = {
   apresentacao:
     "Acompanho crianças e adolescentes na escola e no dia a dia, criando vínculo, mediando atividades e sustentando a autonomia de cada um — sempre junto da família e da equipe terapêutica.",
   selo: ["Presença que", "constrói", "autonomia"],
+  legendaRetrato: "Foto de apresentação",
 } as const;
 
 export const navegacao = [

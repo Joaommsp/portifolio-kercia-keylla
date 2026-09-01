@@ -74,6 +74,10 @@
   --breakpoint-cartao: 35rem;
   --breakpoint-duo: 51.25rem;
   --breakpoint-grade: 53.75rem;
+
+  --container-leitura: 56ch;
+  --container-chamada: 44ch;
+  --container-nota: 38ch;
 }
 
 :root {

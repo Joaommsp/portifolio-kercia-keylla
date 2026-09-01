@@ -1,0 +1,64 @@
+import { ActionLink } from "@/components/layout/action-link";
+import { Container } from "@/components/layout/container";
+import { acoesHero, perfil } from "@/content/site";
+
+/** Abertura da página: saudação, nome, papel, apresentação e os dois CTAs. */
+export function Hero() {
+  return (
+    <header id="topo" className="scroll-mt-20 pt-10 duo:pt-20">
+      <Container>
+        <div className="grid items-center gap-8 duo:grid-cols-2 duo:gap-16">
+          <div>
+            <p className="font-script text-3xl leading-none text-brass md:text-4xl">
+              {perfil.saudacao}
+            </p>
+
+            <h1 className="mt-1.5 font-display text-6xl font-light leading-none tracking-titulo text-olive sm:text-7xl lg:text-8xl">
+              {perfil.nomeEmLinhas.map((linha) => (
+                <span key={linha} className="block">
+                  {linha}
+                </span>
+              ))}
+            </h1>
+
+            <p className="mt-4.5 text-xs uppercase tracking-papel text-brass md:text-sm">
+              {perfil.papel}
+            </p>
+
+            <p className="mt-5 max-w-leitura text-ink-soft">{perfil.apresentacao}</p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <ActionLink href={acoesHero.primaria.href} withArrow>
+                {acoesHero.primaria.rotulo}
+              </ActionLink>
+              <ActionLink href={acoesHero.secundaria.href} variant="ghost">
+                {acoesHero.secundaria.rotulo}
+              </ActionLink>
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-sm duo:max-w-none">
+            {/* Espaço reservado do retrato até a entrega da foto real. */}
+            <div className="relative grid aspect-4/5 place-items-center overflow-hidden rounded-t-full rounded-b-md border border-line bg-linear-to-b from-olive/20 to-surface-2 text-center">
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-3.5 rounded-t-full rounded-b-md border border-brass/45"
+              />
+              <small className="px-8 text-xs uppercase tracking-sobretitulo text-ink-soft">
+                {perfil.legendaRetrato}
+              </small>
+            </div>
+
+            <p className="absolute right-0 bottom-14 grid size-33 place-items-center rounded-full border border-brass bg-ground px-3 text-center text-xs leading-snug uppercase tracking-rotulo text-olive duo:-right-3.5">
+              {perfil.selo.map((linha) => (
+                <span key={linha} className="block">
+                  {linha}
+                </span>
+              ))}
+            </p>
+          </div>
+        </div>
+      </Container>
+    </header>
+  );
+}

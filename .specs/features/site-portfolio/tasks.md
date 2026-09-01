@@ -279,7 +279,7 @@ T38 → T39
 
 ---
 
-### T10: Seção hero
+### T10: Seção hero ✅
 
 **What**: Hero com saudação em script, nome em display, papel, texto de apresentação, dois CTAs e o espaço do retrato.
 **Where**: `src/features/site/sections/hero.tsx`
