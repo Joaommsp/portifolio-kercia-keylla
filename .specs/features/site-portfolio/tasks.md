@@ -1087,7 +1087,7 @@ T4 → T51
 
 ---
 
-### T51: Trava contra cor literal em componente
+### T51: Trava contra cor literal em componente ✅
 
 **What**: Teste de varredura sobre `src/**/*.tsx` que reprova cor literal (hex, `rgb(`, `hsl(`) em `className` ou em style inline, com o detector conferido contra casos positivos e negativos.
 **Where**: `src/test/paleta-em-tokens.test.ts`
@@ -1097,10 +1097,10 @@ T4 → T51
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Nenhum `.tsx` de `src/` tem cor literal em `className` ou em `style` inline
-- [ ] A varredura conta os arquivos lidos, para não passar vazia
-- [ ] O detector acusa `bg-[#EDF3E4]`, `style={{ color: "#8E7A32" }}` e `rgb(`/`hsl(`, e não acusa `href="#contato"` nem `text-brass`
-- [ ] Introduzir uma cor literal em um componente reprova
+- [x] Nenhum `.tsx` de `src/` tem cor literal em `className` ou em `style` inline
+- [x] A varredura conta os arquivos lidos, para não passar vazia
+- [x] O detector acusa `bg-[#EDF3E4]`, `style={{ color: "#8E7A32" }}` e `rgb(`/`hsl(`, e não acusa `href="#contato"` nem `text-brass`
+- [x] Introduzir uma cor literal em um componente reprova
 
 **Tests**: unit
 **Gate**: build
