@@ -2,6 +2,9 @@ import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
 import Home, { metadata } from "@/app/(site)/page";
+import { SiteHeader } from "@/components/layout/site-header";
+import { ancoras } from "@/content/site";
+import type { Formacao } from "@/features/formacoes/schemas";
 import { listarFormacoes } from "@/features/formacoes/queries";
 import { listarPublicadas } from "@/features/publicacoes/queries";
 import { metadadosDaHome, pessoaDaAutora } from "@/features/site/seo";
@@ -16,6 +19,17 @@ vi.mock("@/features/formacoes/queries", () => ({
 
 const listarPublicadasFalso = listarPublicadas as unknown as Mock;
 const listarFormacoesFalso = listarFormacoes as unknown as Mock;
+
+/** Formação cadastrada, para a seção aparecer (FOR-04). */
+const formacao = (): Formacao => ({
+  id: "pedagogia",
+  titulo: "Pedagogia",
+  instituicao: "Universidade",
+  descricao: null,
+  ano: 2018,
+  status: "concluido",
+  ordem: 1,
+});
 
 /** Renderiza a home resolvida, como o servidor a entrega. */
 async function renderizarHome() {
@@ -42,5 +56,46 @@ describe("home", () => {
 
     expect(bloco).not.toBeNull();
     expect(JSON.parse(bloco?.textContent ?? "null")).toEqual(pessoaDaAutora);
+  });
+});
+
+describe("seções da home (SIT-01, SIT-03)", () => {
+  it("apresenta as seções na ordem da spec", async () => {
+    // A seção de formação some quando não há nada cadastrado (FOR-04), então a
+    // ordem só se observa com as duas leituras respondendo com conteúdo.
+    listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
+    listarPublicadasFalso.mockResolvedValue({ dados: [] });
+
+    const { container } = await renderizarHome();
+
+    expect(
+      Array.from(container.querySelectorAll("section[id]")).map(
+        (secao) => secao.id,
+      ),
+    ).toEqual([
+      ancoras.topo,
+      ancoras.at,
+      ancoras.sobre,
+      ancoras.formacao,
+      ancoras.publicacoes,
+      ancoras.contato,
+    ]);
+  });
+
+  it("cada âncora do menu aponta para uma seção que existe na home", async () => {
+    listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
+
+    const cabecalho = render(<SiteHeader />);
+    const ancorasDoMenu = Array.from(
+      cabecalho.container.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
+    ).map((link) => link.getAttribute("href") ?? "");
+
+    expect(ancorasDoMenu.length).toBeGreaterThan(0);
+
+    const { container } = await renderizarHome();
+
+    for (const ancora of ancorasDoMenu) {
+      expect(container.querySelector(ancora)).not.toBeNull();
+    }
   });
 });
