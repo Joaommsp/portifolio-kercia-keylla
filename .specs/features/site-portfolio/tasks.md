@@ -297,7 +297,7 @@ T38 → T39
 
 ---
 
-### T11: Seção "O que faz uma AT"
+### T11: Seção "O que faz uma AT" ✅
 
 **What**: Grade dos 6 pilares lida de `src/content/site.ts`, com ícone, título e descrição.
 **Where**: `src/features/site/sections/o-que-faz-uma-at.tsx`
