@@ -56,7 +56,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | Concurrency / ordering | N/A because a base tem uma única autora; não há escrita concorrente no mesmo documento |
 | Data lifecycle / expiry | ADM-06: exclusão definitiva sob confirmação. TTL/arquivamento: N/A porque publicação não expira |
 | Observability | N/A because o projeto é estático em Vercel com uma autora; logs da plataforma bastam para o MVP |
-| External-dependency failure | PUB-05, FOR-03, SIT-06: Firestore fora do ar não derruba a página — seções dinâmicas degradam para estado de erro; imagem externa quebrada cai em placeholder |
+| External-dependency failure | PUB-05, FOR-03 e o edge case "Firestore fora do ar": a página fica de pé e as seções dinâmicas degradam para estado de erro; imagem externa quebrada cai em placeholder |
 | State-transition integrity | ADM-08: rascunho ↔ publicado é a única transição; documento com `publicado: false` nunca aparece em rota pública |
 
 ---
@@ -76,7 +76,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 3. WHEN o visitante clica em um item do menu THEN the system SHALL rolar até a seção correspondente da mesma página.
 4. WHEN a home é carregada em viewport de 360px de largura THEN the system SHALL exibir todo o conteúdo sem rolagem horizontal.
 5. The system SHALL aplicar a paleta aprovada (fundo `#EDF3E4`, superfície `#F7FBF1`, oliva `#4C5B34`, dourado `#8E7A32`) por tokens de tema, sem cor literal em componente.
-6. IF o visitante abre o site com `prefers-reduced-motion: reduce` THEN the system SHALL renderizar todas as seções sem animação de entrada.
+6. IF o visitante abre o site com `prefers-reduced-motion: reduce` THEN the system SHALL renderizar todas as seções sem animação de entrada. SIT-06 trata exclusivamente de movimento: falha de dependência externa e variável de ambiente ausente são os dois edge cases abaixo, e não têm ID de requisito.
 
 **Independent Test**: Abrir `/` sem Firebase configurado e ver a página estática completa, com as seções dinâmicas em estado vazio.
 
@@ -161,6 +161,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 - IF o corpo em markdown contém HTML bruto THEN the system SHALL renderizá-lo como texto, sem executar.
 - IF duas publicações têm o mesmo slug THEN the system SHALL bloquear a gravação da segunda com mensagem de slug já em uso.
 - WHEN o título tem 120 caracteres THEN the system SHALL aceitar (limite inclusivo) e o contador SHALL indicar 120/120.
+- IF o Firestore está fora do ar ou recusa a leitura THEN the system SHALL manter a página de pé, com a seção afetada em estado de erro e o restante utilizável (desfecho detalhado em PUB-05 e FOR-03).
 - IF as variáveis de ambiente do Firebase estão ausentes THEN the system SHALL falhar na inicialização com mensagem nomeando a variável faltante, em vez de erro genérico de SDK.
 
 ---

@@ -3,7 +3,8 @@
  *
  * A leitura acontece aqui, em um único lugar, para que a ausência de uma
  * variável falhe com o nome exato dela — e não com um erro genérico do SDK,
- * lançado lá adiante e difícil de rastrear (SIT-06).
+ * lançado lá adiante e difícil de rastrear (edge case das variáveis de
+ * ambiente ausentes; SIT-06 é só reduced-motion).
  */
 
 /** Chaves de configuração do Firebase e a variável de ambiente de cada uma. */

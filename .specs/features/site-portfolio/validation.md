@@ -277,3 +277,40 @@ requisitos de SEO e o 404. SEO-02 nem chegou a ser escrito.
 **Próximos passos**: implementar SEO-02 com teste; fechar os dois mutantes sobreviventes (M11, M30);
 cobrir `generateMetadata` e o `notFound()` da rota do slug; decidir se SEC-01 passa a ter emulador ou
 vira revisão manual assumida; e desambiguar SIT-06 na spec.
+
+---
+
+## Correções da Fase 7 (autor, 2026-09-01)
+
+> Escrito pelo implementador, não pelo Verifier. O veredito **FAIL** acima é o da
+> verificação independente e continua valendo até uma nova passada de um verificador
+> fresco — o que está abaixo é o registro do que foi feito para cada lacuna, com a
+> evidência de onde conferir.
+
+| # | Lacuna | Task | Evidência | Situação |
+| - | ------ | ---- | --------- | -------- |
+| 1 | SEO-02 não implementado (Blocker) | T41 | `src/features/site/seo.test.ts:38-52` — `expect(pessoaDaAutora["@type"]).toBe("Person")`, `expect(pessoaDaAutora.url).toBe(`${siteUrl}/`)`, `expect(pessoaDaAutora.sameAs).toEqual([linksContato.instagram])`; `:13` — `expect(metadadosDaHome.openGraph).toMatchObject({type:"website",locale:"pt_BR",…})`; `src/app/(site)/page.test.tsx:47` — `expect(metadata).toBe(metadadosDaHome)`; `:58` — `expect(JSON.parse(bloco?.textContent ?? "null")).toEqual(pessoaDaAutora)` | ✅ implementado e asserido campo a campo |
+| 2 | Teto de 20.000 do corpo frouxo (Major, M11) | T42 | `src/features/publicacoes/schemas.test.ts:29` — `const LIMITE_DE_CORPO_DA_SPEC = 20000`; `:88` — `.toBe("O corpo do texto deve ter no máximo 20000 caracteres.")` | ✅ M11 morre (limite 20001 no schema reprova a suíte) |
+| 3 | Contador 120/120 não discrimina (Major, M30) | T43 | `src/features/publicacoes/components/publicacao-form.test.tsx:124` — `expect(screen.getByText("6/120")).toBeInTheDocument()`; `:130` — `expect(screen.getByText("120/120")).toBeInTheDocument()` | ✅ M30 morre (`usados/usados` reprova) |
+| 4 | PUB-07 sem evidência (Major) | T44 | `src/app/(site)/publicacoes/[slug]/page.test.tsx:66-70`, `:78` — `expect(metadados.openGraph).toMatchObject({type:"article",url:`/publicacoes/${SLUG}`,publishedTime:"2026-01-10T03:00:00.000Z"})`; `:92-95` — slug ausente sem `undefined` | ✅ coberto |
+| 5 | PUB-04 coberto só até o domínio (Major) | T45 | `src/app/(site)/publicacoes/[slug]/page.test.tsx:103-106` (slug inexistente), `:115-119` (rascunho, com `expect(obterPorSlugFalso).toHaveBeenCalledWith("rascunho-da-autora")`), `:127-130` (no ar não chama `notFound`) | ✅ coberto |
+| 6 | SEC-01 sem verificação executável (Major) | T46 | `tests/rules/firestore.rules.test.ts:105` — `await assertFails(getDoc(doc(db,"publicacoes",RASCUNHO)))`; `:111` — `assertFails(getDocs(query(collection(db,"publicacoes"))))`; `:122-126` — escrita anônima negada; `:141`,`:147-153` — autora lê rascunho e escreve; `:161-163` — uid de fora não escreve | ✅ executável por `npm run test:rules` (emulador); com `allow create, update, delete: if true`, 3 casos reprovam |
+| 7 | PUB-02 link de volta sem asserção (Minor) | T47 | `src/app/(site)/publicacoes/[slug]/page.test.tsx:140` — `expect(screen.getByRole("link",{name:secaoPublicacoes.voltar})).toHaveAttribute("href", CAMINHO_HOME)` | ✅ coberto |
+| 8 | SIT-01..SIT-06 sem evidência (Minor) | fora de task | `src/app/(site)/page.test.tsx:71` — ordem dos ids das seções `toEqual([topo, at, sobre, formacao, publicacoes, contato])`; `:98` — cada âncora do menu encontra a seção na home | ⚠️ SIT-01 e SIT-03 cobertos; SIT-02 e SIT-05 seguem por inspeção; **SIT-04 e SIT-06 são UAT** (abaixo) |
+| 9 | SIT-06 com três sentidos (Minor) | fora de task | `spec.md` (AC 6 da P1 e a varredura de dimensões implícitas), `src/lib/firebase/config.ts:6` | ✅ SIT-06 é só reduced-motion; falha externa e variável ausente viraram edge cases sem ID |
+
+**Suítes**: 292 testes em 37 arquivos (`npm test -- --run`) + 10 testes de regra
+(`npm run test:rules`). Antes da Fase 7: 272 em 33 arquivos.
+
+## Verificação manual (UAT) — não coberto por teste
+
+Estes dois critérios não se fecham em jsdom e **não contam como cobertos**. Precisam de
+navegador, e devem ser reconferidos a cada mudança de layout ou de animação:
+
+| Critério | Como conferir |
+| -------- | ------------- |
+| SIT-04 — viewport de 360px sem rolagem horizontal | DevTools → dispositivo de 360px de largura, percorrer a home inteira e a página de um texto: nenhuma barra horizontal, nenhum bloco cortado |
+| SIT-06 — `prefers-reduced-motion: reduce` sem animação de entrada | macOS: Ajustes → Acessibilidade → Vídeo → Reduzir movimento (ou DevTools → Rendering → Emulate `prefers-reduced-motion`), recarregar e conferir que nada anima e que a rolagem do menu é instantânea |
+
+SIT-02 (6 pilares vindos de `content/site.ts`) e SIT-05 (paleta por token, sem cor literal)
+seguem verificados por inspeção do código, como no relatório original.
