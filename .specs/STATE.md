@@ -34,19 +34,22 @@
 | AD-027 | `hooks/use-carga.ts` concentra a máquina `carregando / erro / dados`, com guarda de atividade tanto na carga inicial quanto nas releituras | A guarda estava só no efeito e faltava justamente na releitura pós-ação, que é a mais demorada; e a máquina estava copiada em três telas |
 | AD-028 | Primitivos do painel: `components/form/campo.tsx` (rótulo, ajuda, erro e contador), `components/layout/confirmar-exclusao.tsx` e `components/layout/tabela-painel.tsx` | Publicações e formações usam os três; `components/layout/` segue sendo a pasta de primitivos compartilhados do projeto (AD-009, AD-013), em vez de abrir mais uma |
 | AD-029 | `LIMITE_PUBLICACOES_PAINEL` mora em `schemas.ts`, ao lado de `LIMITE_PUBLICACOES_HOME` | Limite é regra e vive no schema (AD-015); lado a lado, a diferença entre o teto do painel e o da home fica visível de uma vez |
+| AD-030 | `firebase.json` na raiz, fora do `Where` da T37 | Sem ele `firebase deploy --only firestore:rules,firestore:indexes` não sabe onde estão os dois arquivos — e é esse o comando que o README manda rodar |
+| AD-031 | A 404 mora em `src/app/not-found.tsx`, na raiz, e não dentro do grupo `(site)` | Da raiz ela atende as duas entradas: endereço que não casa com rota nenhuma e o `notFound()` de `/publicacoes/[slug]`. O preço é renderizar sem cabeçalho e rodapé — assimetria conhecida com o estado de erro da mesma rota, que os mantém. A variante no grupo só se confirma com o site de pé, e aqui não se sobe dev server |
+| AD-032 | `siteUrl` e `URL_PADRAO_DO_SITE` vivem em `lib/url.ts`, e variável em branco vale como ausente | Endereço é configuração de ambiente, não texto editorial (AD-020), e assim `lib/` deixa de importar `content/` — inversão que fecharia ciclo no dia em que `content/site.ts` precisasse de URL absoluta. O `??` anterior deixava passar a string vazia que vem do `.env.example`, e `new URL("")` derrubava todas as páginas por causa de uma variável opcional |
 
 ## Handoff
 
 - **Feature**: site-portfolio
-- **Fase/task**: Fases 1 a 5 concluídas (T1–T35). Próximo: Fase 6 (T36–T40, fechamento).
-- **Concluído**: a área `/admin` inteira — `useAuth`, guarda e moldura do painel, login, escrita e listagem de publicações, formulário e rota de edição, escrita e tela de formações. 257 testes, 29 arquivos. `tsc`, lint e build limpos.
-- **Próximo passo**: T36 (regras do Firestore) e T37 (índice composto) — são eles que hoje impedem a home de ler; depois T38 (sitemap/robots), T39 (README/.env.example) e T40 (404 na paleta).
-- **Revisores da Fase 5**: 2 bloqueantes corrigidos — o login reimplementava o `Campo` recém-criado, e o formulário de formação montava antes da lista, congelando `ordem = 0` em toda formação criada na primeira visita (AD-026, com teste de regressão em `formacoes-painel.test.tsx`). Também fechados: `useCarga` (AD-027), `TabelaPainel` + `FormacoesTable` (AD-028), `sair` migrado para `features/admin/auth.ts`, rota de edição de volta a Server Component, caminhos do painel compostos a partir de `CAMINHO_PAINEL`, `ORDEM_MINIMA_FORMACAO`, variante do selo por mapa exaustivo.
-- **Bloqueios**: as regras do Firestore (T36) ainda não foram publicadas, então o build segue renderizando a home em estado de erro (`permission-denied`) — esperado. Dados reais ainda placeholder em `content/site.ts`. A área `/admin` nunca foi exercitada contra o Firebase real: sem as rules, login e escrita não têm como ser testados de ponta a ponta.
-- **Pontos herdados, para a Fase 6**:
-  - **Não existe `not-found.tsx`**: o `notFound()` da T27 cai na página padrão do Next. É a T40 — criar em `app/(site)/not-found.tsx`, reusando `Container` e `SectionMessage`, com o texto em `content/site.ts`.
-  - A T36 precisa cobrir o que o painel faz hoje: ler a coleção inteira de publicações (rascunho incluído) e ler documento por id — a leitura pública por slug não é mais a única.
-  - `import "server-only"` nos dois `queries.ts` transformaria a fronteira do AD-002 em erro de build, mas exige uma dependência nova; ficou de fora e vale decidir na Fase 6.
-  - No formulário de publicação, "Salvar rascunho" não troca o rótulo durante o envio (fica desabilitado, como o resto do `fieldset`) — assimetria conhecida com o botão "Publicar".
-  - `revalidate = 300` cacheia o render de erro como cacheia o de sucesso: uma queda curta do Firestore fica servida por até 5 minutos. Aceito no MVP.
+- **Fase/task**: Fases 1 a 6 concluídas (T1–T40). Todas as tasks de `tasks.md` marcadas.
+- **Concluído nesta fase**: `firestore.rules` (leitura pública só do que está no ar, allowlist de uid nas próprias regras), `firestore.indexes.json` + `firebase.json`, `sitemap.ts` e `robots.ts`, README e `.env.example`, e a 404 na paleta. 272 testes, 33 arquivos. `tsc`, lint e build limpos.
+- **Próximo passo**: publicar as regras e o índice no projeto do Firebase, trocando `COLE_AQUI_O_UID_DA_AUTORA` pelo uid real — é o que ainda faz a home renderizar em estado de erro. Depois, exercitar `/admin` contra o Firebase de verdade (login, gravação, exclusão), que nunca rodou ponta a ponta.
+- **Revisores da Fase 6**: 1 bloqueante corrigido, apontado pelos dois — `NEXT_PUBLIC_SITE_URL=` em branco no `.env.example` virava `""`, o `??` não caía no padrão e `new URL("")` derrubava todas as páginas logo depois do `cp .env.example .env.local` que o README manda fazer. Fechado com AD-032 e teste em `src/lib/url.test.ts`. Junto foi o importante de camada (`lib/` importando `content/`).
+- **Bloqueios**: nenhum no código. Fora dele: regras não publicadas, dados reais ainda placeholder (telefone, e-mail, cidade, texto do Sobre, fotos) e domínio real ausente em `NEXT_PUBLIC_SITE_URL`.
+- **Pontos deixados em aberto pelos revisores** (nenhum bloqueante):
+  - `ActionLink` renderiza `<a>` cru, então a volta da 404 para a home é recarga completa; o detalhe da publicação usa `next/link` para o mesmo destino. Cabe dar ao `ActionLink` a opção de renderizar `Link` quando o destino é interno (`ehDestinoExterno` já existe em `lib/link.ts`).
+  - A 404 no grupo `(site)`, para o `notFound()` do slug sair com cabeçalho e rodapé (AD-031 explica por que ficou na raiz).
+  - `revalidate = 300` está literal em três arquivos porque o Next exige valor estático no segmento; nada trava a divergência entre eles.
+  - Falha de leitura no `sitemap.ts` degrada em silêncio — sem log, por a spec marcar observabilidade como N/A.
+  - A tabela de rastreabilidade do `spec.md` nunca foi atualizada durante a execução (segue "0 mapped"); o hábito da casa é marcar só o `tasks.md`.
 - **Branch**: main · árvore limpa.

@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
 import sitemap from "@/app/sitemap";
-import { siteUrl } from "@/content/site";
 import { listarPublicadas } from "@/features/publicacoes/queries";
 import {
   LIMITE_PUBLICACOES_SITEMAP,
   type Publicacao,
 } from "@/features/publicacoes/schemas";
 import { CAMINHO_PAINEL } from "@/lib/rotas";
+import { siteUrl } from "@/lib/url";
 
 vi.mock("@/features/publicacoes/queries", () => ({
   listarPublicadas: vi.fn(),

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Karla, Parisienne } from "next/font/google";
 
-import { siteUrl } from "@/content/site";
+import { siteUrl } from "@/lib/url";
 import "./globals.css";
 
 const fraunces = Fraunces({

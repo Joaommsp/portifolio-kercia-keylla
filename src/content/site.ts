@@ -354,6 +354,3 @@ export const painel = {
     acao: { rotulo: "Entrar", emAndamento: "Entrando…" },
   },
 } as const;
-
-export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://keyllamelo.com.br";

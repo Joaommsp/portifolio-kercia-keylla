@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import robots from "@/app/robots";
-import { siteUrl } from "@/content/site";
 import { CAMINHO_HOME, CAMINHO_PAINEL, CAMINHO_SITEMAP } from "@/lib/rotas";
+import { siteUrl } from "@/lib/url";
 
 /** O campo aceita uma regra ou uma lista; aqui é sempre uma. */
 const regraUnica = () => {
