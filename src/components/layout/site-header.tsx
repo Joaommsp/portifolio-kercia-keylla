@@ -6,7 +6,7 @@ import { cabecalho, navegacao, perfil } from "@/content/site";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur-md">
-      <Container className="flex h-17 items-center justify-between gap-6">
+      <Container className="flex h-cabecalho items-center justify-between gap-6">
         <a
           href="#topo"
           aria-label={perfil.nome}

@@ -1,11 +1,18 @@
-import { Blocks, ClipboardList, Heart, Target, Users, Workflow } from "lucide-react";
-import type { ComponentType, SVGProps } from "react";
+import {
+  Blocks,
+  ClipboardList,
+  Heart,
+  type LucideIcon,
+  Target,
+  Users,
+  Workflow,
+} from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
 import { secaoAt, type IconePilar } from "@/content/site";
 
-const ICONES: Record<IconePilar, ComponentType<SVGProps<SVGSVGElement>>> = {
+const ICONES: Record<IconePilar, LucideIcon> = {
   acolhimento: Heart,
   observacao: ClipboardList,
   mediacao: Workflow,
@@ -17,7 +24,7 @@ const ICONES: Record<IconePilar, ComponentType<SVGProps<SVGSVGElement>>> = {
 /** Grade dos pilares do trabalho da AT, lida do conteúdo fixo do site. */
 export function OQueFazUmaAt() {
   return (
-    <section id="at" className="scroll-mt-20 py-14 duo:py-24">
+    <section id="at" className="scroll-mt-cabecalho py-14 duo:py-24">
       <Container>
         <SectionHeading eyebrow={secaoAt.eyebrow} titulo={secaoAt.titulo}>
           <p className="max-w-nota text-sm text-ink-soft">{secaoAt.chamada}</p>

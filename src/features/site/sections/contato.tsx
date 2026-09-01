@@ -1,8 +1,8 @@
-import { AtSign, Mail, MapPin, Phone } from "lucide-react";
-import type { ComponentType, SVGProps } from "react";
+import { AtSign, type LucideIcon, Mail, MapPin, Phone } from "lucide-react";
 
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
+import { propsLinkExterno } from "@/lib/link";
 import { SectionHeading } from "@/components/layout/section-heading";
 import {
   canaisContato,
@@ -11,7 +11,7 @@ import {
   type IconeContato,
 } from "@/content/site";
 
-const ICONES: Record<IconeContato, ComponentType<SVGProps<SVGSVGElement>>> = {
+const ICONES: Record<IconeContato, LucideIcon> = {
   email: Mail,
   telefone: Phone,
   instagram: AtSign,
@@ -21,11 +21,7 @@ const ICONES: Record<IconeContato, ComponentType<SVGProps<SVGSVGElement>>> = {
 /** Faixa de contato: chamada, botão de WhatsApp e os canais diretos. */
 export function Contato() {
   return (
-    // Sobre a faixa oliva o foco dourado padrão perde contraste.
-    <section
-      id="contato"
-      className="scroll-mt-20 bg-olive text-on-olive [&_a:focus-visible]:outline-on-olive"
-    >
+    <section id="contato" className="scroll-mt-cabecalho bg-olive text-on-olive">
       <Container className="grid items-center gap-8 py-12 duo:grid-cols-2 duo:gap-16 duo:py-20">
         <div>
           <SectionHeading
@@ -48,7 +44,8 @@ export function Contato() {
           </ActionLink>
         </div>
 
-        <ul className="grid gap-3.5 text-sm">
+        {/* Sobre a faixa oliva o foco dourado padrão perde contraste. */}
+        <ul className="grid gap-3.5 text-sm [&_a:focus-visible]:outline-on-olive">
           {canaisContato.map((canal) => {
             const Icone = ICONES[canal.icone];
             const conteudo = (
@@ -67,9 +64,7 @@ export function Contato() {
                   <a
                     href={canal.href}
                     className="flex items-center gap-3 transition-opacity hover:opacity-80"
-                    {...(canal.externo
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : undefined)}
+                    {...propsLinkExterno(canal.externo)}
                   >
                     {conteudo}
                   </a>
