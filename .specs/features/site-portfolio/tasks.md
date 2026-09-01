@@ -498,7 +498,7 @@ T38 → T39
 
 ---
 
-### T22: Leitura de formações
+### T22: Leitura de formações ✅
 
 **What**: `listarFormacoes()` ordenando por `ordem` asc e `ano` desc, devolvendo `{ dados }` ou `{ erro }`.
 **Where**: `src/features/formacoes/queries.ts`
@@ -508,8 +508,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Empate de `ordem` desempata por `ano` decrescente
-- [ ] Falha devolve mensagem traduzida, sem lançar
+- [x] Empate de `ordem` desempata por `ano` decrescente
+- [x] Falha devolve mensagem traduzida, sem lançar
 
 **Tests**: unit
 **Gate**: quick
