@@ -480,7 +480,7 @@ T38 → T39
 
 ---
 
-### T21: Converter de formação
+### T21: Converter de formação ✅
 
 **What**: Converter documento de formação em objeto de domínio e o inverso.
 **Where**: `src/features/formacoes/converter.ts`
@@ -490,8 +490,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `descricao` ausente vira `null`
-- [ ] `ordem` ausente assume o maior valor conhecido, sem quebrar a ordenação
+- [x] `descricao` ausente vira `null`
+- [x] `ordem` ausente assume o maior valor conhecido, sem quebrar a ordenação
 
 **Tests**: unit
 **Gate**: quick

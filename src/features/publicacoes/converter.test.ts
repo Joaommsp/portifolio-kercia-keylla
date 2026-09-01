@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  paraData,
   paraDocumentoDePublicacao,
   paraPublicacao,
 } from "@/features/publicacoes/converter";
@@ -66,6 +65,15 @@ describe("paraPublicacao", () => {
     ).toBeNull();
   });
 
+  it("devolve null quando o Timestamp produz uma data inválida", () => {
+    expect(
+      paraPublicacao("abc123", {
+        ...documentoCompleto,
+        publicadoEm: { toDate: () => new Date("nada") },
+      }).publicadoEm,
+    ).toBeNull();
+  });
+
   it("aceita Date direto no lugar do Timestamp", () => {
     expect(
       paraPublicacao("abc123", {
@@ -106,12 +114,6 @@ describe("paraPublicacao", () => {
 
     expect(publicacao.imagemUrl).toBeNull();
     expect(publicacao.tag).toBeNull();
-  });
-});
-
-describe("paraData", () => {
-  it("devolve null para um Timestamp cujo toDate produz data inválida", () => {
-    expect(paraData({ toDate: () => new Date("nada") })).toBeNull();
   });
 });
 
