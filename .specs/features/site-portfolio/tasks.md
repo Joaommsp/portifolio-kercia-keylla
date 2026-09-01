@@ -813,7 +813,7 @@ T27 → T40
 
 ---
 
-### T39: README e variáveis de ambiente
+### T39: README e variáveis de ambiente ✅
 
 **What**: Documentar setup, variáveis do Firebase, scripts, estrutura de pastas e o passo de criar a usuária no console; incluir `.env.example`.
 **Where**: `README.md`
@@ -823,8 +823,8 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `.env.example` lista todas as variáveis usadas em `config.ts`
-- [ ] Nenhuma credencial real versionada
+- [x] `.env.example` lista todas as variáveis usadas em `config.ts`
+- [x] Nenhuma credencial real versionada
 
 **Tests**: none
 **Gate**: build

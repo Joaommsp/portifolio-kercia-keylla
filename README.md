@@ -1,36 +1,158 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Site da Keylla Melo — Assistente Terapêutica
 
-## Getting Started
+Site de apresentação com publicações e formações mantidas pela própria autora,
+por um painel em `/admin`. Next 16 (App Router) com Firebase — Firestore para os
+dados e Auth para a entrada no painel. Não há servidor próprio: a leitura
+pública roda em Server Component e a escrita roda no navegador autenticado; quem
+autoriza é o `firestore.rules`.
 
-First, run the development server:
+## Requisitos
+
+- Node 20 ou superior e npm
+- Um projeto no [Firebase](https://console.firebase.google.com) (plano gratuito
+  atende), com Firestore e Authentication habilitados
+
+## Como rodar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # preencha com os dados do seu projeto Firebase
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sem `.env.local` preenchido, a aplicação sobe e as páginas estáticas aparecem,
+mas as seções de publicações e formação mostram o erro nomeando a variável que
+falta.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variáveis de ambiente
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Todas são lidas em `src/lib/firebase/config.ts` (menos a última, lida em
+`src/content/site.ts`). Os valores saem do Firebase Console → Project settings →
+General → Your apps → app Web → SDK setup and configuration.
 
-## Learn More
+| Variável | Obrigatória | O que é |
+| -------- | ----------- | ------- |
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | sim | Chave pública do app Web |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | sim | Domínio do Auth (`<projeto>.firebaseapp.com`) |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | sim | Id do projeto |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | sim | Bucket do projeto |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | sim | Id do remetente |
+| `NEXT_PUBLIC_FIREBASE_APP_ID` | sim | Id do app Web |
+| `NEXT_PUBLIC_SITE_URL` | não | Endereço público do site, usado no canonical, no Open Graph, no sitemap e no robots. Padrão: `https://keyllamelo.com.br` |
 
-To learn more about Next.js, take a look at the following resources:
+As chaves do Firebase Web são públicas por natureza — elas identificam o
+projeto, não autorizam nada. A proteção real está nas regras do Firestore.
+Ainda assim, `.env.local` não é versionado; só o `.env.example`, sem valores.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Configurar o Firebase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Criar o projeto** no console e adicionar um app **Web**; copiar a config
+   para o `.env.local`.
+2. **Firestore Database** → Create database (modo produção; as regras deste
+   repositório substituem as padrão).
+3. **Authentication** → Sign-in method → habilitar **Email/Password**. Não há
+   cadastro aberto nem recuperação de senha no site: a usuária é criada à mão.
+4. **Criar a usuária**: Authentication → Users → Add user, com o e-mail e a
+   senha da autora. Copiar o **User UID** que aparece na linha criada.
+5. **Autorizar a autora**: abrir `firestore.rules` e trocar
+   `COLE_AQUI_O_UID_DA_AUTORA` por esse uid. A allowlist mora nas regras, e
+   nunca em campo de documento — no banco, a própria autora poderia editá-la.
+6. **Publicar regras e índice** (passo abaixo). Enquanto as regras padrão
+   estiverem no ar, a home responde com "Você não tem permissão para esta
+   operação".
 
-## Deploy on Vercel
+### Publicar as regras e o índice
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Pelo CLI, na raiz do projeto (o `firebase.json` já aponta para os dois
+arquivos):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install -g firebase-tools
+firebase login
+firebase deploy --only firestore:rules,firestore:indexes --project <id-do-projeto>
+```
+
+Pelo console, se preferir sem CLI:
+
+- **Regras**: Firestore Database → Rules → colar o conteúdo de
+  `firestore.rules` → Publish.
+- **Índice**: Firestore Database → Indexes → Composite → Add index, coleção
+  `publicacoes`, campos `publicado` (Ascending) e `publicadoEm` (Descending).
+  É ele que a listagem da home exige, por combinar filtro com ordenação em
+  outro campo.
+
+## Coleções
+
+| Coleção | Campos |
+| ------- | ------ |
+| `publicacoes` | `titulo`, `slug`, `resumo`, `corpo` (markdown), `imagemUrl`, `tag`, `publicado`, `publicadoEm`, `atualizadoEm` |
+| `formacoes` | `titulo`, `instituicao`, `descricao`, `ano`, `status` (`concluido` \| `em_andamento`), `ordem` |
+
+Nenhuma das duas precisa ser criada à mão: o painel cria o documento na
+primeira gravação. Os limites de cada campo vivem nos `schemas.ts` de cada
+domínio.
+
+Imagem não é hospedada aqui — entra por URL, e só de um host da allowlist em
+`src/content/imagens.ts`, que é a mesma lista dos `remotePatterns` do
+`next.config.ts`.
+
+## Scripts
+
+| Script | O que faz |
+| ------ | --------- |
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm start` | Sobe o build |
+| `npm run lint` | ESLint |
+| `npm test` | Vitest em modo observador (`npm test -- --run` para uma passada) |
+| `npm run typecheck` | `tsc --noEmit` |
+
+Antes de entregar qualquer alteração:
+
+```bash
+npx tsc --noEmit && npm run lint && npm test -- --run && npm run build
+```
+
+## Estrutura
+
+```
+src/
+├── app/                  # só roteamento
+│   ├── (site)/           # home, layout público e /publicacoes/[slug]
+│   ├── (admin)/admin/    # painel: login, publicações e formações
+│   ├── sitemap.ts        # home + publicações no ar
+│   ├── robots.ts         # site liberado, /admin fora
+│   └── globals.css       # tokens da paleta
+├── components/
+│   ├── ui/               # shadcn
+│   ├── form/             # campo com rótulo, erro e contador
+│   └── layout/           # Container, ActionLink, SectionHeading, tabela do painel…
+├── features/             # domínio, uma pasta por assunto
+│   ├── publicacoes/      # schemas, converter, queries (servidor), painel e mutations (cliente)
+│   ├── formacoes/        # mesma anatomia
+│   ├── admin/            # sessão, guarda e moldura do painel
+│   └── site/sections/    # hero, o que faz uma AT, sobre, contato
+├── content/site.ts       # todo texto fixo do site e do painel
+├── lib/                  # firebase, formatação, rotas, utilidades
+├── hooks/
+└── test/                 # setup e dublês de Firestore e Auth
+```
+
+Convenções que valem para qualquer alteração: `app/` só roteia; nenhum texto de
+interface é escrito dentro de componente (tudo vem de `src/content/site.ts` ou
+do Firestore); nenhuma cor literal (só token do tema); Server Component nunca
+importa `mutations.ts`, Client Component nunca importa `queries.ts`.
+
+## Pendente
+
+Aguardam os dados reais da Keylla e estão marcados com `PENDENTE` em
+`src/content/site.ts`:
+
+- telefone/WhatsApp (hoje `5500000000000`)
+- e-mail (hoje `contato@exemplo.com.br`)
+- perfil do Instagram e cidade de atendimento
+- texto do "Sobre", escrito por ela
+- fotos do hero e da seção "Sobre" — hoje são molduras vazias
+
+Fora do conteúdo, seguem pendentes o uid da autora em `firestore.rules` e o
+domínio real em `NEXT_PUBLIC_SITE_URL`.
