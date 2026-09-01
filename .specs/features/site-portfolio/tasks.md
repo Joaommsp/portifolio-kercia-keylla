@@ -759,7 +759,7 @@ T27 → T40
 
 ---
 
-### T36: Regras do Firestore
+### T36: Regras do Firestore ✅
 
 **What**: Regras com leitura pública apenas de publicações publicadas, formações públicas e escrita restrita à allowlist de uid.
 **Where**: `firestore.rules`
@@ -769,9 +769,9 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Escrita negada para usuário fora da allowlist
-- [ ] Rascunho não é legível sem sessão
-- [ ] Allowlist só nas rules, nunca em campo de documento
+- [x] Escrita negada para usuário fora da allowlist
+- [x] Rascunho não é legível sem sessão
+- [x] Allowlist só nas rules, nunca em campo de documento
 
 **Tests**: none
 **Gate**: build

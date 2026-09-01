@@ -1,0 +1,66 @@
+rules_version = '2';
+
+// Regras do Firestore do site (SEC-01).
+//
+// O site não tem servidor próprio nem `firebase-admin` (AD-001): a leitura
+// pública e a escrita da autora saem do mesmo SDK, no navegador. Quem autoriza
+// é este arquivo — código de aplicação aqui não protege nada.
+//
+// ── Como trocar o uid placeholder pelo real ──────────────────────────────────
+// 1. Firebase Console → Authentication → Users → Add user: e-mail e senha da
+//    Keylla (não existe cadastro aberto; a usuária é criada à mão).
+// 2. Copiar o "User UID" da linha criada.
+// 3. Substituir COLE_AQUI_O_UID_DA_AUTORA, abaixo, por esse uid entre aspas.
+// 4. Publicar: Console → Firestore Database → Rules → Publish, ou
+//    `firebase deploy --only firestore:rules` na raiz do projeto.
+//
+// Enquanto o placeholder estiver aqui, ninguém escreve: nenhum uid real casa
+// com ele. A leitura pública continua funcionando.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // A allowlist mora NAS REGRAS, nunca em campo de documento: a autora tem
+    // escrita na coleção e poderia promover a si mesma se o papel morasse no
+    // banco. Para adicionar alguém, basta mais um uid nesta lista.
+    function autoras() {
+      return [
+        'COLE_AQUI_O_UID_DA_AUTORA'
+      ];
+    }
+
+    function ehAutora() {
+      return request.auth != null && request.auth.uid in autoras();
+    }
+
+    match /publicacoes/{publicacaoId} {
+      // Leitura de um documento pelo id. O painel abre o formulário por id e
+      // precisa enxergar rascunho; visitante só alcança o que está no ar.
+      allow get: if ehAutora() || resource.data.publicado == true;
+
+      // Leitura de lista. A regra é avaliada contra a CONSULTA, não contra o
+      // que ela devolveria: uma consulta sem `where('publicado', '==', true)`
+      // é recusada inteira para quem não é a autora, mesmo que por acaso só
+      // fosse casar com documentos publicados.
+      //
+      // Passa anônima:   where('publicado','==',true) + orderBy('publicadoEm')
+      //                  (home) e where('slug') + where('publicado','==',true)
+      //                  (detalhe).
+      // Passa só autenticada: a listagem do painel, que traz a coleção inteira
+      //                  para mostrar rascunho, e a conferência de slug
+      //                  duplicado, que filtra apenas por `slug`.
+      allow list: if ehAutora() || resource.data.publicado == true;
+
+      allow create, update, delete: if ehAutora();
+    }
+
+    match /formacoes/{formacaoId} {
+      // Formação não tem rascunho: o que está cadastrado está na página.
+      allow read: if true;
+      allow create, update, delete: if ehAutora();
+    }
+
+    // Coleção não declarada acima já é negada por padrão — o Firestore só
+    // libera o que uma regra permite explicitamente.
+  }
+}
