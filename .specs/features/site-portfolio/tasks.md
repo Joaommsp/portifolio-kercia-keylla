@@ -704,7 +704,7 @@ T27 → T40
 
 ---
 
-### T33: Listagem do painel
+### T33: Listagem do painel ✅
 
 **What**: Tabela de publicações do painel com estado (no ar/rascunho), editar, alternar publicação e excluir com `AlertDialog`.
 **Where**: `src/app/(admin)/admin/page.tsx`
@@ -714,9 +714,9 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Excluir só persiste após confirmação no dialog
-- [ ] Nenhuma chamada a `window.confirm`
-- [ ] Ações sempre visíveis, nunca só no hover
+- [x] Excluir só persiste após confirmação no dialog
+- [x] Nenhuma chamada a `window.confirm`
+- [x] Ações sempre visíveis, nunca só no hover
 
 **Tests**: unit
 **Gate**: quick

@@ -234,6 +234,34 @@ export const painel = {
   rotuloNavegacao: "Seções do painel",
   sair: { rotulo: "Sair", emAndamento: "Saindo…" },
   verSite: "Ver o site",
+  listaDePublicacoes: {
+    titulo: "Publicações",
+    carregando: "Carregando as publicações…",
+    vazio: "Nenhuma publicação criada ainda.",
+    colunas: {
+      titulo: "Título",
+      estado: "Estado",
+      data: "Publicado em",
+      acoes: "Ações",
+    },
+    estados: { publicado: "No ar", rascunho: "Rascunho" },
+    semData: "Sem data",
+    acoes: {
+      criar: "Nova publicação",
+      editar: "Editar",
+      publicar: "Publicar",
+      despublicar: "Tirar do ar",
+      excluir: "Excluir",
+      emAndamento: "Aguarde…",
+    },
+    exclusao: {
+      titulo: "Excluir esta publicação?",
+      mensagem: (titulo: string) =>
+        `“${titulo}” será apagada em definitivo, e não dá para desfazer.`,
+      confirmar: "Excluir em definitivo",
+      cancelar: "Manter a publicação",
+    },
+  },
   publicacao: {
     novo: "Nova publicação",
     edicao: "Editar publicação",

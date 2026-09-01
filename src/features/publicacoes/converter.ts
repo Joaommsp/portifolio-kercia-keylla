@@ -102,3 +102,31 @@ export function paraFormularioDePublicacao(
     publicado: publicacao.publicado,
   };
 }
+
+/**
+ * Ordena as publicações como o painel as lista: da mais recente para a mais
+ * antiga. Publicação sem data fica no fim, e não some — no painel é justamente
+ * ela que precisa ser vista e corrigida.
+ *
+ * A regra é pura e mora aqui, e não na leitura, porque o painel não pode
+ * importar de `queries.ts` (AD-002).
+ */
+export function ordenarPublicacoes(
+  publicacoes: readonly Publicacao[],
+): Publicacao[] {
+  return [...publicacoes].sort((a, b) => {
+    if (a.publicadoEm === null && b.publicadoEm === null) {
+      return 0;
+    }
+
+    if (a.publicadoEm === null) {
+      return 1;
+    }
+
+    if (b.publicadoEm === null) {
+      return -1;
+    }
+
+    return b.publicadoEm.getTime() - a.publicadoEm.getTime();
+  });
+}
