@@ -351,7 +351,7 @@ T38 → T39
 
 ---
 
-### T14: Configuração validada do Firebase
+### T14: Configuração validada do Firebase ✅
 
 **What**: Ler as variáveis `NEXT_PUBLIC_FIREBASE_*` e falhar nomeando a variável ausente.
 **Where**: `src/lib/firebase/config.ts`
@@ -361,8 +361,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Erro cita o nome exato da variável faltante
-- [ ] Objeto de config tipado, sem `any`
+- [x] Erro cita o nome exato da variável faltante
+- [x] Objeto de config tipado, sem `any`
 
 **Tests**: unit
 **Gate**: quick
