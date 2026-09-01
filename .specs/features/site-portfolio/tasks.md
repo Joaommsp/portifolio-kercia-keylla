@@ -516,7 +516,7 @@ T38 → T39
 
 ---
 
-### T23: Card de publicação
+### T23: Card de publicação ✅
 
 **What**: Card com imagem opcional, título, resumo, data e tag, ligando para `/publicacoes/[slug]`.
 **Where**: `src/features/publicacoes/components/publicacao-card.tsx`
@@ -526,8 +526,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Sem `imagemUrl`, o card renderiza só texto, sem espaço vazio
-- [ ] Data formatada por `formatDateBR`
+- [x] Sem `imagemUrl`, o card renderiza só texto, sem espaço vazio
+- [x] Data formatada por `formatDateBR`
 
 **Tests**: unit
 **Gate**: quick

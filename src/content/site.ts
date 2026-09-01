@@ -215,13 +215,12 @@ export const rodape = {
   assinatura: "Feito com carinho pelo filho",
 } as const;
 
-/** Hosts permitidos para a imagem externa das publicações. */
-export const hostsDeImagemPermitidos = [
-  "images.unsplash.com",
-  "res.cloudinary.com",
-  "firebasestorage.googleapis.com",
-  "lh3.googleusercontent.com",
-] as const;
+/**
+ * Hosts permitidos para a imagem externa das publicações. A lista mora em
+ * `@/content/imagens` porque o `next.config.ts` também precisa dela e não
+ * resolve o alias `@/` — aqui ela é só reexportada.
+ */
+export { hostsDeImagemPermitidos } from "./imagens";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://keyllamelo.com.br";
