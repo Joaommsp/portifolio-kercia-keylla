@@ -134,7 +134,7 @@ T38 → T39
 
 ---
 
-### T2: Dependências do projeto
+### T2: Dependências do projeto ✅
 
 **What**: Instalar firebase, react-hook-form, @hookform/resolvers, zod, react-markdown, remark-gfm, lucide-react, e as devDependencies de teste (vitest, @vitejs/plugin-react, jsdom, @testing-library/react, @testing-library/jest-dom, @testing-library/user-event).
 **Where**: `package.json`
