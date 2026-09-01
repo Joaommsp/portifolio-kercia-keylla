@@ -11,6 +11,13 @@ import {
 /** Mensagem tal como o Firebase a devolve, já traduzida pela camada de erros. */
 const ERRO_DO_FIREBASE = "Você não tem permissão para esta operação.";
 
+/**
+ * Frase que a spec escreve por extenso para o estado vazio (PUB-03). É literal
+ * de propósito: comparar com `secaoPublicacoes.vazio` moveria os dois lados
+ * junto e trocar o texto do site não reprovaria nada.
+ */
+const MENSAGEM_DE_VAZIO_DA_SPEC = "Nenhuma publicação por aqui ainda.";
+
 function criarPublicacao(indice: number, ajustes: Partial<Publicacao> = {}): Publicacao {
   return {
     id: `p${indice}`,
@@ -40,7 +47,7 @@ describe("PublicacoesSection", () => {
     expect(
       screen.getByRole("heading", { name: "Publicação 3" }),
     ).toBeInTheDocument();
-    expect(screen.queryByText(secaoPublicacoes.vazio)).not.toBeInTheDocument();
+    expect(screen.queryByText(MENSAGEM_DE_VAZIO_DA_SPEC)).not.toBeInTheDocument();
   });
 
   it("mostra no máximo seis cards, mesmo recebendo mais", () => {
@@ -57,15 +64,19 @@ describe("PublicacoesSection", () => {
   it("mostra o aviso de vazio, e não a lista, quando não há publicação", () => {
     render(<PublicacoesSection resultado={{ dados: [] }} />);
 
-    expect(screen.getByText(secaoPublicacoes.vazio)).toBeInTheDocument();
+    expect(screen.getByText(MENSAGEM_DE_VAZIO_DA_SPEC)).toBeInTheDocument();
     expect(screen.queryByRole("article")).not.toBeInTheDocument();
+  });
+
+  it("escreve o aviso de vazio com a frase da spec", () => {
+    expect(secaoPublicacoes.vazio).toBe(MENSAGEM_DE_VAZIO_DA_SPEC);
   });
 
   it("mostra a mensagem devolvida pelo Firebase quando a leitura falha", () => {
     render(<PublicacoesSection resultado={{ erro: ERRO_DO_FIREBASE }} />);
 
     expect(screen.getByRole("alert")).toHaveTextContent(ERRO_DO_FIREBASE);
-    expect(screen.queryByText(secaoPublicacoes.vazio)).not.toBeInTheDocument();
+    expect(screen.queryByText(MENSAGEM_DE_VAZIO_DA_SPEC)).not.toBeInTheDocument();
     expect(screen.queryByRole("article")).not.toBeInTheDocument();
   });
 

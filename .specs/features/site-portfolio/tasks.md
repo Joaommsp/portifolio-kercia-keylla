@@ -1046,7 +1046,7 @@ T4 → T51
 
 ---
 
-### T49: Mensagem de vazio ancorada no literal da spec
+### T49: Mensagem de vazio ancorada no literal da spec ✅
 
 **What**: Ancorar o estado vazio das publicações na frase que a spec escreve, em vez de na constante que o componente renderiza, e varrer os outros estados vazio/erro atrás da mesma armadilha.
 **Where**: `src/features/publicacoes/components/publicacoes-section.test.tsx`
@@ -1056,10 +1056,12 @@ T4 → T51
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] O estado vazio é asserido contra "Nenhuma publicação por aqui ainda."
-- [ ] `secaoPublicacoes.vazio` é conferido contra esse mesmo literal
-- [ ] Trocar o texto em `content/site.ts` (M54) reprova
-- [ ] Os demais estados vazio/erro são varridos e o resultado da varredura fica registrado
+- [x] O estado vazio é asserido contra "Nenhuma publicação por aqui ainda."
+- [x] `secaoPublicacoes.vazio` é conferido contra esse mesmo literal
+- [x] Trocar o texto em `content/site.ts` (M54) reprova
+- [x] Os demais estados vazio/erro são varridos e o resultado da varredura fica registrado
+
+**Varredura**: dos textos que a spec escreve por extenso, só dois chegam à tela — a frase de vazio de PUB-03 (corrigida aqui) e os rótulos "Em andamento"/"Concluído" de FOR-02, já asseridos como literal em `formacoes-section.test.tsx:52-53`. Os demais estados vazio/erro (`textos.vazio` dos painéis, `painel.verificandoSessao`, `paginaNaoEncontrada.mensagem`) são texto que a spec não fixa, então comparar com a constante do conteúdo é o contrato certo. As mensagens do Firebase já são literais em todos os testes.
 
 **Tests**: unit
 **Gate**: quick
