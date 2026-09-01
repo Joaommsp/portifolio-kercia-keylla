@@ -75,7 +75,7 @@ portfolio-keylla/
 
 **Regras de camada**
 - Server Component nunca importa de `mutations.ts`; Client Component nunca importa de `queries.ts`.
-- Componente de seção recebe dados por prop — quem busca é a `page.tsx`.
+- Dado vindo do Firestore chega ao componente por prop — quem busca é a `page.tsx`. Conteúdo fixo é importado direto de `src/content/site.ts`.
 - Nenhuma string de conteúdo dentro de componente: tudo vem de `src/content/site.ts` ou do Firestore.
 - Nenhum valor de cor/espaçamento literal: só token do tema.
 
@@ -134,3 +134,4 @@ A allowlist de uid fica nas rules — nunca em campo de documento, que a própri
 - AD-002: `features/` por domínio com `queries`/`mutations` separados, para impedir SDK de escrita no bundle público.
 - AD-003: `/publicacoes/[slug]` como rota real (SEO e compartilhamento), o resto do site permanece página única.
 - AD-004: conteúdo fixo centralizado em `src/content/site.ts`, com placeholders marcados até a entrega dos dados reais.
+- AD-008: dois vocabulários de ação, por contexto — `ActionLink` (navegação e CTA do site público, visual do mockup) e `Button` do shadcn (ações do painel). Não unificar: o site é link, o painel é ação com estado de carregamento.
