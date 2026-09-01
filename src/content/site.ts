@@ -10,6 +10,9 @@ import { formatarTelefoneBR } from "@/lib/format";
 
 export const PENDENTE = "PENDENTE" as const;
 
+/** Id da âncora de topo, alvo da marca no cabeçalho. */
+export const idTopo = "topo";
+
 export const perfil = {
   nome: "Keylla Melo",
   nomeEmLinhas: ["Keylla", "Melo"],
@@ -18,7 +21,6 @@ export const perfil = {
   apresentacao:
     "Acompanho crianças e adolescentes na escola e no dia a dia, criando vínculo, mediando atividades e sustentando a autonomia de cada um — sempre junto da família e da equipe terapêutica.",
   selo: ["Presença que", "constrói", "autonomia"],
-  legendaRetrato: "Foto de apresentação",
 } as const;
 
 export const navegacao = [
@@ -30,13 +32,17 @@ export const navegacao = [
 ] as const;
 
 export const cabecalho = {
+  marca: "K",
   rotuloNavegacao: "Seções do site",
   acao: { rotulo: "Fale comigo", href: "#contato" },
 } as const;
 
-export const acoesHero = {
-  primaria: { rotulo: "Conversar comigo", href: "#contato" },
-  secundaria: { rotulo: "Entenda o trabalho de uma AT", href: "#at" },
+export const secaoHero = {
+  legendaFoto: "Foto de apresentação",
+  acoes: {
+    primaria: { rotulo: "Conversar comigo", href: "#contato" },
+    secundaria: { rotulo: "Entenda o trabalho de uma AT", href: "#at" },
+  },
 } as const;
 
 export type IconePilar =
@@ -126,14 +132,6 @@ export const secaoPublicacoes = {
   voltar: "Voltar para a página inicial",
 } as const;
 
-export const secaoContato = {
-  eyebrow: "Vamos conversar",
-  titulo: "Precisa de uma AT para o seu filho?",
-  chamada:
-    "Me conte a rotina, a idade e o que a equipe já vem trabalhando. Respondo pessoalmente.",
-  acao: "Chamar no WhatsApp",
-} as const;
-
 /** PENDENTE: telefone, e-mail, perfil e cidade reais. */
 export const contato = {
   whatsapp: {
@@ -151,6 +149,14 @@ export const linksContato = {
   )}`,
   email: `mailto:${contato.email}`,
   instagram: `https://instagram.com/${contato.instagram}`,
+} as const;
+
+export const secaoContato = {
+  eyebrow: "Vamos conversar",
+  titulo: "Precisa de uma AT para o seu filho?",
+  chamada:
+    "Me conte a rotina, a idade e o que a equipe já vem trabalhando. Respondo pessoalmente.",
+  acao: { rotulo: "Chamar no WhatsApp", href: linksContato.whatsapp },
 } as const;
 
 export type IconeContato = "email" | "telefone" | "instagram" | "regiao";

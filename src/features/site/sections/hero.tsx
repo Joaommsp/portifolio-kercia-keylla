@@ -1,12 +1,12 @@
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
 import { PhotoFrame } from "@/components/layout/photo-frame";
-import { acoesHero, perfil } from "@/content/site";
+import { idTopo, perfil, secaoHero } from "@/content/site";
 
 /** Abertura da página: saudação, nome, papel, apresentação e os dois CTAs. */
 export function Hero() {
   return (
-    <header id="topo" className="scroll-mt-cabecalho pt-10 duo:pt-20">
+    <section id={idTopo} className="scroll-mt-cabecalho pt-10 duo:pt-20">
       <Container>
         <div className="grid items-center gap-8 duo:grid-cols-2 duo:gap-16">
           <div>
@@ -29,11 +29,11 @@ export function Hero() {
             <p className="mt-5 max-w-leitura text-ink-soft">{perfil.apresentacao}</p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <ActionLink href={acoesHero.primaria.href} withArrow>
-                {acoesHero.primaria.rotulo}
+              <ActionLink href={secaoHero.acoes.primaria.href} withArrow>
+                {secaoHero.acoes.primaria.rotulo}
               </ActionLink>
-              <ActionLink href={acoesHero.secundaria.href} variant="ghost">
-                {acoesHero.secundaria.rotulo}
+              <ActionLink href={secaoHero.acoes.secundaria.href} variant="ghost">
+                {secaoHero.acoes.secundaria.rotulo}
               </ActionLink>
             </div>
           </div>
@@ -41,7 +41,7 @@ export function Hero() {
           <div className="relative mx-auto w-full max-w-sm duo:max-w-none">
             <PhotoFrame
               comAnel
-              legenda={perfil.legendaRetrato}
+              legenda={secaoHero.legendaFoto}
               className="bg-linear-to-b from-olive/20 to-surface-2"
             />
 
@@ -55,6 +55,6 @@ export function Hero() {
           </div>
         </div>
       </Container>
-    </header>
+    </section>
   );
 }

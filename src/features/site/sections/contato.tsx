@@ -4,12 +4,7 @@ import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
 import { propsLinkExterno } from "@/lib/link";
 import { SectionHeading } from "@/components/layout/section-heading";
-import {
-  canaisContato,
-  linksContato,
-  secaoContato,
-  type IconeContato,
-} from "@/content/site";
+import { canaisContato, secaoContato, type IconeContato } from "@/content/site";
 
 const ICONES: Record<IconeContato, LucideIcon> = {
   email: Mail,
@@ -21,8 +16,11 @@ const ICONES: Record<IconeContato, LucideIcon> = {
 /** Faixa de contato: chamada, botão de WhatsApp e os canais diretos. */
 export function Contato() {
   return (
-    <section id="contato" className="scroll-mt-cabecalho bg-olive text-on-olive">
-      <Container className="grid items-center gap-8 py-12 duo:grid-cols-2 duo:gap-16 duo:py-20">
+    <section
+      id="contato"
+      className="scroll-mt-cabecalho bg-olive py-12 text-on-olive duo:py-20"
+    >
+      <Container className="grid items-center gap-8 duo:grid-cols-2 duo:gap-16">
         <div>
           <SectionHeading
             stacked
@@ -37,10 +35,10 @@ export function Contato() {
             external
             withArrow
             variant="light"
-            href={linksContato.whatsapp}
+            href={secaoContato.acao.href}
             className="mt-6"
           >
-            {secaoContato.acao}
+            {secaoContato.acao.rotulo}
           </ActionLink>
         </div>
 
