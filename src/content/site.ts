@@ -131,11 +131,12 @@ export const secaoSobre = {
   legendaFoto: "Foto em contexto",
 } as const;
 
+/** Pontuação que une dois dados na mesma linha ("Instituição · 180 horas"). */
+export const separadorDeMeta = " · ";
+
 export const secaoFormacao = {
   eyebrow: "Trajetória",
   titulo: "Formação e certificações",
-  /** Une instituição e descrição na mesma linha da formação. */
-  separador: " · ",
   /** Acompanha o ano de uma formação ainda em curso: "2026 —". */
   sufixoEmAndamento: " —",
   rotulos: {

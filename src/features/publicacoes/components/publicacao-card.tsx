@@ -10,7 +10,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { ehUrlDeImagemPermitida } from "@/features/publicacoes/schemas";
+import { imagemExibivel } from "@/features/publicacoes/schemas";
 import type { Publicacao } from "@/features/publicacoes/schemas";
 import { formatDateBR } from "@/lib/format";
 import { caminhoDaPublicacao } from "@/lib/rotas";
@@ -19,11 +19,7 @@ import { caminhoDaPublicacao } from "@/lib/rotas";
 const TAMANHOS_DA_MINIATURA = "(max-width: 880px) 100vw, 33vw";
 
 export function PublicacaoCard({ publicacao }: { publicacao: Publicacao }) {
-  const imagem =
-    publicacao.imagemUrl !== null &&
-    ehUrlDeImagemPermitida(publicacao.imagemUrl)
-      ? publicacao.imagemUrl
-      : null;
+  const imagem = imagemExibivel(publicacao.imagemUrl);
 
   const data =
     publicacao.publicadoEm === null ? null : formatDateBR(publicacao.publicadoEm);

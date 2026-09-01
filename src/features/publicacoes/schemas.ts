@@ -53,6 +53,19 @@ export function ehUrlDeImagemPermitida(valor: string): boolean {
   return (hostsDeImagemPermitidos as readonly string[]).includes(url.hostname);
 }
 
+/**
+ * A imagem que a publicação pode exibir: a URL gravada só passa se apontar
+ * para host da allowlist. Fora dela vira `null`, e quem renderiza omite a
+ * imagem em vez de deixar um buraco no layout.
+ */
+export function imagemExibivel(imagemUrl: string | null): string | null {
+  if (imagemUrl === null || !ehUrlDeImagemPermitida(imagemUrl)) {
+    return null;
+  }
+
+  return imagemUrl;
+}
+
 export const publicacaoSchema = z.object({
   titulo: textoObrigatorio("o título", LIMITES_PUBLICACAO.titulo),
   slug: textoObrigatorio("o slug", LIMITES_PUBLICACAO.slug).regex(PADRAO_SLUG, {

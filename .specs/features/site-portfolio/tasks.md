@@ -591,7 +591,7 @@ T38 → T39
 
 ---
 
-### T27: Página da publicação
+### T27: Página da publicação ✅
 
 **What**: Rota `/publicacoes/[slug]` com corpo em markdown, metadados Open Graph e 404 para slug inexistente ou rascunho.
 **Where**: `src/app/(site)/publicacoes/[slug]/page.tsx`
@@ -601,9 +601,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `generateMetadata` usa título e resumo
-- [ ] Markdown renderizado sem HTML bruto
-- [ ] Rascunho responde 404
+- [x] `generateMetadata` usa título e resumo
+- [x] Markdown renderizado sem HTML bruto
+- [x] Rascunho responde 404
 
 **Tests**: none
 **Gate**: build

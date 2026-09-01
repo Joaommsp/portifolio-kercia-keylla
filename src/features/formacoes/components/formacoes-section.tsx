@@ -12,7 +12,7 @@
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
 import { SectionMessage } from "@/components/layout/section-message";
-import { ancoras, secaoFormacao } from "@/content/site";
+import { ancoras, secaoFormacao, separadorDeMeta } from "@/content/site";
 import type { Formacao, StatusFormacao } from "@/features/formacoes/schemas";
 import type { Resultado } from "@/lib/resultado";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,7 @@ function ItemDeFormacao({ formacao }: { formacao: Formacao }) {
   const ano = anoExibido(formacao);
   const detalhe = [formacao.instituicao, formacao.descricao]
     .filter((parte): parte is string => parte !== null && parte !== "")
-    .join(secaoFormacao.separador);
+    .join(separadorDeMeta);
 
   return (
     <li className="grid gap-1.5 border-b border-line px-1 py-5 sm:grid-cols-[8rem_1fr_auto] sm:items-baseline sm:gap-5">
