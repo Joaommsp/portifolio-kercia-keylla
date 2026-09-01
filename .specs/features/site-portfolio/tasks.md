@@ -152,7 +152,7 @@ T38 → T39
 
 ---
 
-### T3: Vitest configurado
+### T3: Vitest configurado ✅
 
 **What**: Configurar Vitest com jsdom, plugin React, alias `@/*` e `src/test/setup.ts` com jest-dom; adicionar script `test`.
 **Where**: `vitest.config.ts`
