@@ -127,9 +127,20 @@ T36 → T46
 T27 → T47
 ```
 
+### Phase 8: Lacunas da re-verificação
+
+```
+T11 → T48
+T24 → T49
+T26 → T50
+T4 → T51
+```
+
 ---
 
 ## Task Breakdown
+
+## Phase 1: Fundação
 
 ### T1: Scaffold Next 16 ✅
 
@@ -240,6 +251,8 @@ T27 → T47
 **Gate**: build
 
 ---
+
+## Phase 2: Home estática
 
 ### T7: Formatadores compartilhados ✅
 
@@ -366,6 +379,8 @@ T27 → T47
 **Gate**: build
 
 ---
+
+## Phase 3: Camada de dados
 
 ### T14: Configuração validada do Firebase ✅
 
@@ -532,6 +547,8 @@ T27 → T47
 
 ---
 
+## Phase 4: Seções dinâmicas públicas
+
 ### T23: Card de publicação ✅
 
 **What**: Card com imagem opcional, título, resumo, data e tag, ligando para `/publicacoes/[slug]`.
@@ -625,6 +642,8 @@ T27 → T47
 **Gate**: build
 
 ---
+
+## Phase 5: Admin
 
 ### T28: Hook de autenticação ✅
 
@@ -773,6 +792,8 @@ T27 → T47
 **Gate**: quick
 
 ---
+
+## Phase 6: Fechamento
 
 ### T36: Regras do Firestore ✅
 
@@ -998,3 +1019,86 @@ T27 → T47
 
 **Tests**: unit
 **Gate**: quick
+
+---
+
+## Phase 8: Lacunas da re-verificação
+
+> Quatro tasks abertas pela re-verificação independente (iteração 2, `validation.md` de 2026-09-01): as sete correções da Fase 7 fecharam, mas quatro mutantes novos sobreviveram — todos de teste que não discrimina o valor que a spec fixa. Numeração continua de T47.
+
+### T48: Contagem dos seis pilares sob teste
+
+**What**: Teste da seção "O que faz uma AT" asserindo os 6 pilares que a spec fixa — a contagem como literal da spec, não como `pilares.length` — e que cada título na tela vem do conteúdo.
+**Where**: `src/features/site/sections/o-que-faz-uma-at.test.tsx`
+**Depends on**: T11
+**Requirement**: SIT-02
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] `secaoAt.pilares` tem exatamente 6 itens, comparados com o literal 6 da spec
+- [ ] A seção renderiza 6 cards, comparados com o mesmo literal
+- [ ] Os títulos renderizados são exatamente os títulos do conteúdo, na ordem
+- [ ] Remover um pilar do conteúdo (M52) e `pilares.slice(0, 3)` no componente (M53) reprovam
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T49: Mensagem de vazio ancorada no literal da spec
+
+**What**: Ancorar o estado vazio das publicações na frase que a spec escreve, em vez de na constante que o componente renderiza, e varrer os outros estados vazio/erro atrás da mesma armadilha.
+**Where**: `src/features/publicacoes/components/publicacoes-section.test.tsx`
+**Depends on**: T24
+**Requirement**: PUB-03
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] O estado vazio é asserido contra "Nenhuma publicação por aqui ainda."
+- [ ] `secaoPublicacoes.vazio` é conferido contra esse mesmo literal
+- [ ] Trocar o texto em `content/site.ts` (M54) reprova
+- [ ] Os demais estados vazio/erro são varridos e o resultado da varredura fica registrado
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T50: Rodapé dentro da ordem dos sete blocos
+
+**What**: Estender a asserção de ordem de SIT-01 para os 7 blocos da spec, renderizando a home dentro da moldura que traz o rodapé.
+**Where**: `src/app/(site)/page.test.tsx`
+**Depends on**: T26
+**Requirement**: SIT-01
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] A ordem asserida cobre hero, AT, Sobre, Formação, Publicações, contato e rodapé
+- [ ] O rodapé é localizado por papel (`contentinfo`), depois do conteúdo principal
+- [ ] Tirar o rodapé do layout (M55) reprova
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T51: Trava contra cor literal em componente
+
+**What**: Teste de varredura sobre `src/**/*.tsx` que reprova cor literal (hex, `rgb(`, `hsl(`) em `className` ou em style inline, com o detector conferido contra casos positivos e negativos.
+**Where**: `src/test/paleta-em-tokens.test.ts`
+**Depends on**: T4
+**Requirement**: SIT-05
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] Nenhum `.tsx` de `src/` tem cor literal em `className` ou em `style` inline
+- [ ] A varredura conta os arquivos lidos, para não passar vazia
+- [ ] O detector acusa `bg-[#EDF3E4]`, `style={{ color: "#8E7A32" }}` e `rgb(`/`hsl(`, e não acusa `href="#contato"` nem `text-brass`
+- [ ] Introduzir uma cor literal em um componente reprova
+
+**Tests**: unit
+**Gate**: build
