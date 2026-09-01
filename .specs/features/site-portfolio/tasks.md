@@ -924,7 +924,7 @@ T27 → T47
 
 ---
 
-### T44: Metadados da rota de publicação sob teste
+### T44: Metadados da rota de publicação sob teste ✅
 
 **What**: Teste de `generateMetadata` de `/publicacoes/[slug]`: título e description vindos do título e do resumo, Open Graph preenchido e slug inexistente sem `undefined` no título.
 **Where**: `src/app/(site)/publicacoes/[slug]/page.test.tsx`
@@ -934,9 +934,9 @@ T27 → T47
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `title` e `description` conferem com o título e o resumo da publicação
-- [ ] `openGraph` traz título, description e URL do texto
-- [ ] Slug inexistente não vaza `undefined` no título
+- [x] `title` e `description` conferem com o título e o resumo da publicação
+- [x] `openGraph` traz título, description e URL do texto
+- [x] Slug inexistente não vaza `undefined` no título
 
 **Tests**: unit
 **Gate**: quick
