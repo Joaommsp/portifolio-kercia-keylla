@@ -369,7 +369,7 @@ T38 → T39
 
 ---
 
-### T15: Cliente Firebase singleton
+### T15: Cliente Firebase singleton ✅
 
 **What**: Inicializar app, Firestore e Auth uma única vez (reuso via `getApps()`).
 **Where**: `src/lib/firebase/client.ts`
@@ -379,8 +379,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Nenhuma reinicialização em hot reload
-- [ ] Exporta `db` e `auth`
+- [x] Nenhuma reinicialização em hot reload
+- [x] Exporta `db` e `auth`
 
 **Tests**: none
 **Gate**: build
