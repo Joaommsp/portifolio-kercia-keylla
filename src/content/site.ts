@@ -234,6 +234,48 @@ export const painel = {
   rotuloNavegacao: "Seções do painel",
   sair: { rotulo: "Sair", emAndamento: "Saindo…" },
   verSite: "Ver o site",
+  formacoes: {
+    titulo: "Formações",
+    carregando: "Carregando as formações…",
+    vazio: "Nenhuma formação cadastrada ainda.",
+    novo: "Nova formação",
+    edicao: "Editar formação",
+    campos: {
+      titulo: "Curso",
+      instituicao: "Instituição",
+      descricao: "Descrição",
+      ano: "Ano",
+      status: "Situação",
+      ordem: "Ordem na lista",
+    },
+    ajuda: {
+      ordem: "Quem tem o número menor aparece antes na página.",
+    },
+    situacoes: secaoFormacao.rotulos,
+    semAno: "Sem ano",
+    semOrdem: "Sem ordem",
+    colunas: {
+      formacao: "Formação",
+      ano: "Ano",
+      situacao: "Situação",
+      ordem: "Ordem",
+      acoes: "Ações",
+    },
+    acoes: {
+      salvar: "Salvar formação",
+      emAndamento: "Salvando…",
+      cancelar: "Cancelar a edição",
+      editar: "Editar",
+      excluir: "Excluir",
+    },
+    exclusao: {
+      titulo: "Excluir esta formação?",
+      mensagem: (titulo: string) =>
+        `“${titulo}” será apagada em definitivo, e não dá para desfazer.`,
+      confirmar: "Excluir em definitivo",
+      cancelar: "Manter a formação",
+    },
+  },
   listaDePublicacoes: {
     titulo: "Publicações",
     carregando: "Carregando as publicações…",

@@ -15,16 +15,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ConfirmarExclusao } from "@/components/layout/confirmar-exclusao";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { painel } from "@/content/site";
@@ -156,33 +147,15 @@ export function PublicacoesTable({
         </table>
       </div>
 
-      <AlertDialog
-        open={aExcluir !== null}
-        onOpenChange={(aberto) => {
-          if (!aberto) {
-            setAExcluir(null);
-          }
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{textos.exclusao.titulo}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {textos.exclusao.mensagem(aExcluir?.titulo ?? "")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel>{textos.exclusao.cancelar}</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={confirmarExclusao}
-            >
-              {textos.exclusao.confirmar}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmarExclusao
+        aberto={aExcluir !== null}
+        titulo={textos.exclusao.titulo}
+        descricao={textos.exclusao.mensagem(aExcluir?.titulo ?? "")}
+        rotuloConfirmar={textos.exclusao.confirmar}
+        rotuloCancelar={textos.exclusao.cancelar}
+        aoConfirmar={confirmarExclusao}
+        aoFechar={() => setAExcluir(null)}
+      />
     </>
   );
 }

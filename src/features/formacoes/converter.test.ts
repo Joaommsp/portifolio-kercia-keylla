@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  formacaoEmBranco,
   ORDEM_NO_FIM,
   paraDocumentoDeFormacao,
   paraFormacao,
+  paraFormularioDeFormacao,
+  proximaOrdem,
 } from "@/features/formacoes/converter";
 import type { FormacaoFormulario } from "@/features/formacoes/schemas";
 
@@ -112,6 +115,69 @@ describe("paraDocumentoDeFormacao", () => {
       ano: 2018,
       status: "em_andamento",
       ordem: 1,
+    });
+  });
+});
+
+describe("proximaOrdem", () => {
+  const comOrdem = (id: string, ordem: number) =>
+    paraFormacao(id, { ...documentoCompleto, ordem });
+
+  it("continua da maior ordem gravada", () => {
+    expect(proximaOrdem([comOrdem("a", 0), comOrdem("b", 4)])).toBe(5);
+  });
+
+  it("começa em zero quando não há formação nenhuma", () => {
+    expect(proximaOrdem([])).toBe(0);
+  });
+
+  it("ignora o sentinela de quem não tem ordem gravada", () => {
+    const semOrdem = paraFormacao("sem", { ...documentoCompleto, ordem: null });
+
+    expect(semOrdem.ordem).toBe(ORDEM_NO_FIM);
+    expect(proximaOrdem([comOrdem("a", 1), semOrdem])).toBe(2);
+  });
+});
+
+describe("paraFormularioDeFormacao", () => {
+  const hoje = new Date("2026-09-01T12:00:00.000Z");
+
+  it("leva os campos da formação para o formulário, com descrição em texto", () => {
+    const formacao = paraFormacao("f1", { ...documentoCompleto, descricao: null });
+
+    expect(paraFormularioDeFormacao(formacao, 7, hoje)).toEqual({
+      titulo: "Pedagogia",
+      instituicao: "Universidade Federal",
+      descricao: "",
+      ano: 2018,
+      status: "concluido",
+      ordem: 2,
+    });
+  });
+
+  it("troca o sentinela de ordem pela próxima ordem livre, para não persisti-lo", () => {
+    const semOrdem = paraFormacao("f1", { ...documentoCompleto, ordem: null });
+
+    expect(semOrdem.ordem).toBe(ORDEM_NO_FIM);
+    expect(paraFormularioDeFormacao(semOrdem, 7, hoje).ordem).toBe(7);
+  });
+
+  it("usa o ano corrente quando a formação está sem ano", () => {
+    const semAno = paraFormacao("f1", { ...documentoCompleto, ano: null });
+
+    expect(paraFormularioDeFormacao(semAno, 7, hoje).ano).toBe(2026);
+  });
+});
+
+describe("formacaoEmBranco", () => {
+  it("abre no ano corrente, concluída e na ordem sugerida", () => {
+    expect(formacaoEmBranco(3, new Date("2026-09-01T12:00:00.000Z"))).toEqual({
+      titulo: "",
+      instituicao: "",
+      descricao: "",
+      ano: 2026,
+      status: "concluido",
+      ordem: 3,
     });
   });
 });

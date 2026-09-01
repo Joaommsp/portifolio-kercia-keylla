@@ -101,3 +101,54 @@ export function ordenarFormacoes(formacoes: readonly Formacao[]): Formacao[] {
     return b.ano - a.ano;
   });
 }
+
+/**
+ * Primeira ordem livre da lista: a maior ordem realmente gravada mais um.
+ * Documento sem `ordem` não conta — ele carrega o sentinela `ORDEM_NO_FIM`,
+ * que é posição de exibição, não valor gravado.
+ */
+export function proximaOrdem(formacoes: readonly Formacao[]): number {
+  const gravadas = formacoes
+    .map((formacao) => formacao.ordem)
+    .filter((ordem) => ordem !== ORDEM_NO_FIM);
+
+  return gravadas.length === 0 ? 0 : Math.max(...gravadas) + 1;
+}
+
+/** Formação em branco, como o formulário do painel começa uma nova. */
+export function formacaoEmBranco(
+  ordemSugerida: number,
+  hoje: Date = new Date(),
+): FormacaoFormulario {
+  return {
+    titulo: "",
+    instituicao: "",
+    descricao: "",
+    ano: hoje.getFullYear(),
+    status: STATUS_PADRAO,
+    ordem: ordemSugerida,
+  };
+}
+
+/**
+ * Converte a formação lida do Firestore nos valores do formulário.
+ *
+ * O sentinela `ORDEM_NO_FIM` nunca chega ao formulário: ele significa "este
+ * documento não tem ordem gravada", e persisti-lo transformaria uma ausência
+ * em um número absurdo dentro do banco. No lugar dele entra a próxima ordem
+ * livre da lista (FOR-05).
+ */
+export function paraFormularioDeFormacao(
+  formacao: Formacao,
+  ordemSugerida: number,
+  hoje: Date = new Date(),
+): FormacaoFormulario {
+  return {
+    titulo: formacao.titulo,
+    instituicao: formacao.instituicao,
+    descricao: formacao.descricao ?? "",
+    ano: formacao.ano ?? hoje.getFullYear(),
+    status: formacao.status,
+    ordem: formacao.ordem === ORDEM_NO_FIM ? ordemSugerida : formacao.ordem,
+  };
+}

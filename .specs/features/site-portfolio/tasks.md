@@ -741,7 +741,7 @@ T27 → T40
 
 ---
 
-### T35: Escrita e tela de formações
+### T35: Escrita e tela de formações ✅
 
 **What**: Mutations de formação e a tela `/admin/formacoes` com formulário, listagem e exclusão confirmada.
 **Where**: `src/features/formacoes/mutations.ts`
@@ -751,8 +751,8 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Mesmas regras de validação, confirmação e erro das publicações
-- [ ] Falha devolve a mensagem traduzida
+- [x] Mesmas regras de validação, confirmação e erro das publicações
+- [x] Falha devolve a mensagem traduzida
 
 **Tests**: unit
 **Gate**: quick

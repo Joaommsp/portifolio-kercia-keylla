@@ -16,6 +16,13 @@ export const LIMITES_FORMACAO = {
   descricao: 220,
 } as const;
 
+/**
+ * Maior ordem aceita. O teto existe para o sentinela de "sem ordem" do
+ * converter (`ORDEM_NO_FIM`) ser inválido no formulário: gravá-lo faria a
+ * formação carregar para sempre a marca de um campo que ela não tinha.
+ */
+export const ORDEM_MAXIMA_FORMACAO = 999;
+
 /** Estados possíveis de uma formação. */
 export const STATUS_FORMACAO = ["concluido", "em_andamento"] as const;
 
@@ -57,7 +64,10 @@ export const formacaoSchema = z.object({
   ordem: z
     .number({ message: "Informe a ordem." })
     .int({ message: "A ordem deve ser um número inteiro." })
-    .min(0, { message: "A ordem não pode ser negativa." }),
+    .min(0, { message: "A ordem não pode ser negativa." })
+    .max(ORDEM_MAXIMA_FORMACAO, {
+      message: `A ordem deve ser no máximo ${ORDEM_MAXIMA_FORMACAO}.`,
+    }),
 });
 
 /** Dados como o formulário do painel os manipula: texto vazio, nunca `null`. */
