@@ -265,6 +265,9 @@ export const painel = {
   publicacao: {
     novo: "Nova publicação",
     edicao: "Editar publicação",
+    carregando: "Carregando a publicação…",
+    naoEncontrada:
+      "Publicação não encontrada. Ela pode ter sido excluída em outra aba.",
     campos: {
       titulo: "Título",
       slug: "Endereço do texto",

@@ -17,6 +17,8 @@
 
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   limit as limitarA,
   query,
@@ -59,6 +61,27 @@ export async function listarNoPainel(
           paraPublicacao(documento.id, documento.data()),
         ),
       ),
+    };
+  } catch (falha) {
+    return { erro: traduzirErroFirebase(falha) };
+  }
+}
+
+/**
+ * Uma publicação pelo id do documento, para o formulário de edição. Id
+ * inexistente devolve `{ dados: null }` — é ausência, não falha, e a tela
+ * distingue as duas.
+ */
+export async function obterNoPainel(
+  id: string,
+): Promise<Resultado<Publicacao | null>> {
+  try {
+    const documento = await getDoc(doc(obterDb(), COLECAO_PUBLICACOES, id));
+
+    return {
+      dados: documento.exists()
+        ? paraPublicacao(documento.id, documento.data())
+        : null,
     };
   } catch (falha) {
     return { erro: traduzirErroFirebase(falha) };

@@ -723,7 +723,7 @@ T27 → T40
 
 ---
 
-### T34: Rota de edição de publicação
+### T34: Rota de edição de publicação ✅
 
 **What**: `/admin/publicacoes/[id]`, criando quando o id é `nova` e editando quando existe.
 **Where**: `src/app/(admin)/admin/publicacoes/[id]/page.tsx`
@@ -733,8 +733,8 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Id inexistente mostra estado de erro, não tela em branco
-- [ ] Após salvar, volta para `/admin`
+- [x] Id inexistente mostra estado de erro, não tela em branco
+- [x] Após salvar, volta para `/admin`
 
 **Tests**: none
 **Gate**: build
