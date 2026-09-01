@@ -629,7 +629,7 @@ T27 → T40
 
 ---
 
-### T29: Guarda do painel
+### T29: Guarda do painel ✅
 
 **What**: Layout do grupo `(admin)` que bloqueia a renderização enquanto carrega e redireciona para `/admin/login` sem sessão.
 **Where**: `src/app/(admin)/admin/layout.tsx`
@@ -639,8 +639,8 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Nenhum conteúdo do painel aparece antes de a sessão resolver
-- [ ] `/admin/login` não entra em laço de redirecionamento
+- [x] Nenhum conteúdo do painel aparece antes de a sessão resolver
+- [x] `/admin/login` não entra em laço de redirecionamento
 
 **Tests**: unit
 **Gate**: quick

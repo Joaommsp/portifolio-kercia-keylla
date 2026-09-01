@@ -7,6 +7,7 @@
  */
 
 import { formatarTelefoneBR, juntarMeta } from "@/lib/format";
+import { CAMINHO_PAINEL, CAMINHO_PAINEL_FORMACOES } from "@/lib/rotas";
 
 export const PENDENTE = "PENDENTE" as const;
 
@@ -216,6 +217,23 @@ export const rodape = {
   copyright: (ano: number) =>
     juntarMeta(`© ${ano} ${perfil.nome}`, perfil.papel),
   assinatura: "Feito com carinho pelo filho",
+} as const;
+
+/**
+ * Textos do painel da autora. Ficam aqui pelo mesmo motivo dos textos do site:
+ * nenhuma string de interface é escrita dentro de componente.
+ */
+export const painel = {
+  marca: "Painel",
+  verificandoSessao: "Verificando sua sessão…",
+  redirecionando: "Levando você para o lugar certo…",
+  navegacao: [
+    { rotulo: "Publicações", href: CAMINHO_PAINEL },
+    { rotulo: "Formações", href: CAMINHO_PAINEL_FORMACOES },
+  ],
+  rotuloNavegacao: "Seções do painel",
+  sair: { rotulo: "Sair", emAndamento: "Saindo…" },
+  verSite: "Ver o site",
 } as const;
 
 export const siteUrl =
