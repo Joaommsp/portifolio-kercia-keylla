@@ -387,7 +387,7 @@ T38 → T39
 
 ---
 
-### T16: Tradução de erros do Firebase
+### T16: Tradução de erros do Firebase ✅
 
 **What**: Mapear códigos de Auth e Firestore para mensagens em pt-BR, com fallback para a mensagem original.
 **Where**: `src/lib/firebase/errors.ts`
@@ -397,9 +397,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `auth/invalid-credential`, `auth/too-many-requests` e `permission-denied` cobertos
-- [ ] Mensagem de credencial não revela se o e-mail existe
-- [ ] Código desconhecido devolve a mensagem original, nunca texto genérico
+- [x] `auth/invalid-credential`, `auth/too-many-requests` e `permission-denied` cobertos
+- [x] Mensagem de credencial não revela se o e-mail existe
+- [x] Código desconhecido devolve a mensagem original, nunca texto genérico
 
 **Tests**: unit
 **Gate**: quick
