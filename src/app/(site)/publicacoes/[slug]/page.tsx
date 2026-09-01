@@ -19,8 +19,8 @@ import { SectionMessage } from "@/components/layout/section-message";
 import { secaoPublicacoes } from "@/content/site";
 import { PublicacaoArtigo } from "@/features/publicacoes/components/publicacao-artigo";
 import { obterPorSlug } from "@/features/publicacoes/queries";
-import { imagemExibivel } from "@/features/publicacoes/schemas";
-import { CAMINHO_HOME, caminhoDaPublicacao } from "@/lib/rotas";
+import { metadadosDaPublicacao } from "@/features/publicacoes/seo";
+import { CAMINHO_HOME } from "@/lib/rotas";
 
 /** Segundos entre revalidações do conteúdo vindo do Firestore. */
 export const revalidate = 300;
@@ -46,24 +46,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const publicacao = resultado.dados;
-  const caminho = caminhoDaPublicacao(publicacao.slug);
-  const imagem = imagemExibivel(publicacao.imagemUrl);
-
-  // Caminhos relativos: o `metadataBase` do layout raiz resolve a origem.
-  return {
-    title: publicacao.titulo,
-    description: publicacao.resumo,
-    alternates: { canonical: caminho },
-    openGraph: {
-      type: "article",
-      title: publicacao.titulo,
-      description: publicacao.resumo,
-      url: caminho,
-      publishedTime: publicacao.publicadoEm?.toISOString(),
-      images: imagem === null ? undefined : [imagem],
-    },
-  };
+  return metadadosDaPublicacao(resultado.dados);
 }
 
 export default async function PaginaDaPublicacao({
