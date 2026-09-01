@@ -425,7 +425,7 @@ T38 → T39
 
 ---
 
-### T18: Converter de publicação
+### T18: Converter de publicação ✅
 
 **What**: Converter documento do Firestore em objeto de domínio (timestamp → Date, campos ausentes → default) e o inverso.
 **Where**: `src/features/publicacoes/converter.ts`
@@ -435,8 +435,8 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Documento sem `imagemUrl`, `tag` ou `atualizadoEm` não quebra a conversão
-- [ ] `publicadoEm` ausente não vira data inválida
+- [x] Documento sem `imagemUrl`, `tag` ou `atualizadoEm` não quebra a conversão
+- [x] `publicadoEm` ausente não vira data inválida
 
 **Tests**: unit
 **Gate**: quick
