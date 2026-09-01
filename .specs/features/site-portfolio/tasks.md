@@ -19,7 +19,9 @@ Implement these tasks with the `tlc-spec-driven` skill: **activate it by name an
 | Componentes com estado (seções dinâmicas, formulários, guard) | unit (Testing Library) | Estados vazio, erro, carregando e caminho feliz | `src/**/*.test.tsx` | `npm test` |
 | Leitura de dados (`queries.ts`) | unit com Firestore mockado | Caminho feliz, lista vazia, falha de leitura | `src/**/*.test.ts` | `npm test` |
 | Escrita (`mutations.ts`) | unit com Firestore mockado | Criar, editar, excluir, slug duplicado, falha de escrita | `src/**/*.test.ts` | `npm test` |
-| Rotas / layouts / config / conteúdo estático | none | — (build gate) | — | build gate |
+| Rotas com decisão própria (`generateMetadata`, `notFound()`, ordem das seções) | unit (Testing Library) | Metadados por campo, 404 de slug ausente e de rascunho, ordem e âncoras da home | `src/app/**/*.test.{ts,tsx}` | `npm test` |
+| Layouts / config / conteúdo estático | none | — (build gate) | — | build gate |
+| Regras do Firestore (`firestore.rules`) | none neste ambiente | Sem emulador (Java ausente) — verificação manual descrita no README, registrada em AD-033 | — | manual |
 
 ## Gate Check Commands
 
@@ -110,6 +112,18 @@ T36 → T37
 T19 → T38
 T38 → T39
 T27 → T40
+```
+
+### Phase 7: Correções do Verifier
+
+```
+T5 → T41
+T17 → T42
+T32 → T43
+T27 → T44
+T27 → T45
+T36 → T46
+T27 → T47
 ```
 
 ---
@@ -846,3 +860,139 @@ T27 → T40
 
 **Tests**: unit
 **Gate**: build
+
+---
+
+## Phase 7: Correções do Verifier
+
+> Sete tasks abertas pelo relatório em `validation.md` (FAIL de 2026-09-01): um requisito sem implementação, dois mutantes sobreviventes e quatro pontos sem asserção. Numeração continua de T40 para não renumerar nada já rastreado.
+
+### T41: Open Graph e Person na home
+
+**What**: Metadados Open Graph/Twitter e o bloco JSON-LD `Person` da home, montados a partir de `src/content/site.ts` e do endereço de `src/lib/url.ts`, consumidos pela rota `/`.
+**Where**: `src/features/site/seo.ts`
+**Depends on**: T5
+**Requirement**: SEO-02
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] `openGraph` e `twitter` da home saem do conteúdo do site, com URL absoluta resolvida por `siteUrl`
+- [ ] JSON-LD `Person` com `name`, `jobTitle`, `url`, `sameAs` do Instagram e `areaServed`
+- [ ] A home exporta esses metadados e renderiza o `application/ld+json`
+- [ ] Teste asserta campo a campo, não a presença da tag
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T42: Teto do corpo ancorado no literal da spec
+
+**What**: Ancorar o teto de 20.000 caracteres do corpo no valor escrito na spec, em vez de na própria constante do schema.
+**Where**: `src/features/publicacoes/schemas.test.ts`
+**Depends on**: T17
+**Requirement**: ADM-04
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] Corpo com 20.001 caracteres é recusado com a mensagem que cita 20000
+- [ ] Corpo com exatamente 20.000 caracteres é aceito
+- [ ] Mover `LIMITES_PUBLICACAO.corpo` quebra o teste (mutante M11 morre)
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T43: Contador que separa usado de limite
+
+**What**: Caso de contador em que os dois números diferem, para `usados/usados` deixar de passar.
+**Where**: `src/features/publicacoes/components/publicacao-form.test.tsx`
+**Depends on**: T32
+**Requirement**: ADM-04
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] Um caso com usado ≠ limite (5/120) e o caso de borda 120/120
+- [ ] Contador que renderize `usados/usados` reprova (mutante M30 morre)
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T44: Metadados da rota de publicação sob teste
+
+**What**: Teste de `generateMetadata` de `/publicacoes/[slug]`: título e description vindos do título e do resumo, Open Graph preenchido e slug inexistente sem `undefined` no título.
+**Where**: `src/app/(site)/publicacoes/[slug]/page.test.tsx`
+**Depends on**: T27
+**Requirement**: PUB-07
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] `title` e `description` conferem com o título e o resumo da publicação
+- [ ] `openGraph` traz título, description e URL do texto
+- [ ] Slug inexistente não vaza `undefined` no título
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T45: 404 da rota de publicação sob teste
+
+**What**: Asserção de que a página chama `notFound()` quando a leitura pública não encontra o texto — slug inexistente e publicação em rascunho.
+**Where**: `src/app/(site)/publicacoes/[slug]/page.test.tsx`
+**Depends on**: T27
+**Requirement**: PUB-04
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] Slug inexistente chama `notFound()` e não renderiza o texto
+- [ ] Publicação em rascunho chama `notFound()`
+- [ ] Publicação no ar não chama `notFound()`
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T46: Verificação das regras do Firestore
+
+**What**: Decidir e registrar como SEC-01 é verificado: emulador com `@firebase/rules-unit-testing` se houver Java, ou limitação assumida por escrito se não houver.
+**Where**: `README.md`
+**Depends on**: T36
+**Requirement**: SEC-01
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] `java -version` decide o caminho, e a decisão fica registrada em `.specs/STATE.md`
+- [ ] Sem emulador, o README traz o passo manual de verificação das regras
+- [ ] A lacuna só é dada por fechada se existir teste executável
+
+**Tests**: none
+**Gate**: build
+
+---
+
+### T47: Link de volta do texto sob teste
+
+**What**: Asserção do caminho de volta da página do texto para a home.
+**Where**: `src/app/(site)/publicacoes/[slug]/page.test.tsx`
+**Depends on**: T27
+**Requirement**: PUB-02
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] Link com o texto de `secaoPublicacoes.voltar` e `href` da home
+- [ ] O texto do link vem de `src/content/site.ts`, não do teste
+
+**Tests**: unit
+**Gate**: quick
