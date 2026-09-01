@@ -12,7 +12,7 @@
  * seção em vez de derrubar a página (AD-011).
  */
 
-import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { onAuthStateChanged, signOut, type Auth, type User } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 
 import { obterAuth } from "@/lib/firebase/client";
@@ -30,24 +30,36 @@ export type Sessao = {
   readonly sair: () => Promise<Resultado<null>>;
 };
 
+type Inicio =
+  | { readonly auth: Auth; readonly erro: null }
+  | { readonly auth: null; readonly erro: string };
+
+/**
+ * Resolve o Auth uma única vez, no primeiro render. Sem instância não há o que
+ * escutar: a sessão já nasce resolvida, em erro — esperar por um listener que
+ * nunca será registrado deixaria o painel preso em "carregando".
+ */
+function iniciar(): Inicio {
+  try {
+    return { auth: obterAuth(), erro: null };
+  } catch (falha) {
+    return { auth: null, erro: traduzirErroFirebase(falha) };
+  }
+}
+
 export function useAuth(): Sessao {
+  const [inicio] = useState(iniciar);
   const [usuario, setUsuario] = useState<User | null>(null);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState<string | null>(null);
+  const [carregando, setCarregando] = useState(inicio.erro === null);
+  const [erro, setErro] = useState<string | null>(inicio.erro);
 
   useEffect(() => {
-    let auth;
-
-    try {
-      auth = obterAuth();
-    } catch (falha) {
-      setErro(traduzirErroFirebase(falha));
-      setCarregando(false);
+    if (inicio.auth === null) {
       return;
     }
 
     return onAuthStateChanged(
-      auth,
+      inicio.auth,
       (autenticada) => {
         setUsuario(autenticada);
         setErro(null);
@@ -58,7 +70,7 @@ export function useAuth(): Sessao {
         setCarregando(false);
       },
     );
-  }, []);
+  }, [inicio.auth]);
 
   const sair = useCallback(async (): Promise<Resultado<null>> => {
     try {
