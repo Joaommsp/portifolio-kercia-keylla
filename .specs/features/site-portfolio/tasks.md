@@ -611,7 +611,7 @@ T27 → T40
 
 ---
 
-### T28: Hook de autenticação
+### T28: Hook de autenticação ✅
 
 **What**: `useAuth` expondo `usuario`, `carregando` e `sair`, escutando `onAuthStateChanged`.
 **Where**: `src/hooks/use-auth.ts`
@@ -621,8 +621,8 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Estado inicial é `carregando`, nunca "deslogado"
-- [ ] Listener é removido no unmount
+- [x] Estado inicial é `carregando`, nunca "deslogado"
+- [x] Listener é removido no unmount
 
 **Tests**: unit
 **Gate**: quick
