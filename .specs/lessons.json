@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "promote_threshold": 2,
+  "window_days": 45,
+  "quarantine_threshold": 2,
+  "next_id": 7,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "surviving_mutant::teste de limite deve asserir o valor literal do limite nunca a constante que ele valida",
+      "text": "Teste de limite deve asserir o valor literal do limite, nunca a constante que ele valida.",
+      "signal": "surviving_mutant",
+      "scope": "schemas",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "M11 src/features/publicacoes/schemas.ts:38 (schemas)"
+      ],
+      "created": "2026-09-01T20:15:50Z",
+      "last_seen": "2026-09-01T20:15:50Z"
+    },
+    {
+      "id": "L-002",
+      "key": "surviving_mutant::teste de valor derivado deve usar entrada em que as partes diferem para o denominador nao poder ser confundido com o numerador",
+      "text": "Teste de valor derivado deve usar entrada em que as partes diferem, para o denominador nao poder ser confundido com o numerador.",
+      "signal": "surviving_mutant",
+      "scope": "componentes",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "M30 src/components/form/campo.tsx:38 (componentes)"
+      ],
+      "created": "2026-09-01T20:15:50Z",
+      "last_seen": "2026-09-01T20:15:50Z"
+    },
+    {
+      "id": "L-003",
+      "key": "ac_gap::requisito com duas clausulas ligadas por e precisa de uma task e de uma evidencia por clausula",
+      "text": "Requisito com duas clausulas ligadas por 'e' precisa de uma task e de uma evidencia por clausula.",
+      "signal": "ac_gap",
+      "scope": "rastreabilidade",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "SEO-02 src/app/layout.tsx:26-36 (rastreabilidade)"
+      ],
+      "created": "2026-09-01T20:15:50Z",
+      "last_seen": "2026-09-01T20:15:50Z"
+    },
+    {
+      "id": "L-004",
+      "key": "ac_gap::rota que decide metadados ou 404 precisa de teste proprio o gate de build so prova compilacao nao comportamento",
+      "text": "Rota que decide metadados ou 404 precisa de teste proprio: o gate de build so prova compilacao, nao comportamento.",
+      "signal": "ac_gap",
+      "scope": "rotas",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "PUB-07 src/app/(site)/publicacoes/[slug]/page.tsx:34 (rotas)"
+      ],
+      "created": "2026-09-01T20:15:50Z",
+      "last_seen": "2026-09-01T20:15:50Z"
+    },
+    {
+      "id": "L-005",
+      "key": "ac_gap::regra de autorizacao fora do codigo da aplicacao precisa de verificacao executavel ou de decisao registrada assumindo revisao manual",
+      "text": "Regra de autorizacao fora do codigo da aplicacao precisa de verificacao executavel ou de decisao registrada assumindo revisao manual.",
+      "signal": "ac_gap",
+      "scope": "seguranca",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "SEC-01 firestore.rules:32-34 (seguranca)"
+      ],
+      "created": "2026-09-01T20:15:50Z",
+      "last_seen": "2026-09-01T20:15:50Z"
+    },
+    {
+      "id": "L-006",
+      "key": "spec_precision_gap::cada id de requisito deve ter um unico sentido em toda a spec e nos comentarios do codigo",
+      "text": "Cada ID de requisito deve ter um unico sentido em toda a spec e nos comentarios do codigo.",
+      "signal": "spec_precision_gap",
+      "scope": "spec",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "SIT-06 .specs/features/site-portfolio/spec.md:59 (spec)"
+      ],
+      "created": "2026-09-01T20:15:50Z",
+      "last_seen": "2026-09-01T20:15:50Z"
+    }
+  ]
+}
