@@ -831,7 +831,7 @@ T27 → T40
 
 ---
 
-### T40: Página 404 na paleta
+### T40: Página 404 na paleta ✅
 
 **What**: Página não encontrada usando a identidade do site, com link de volta para a home.
 **Where**: `src/app/not-found.tsx`
@@ -841,8 +841,8 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] `notFound()` da rota de publicação cai nesta página, não na padrão do Next
-- [ ] Usa os tokens do tema e o texto vem de `src/content/site.ts`
+- [x] `notFound()` da rota de publicação cai nesta página, não na padrão do Next
+- [x] Usa os tokens do tema e o texto vem de `src/content/site.ts`
 
-**Tests**: none
+**Tests**: unit
 **Gate**: build

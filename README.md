@@ -122,6 +122,7 @@ src/
 │   ├── (admin)/admin/    # painel: login, publicações e formações
 │   ├── sitemap.ts        # home + publicações no ar
 │   ├── robots.ts         # site liberado, /admin fora
+│   ├── not-found.tsx     # 404 na identidade do site
 │   └── globals.css       # tokens da paleta
 ├── components/
 │   ├── ui/               # shadcn

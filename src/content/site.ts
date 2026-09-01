@@ -7,7 +7,11 @@
  */
 
 import { formatarTelefoneBR, juntarMeta } from "@/lib/format";
-import { CAMINHO_PAINEL, CAMINHO_PAINEL_FORMACOES } from "@/lib/rotas";
+import {
+  CAMINHO_HOME,
+  CAMINHO_PAINEL,
+  CAMINHO_PAINEL_FORMACOES,
+} from "@/lib/rotas";
 
 export const PENDENTE = "PENDENTE" as const;
 
@@ -212,6 +216,19 @@ export const canaisContato = [
     externo: false,
   },
 ] satisfies readonly CanalContato[];
+
+/**
+ * Página 404. O rótulo do caminho de volta é o mesmo do detalhe de uma
+ * publicação: quem cai aqui costuma vir justamente de um link de texto que
+ * saiu do ar.
+ */
+export const paginaNaoEncontrada = {
+  codigo: "404",
+  titulo: "Esta página não existe",
+  mensagem:
+    "O endereço pode ter mudado, ou o texto que estava aqui pode ter saído do ar.",
+  acao: { rotulo: secaoPublicacoes.voltar, href: CAMINHO_HOME },
+} as const;
 
 export const rodape = {
   copyright: (ano: number) =>
