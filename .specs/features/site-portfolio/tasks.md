@@ -647,7 +647,7 @@ T27 → T40
 
 ---
 
-### T30: Tela de login
+### T30: Tela de login ✅
 
 **What**: Formulário de e-mail e senha com estado de carregamento e erro traduzido.
 **Where**: `src/app/(admin)/admin/login/page.tsx`
@@ -657,9 +657,9 @@ T27 → T40
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Sem `maxLength` em e-mail ou senha
-- [ ] Erro exibido é o traduzido, sem revelar existência do e-mail
-- [ ] Sucesso redireciona para `/admin`
+- [x] Sem `maxLength` em e-mail ou senha
+- [x] Erro exibido é o traduzido, sem revelar existência do e-mail
+- [x] Sucesso redireciona para `/admin`
 
 **Tests**: unit
 **Gate**: quick

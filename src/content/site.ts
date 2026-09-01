@@ -234,6 +234,13 @@ export const painel = {
   rotuloNavegacao: "Seções do painel",
   sair: { rotulo: "Sair", emAndamento: "Saindo…" },
   verSite: "Ver o site",
+  login: {
+    titulo: "Entrar no painel",
+    chamada: "Use o e-mail e a senha cadastrados no Firebase.",
+    email: { rotulo: "E-mail", obrigatorio: "Informe o e-mail." },
+    senha: { rotulo: "Senha", obrigatorio: "Informe a senha." },
+    acao: { rotulo: "Entrar", emAndamento: "Entrando…" },
+  },
 } as const;
 
 export const siteUrl =
