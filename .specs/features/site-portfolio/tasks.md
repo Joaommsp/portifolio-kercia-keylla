@@ -225,7 +225,7 @@ T38 → T39
 
 ---
 
-### T7: Formatadores compartilhados
+### T7: Formatadores compartilhados ✅
 
 **What**: Implementar `formatDateBR` (pt-BR, America/Sao_Paulo) e `slugify` (minúsculo, sem acento, `[a-z0-9-]`).
 **Where**: `src/lib/format.ts`
