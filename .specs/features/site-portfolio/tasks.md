@@ -443,7 +443,7 @@ T38 → T39
 
 ---
 
-### T19: Leitura de publicações
+### T19: Leitura de publicações ✅
 
 **What**: `listarPublicadas(limite)` e `obterPorSlug(slug)` em Server Component, devolvendo `{ dados }` ou `{ erro }`.
 **Where**: `src/features/publicacoes/queries.ts`
@@ -453,9 +453,9 @@ T38 → T39
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Filtra `publicado == true` e ordena por `publicadoEm` desc
-- [ ] Slug inexistente devolve `null`, não erro
-- [ ] Falha de leitura devolve a mensagem traduzida, sem lançar
+- [x] Filtra `publicado == true` e ordena por `publicadoEm` desc
+- [x] Slug inexistente devolve `null`, não erro
+- [x] Falha de leitura devolve a mensagem traduzida, sem lançar
 
 **Tests**: unit
 **Gate**: quick
