@@ -943,7 +943,7 @@ T27 → T47
 
 ---
 
-### T45: 404 da rota de publicação sob teste
+### T45: 404 da rota de publicação sob teste ✅
 
 **What**: Asserção de que a página chama `notFound()` quando a leitura pública não encontra o texto — slug inexistente e publicação em rascunho.
 **Where**: `src/app/(site)/publicacoes/[slug]/page.test.tsx`
@@ -953,9 +953,9 @@ T27 → T47
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Slug inexistente chama `notFound()` e não renderiza o texto
-- [ ] Publicação em rascunho chama `notFound()`
-- [ ] Publicação no ar não chama `notFound()`
+- [x] Slug inexistente chama `notFound()` e não renderiza o texto
+- [x] Publicação em rascunho chama `notFound()`
+- [x] Publicação no ar não chama `notFound()`
 
 **Tests**: unit
 **Gate**: quick
