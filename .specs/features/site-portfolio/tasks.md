@@ -333,7 +333,7 @@ T38 → T39
 
 ---
 
-### T13: Seção de contato
+### T13: Seção de contato ✅
 
 **What**: Faixa de contato com chamada e os links diretos (WhatsApp com mensagem pré-preenchida, e-mail, Instagram, região de atendimento).
 **Where**: `src/features/site/sections/contato.tsx`

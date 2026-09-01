@@ -138,6 +138,7 @@ export const contato = {
     numero: "5500000000000",
     mensagem: "Olá, Keylla! Vim pelo seu site e gostaria de conversar.",
   },
+  telefoneExibicao: "(00) 00000-0000",
   email: "contato@exemplo.com.br",
   instagram: "keylla_melo",
   regiao: "Cidade / atendimento a domicílio e em escolas",
@@ -150,6 +151,42 @@ export const linksContato = {
   email: `mailto:${contato.email}`,
   instagram: `https://instagram.com/${contato.instagram}`,
 } as const;
+
+export type IconeContato = "email" | "telefone" | "instagram" | "regiao";
+
+export type CanalContato = {
+  readonly icone: IconeContato;
+  readonly rotulo: string;
+  readonly href: string | null;
+  readonly externo: boolean;
+};
+
+export const canaisContato = [
+  {
+    icone: "email",
+    rotulo: contato.email,
+    href: linksContato.email,
+    externo: false,
+  },
+  {
+    icone: "telefone",
+    rotulo: contato.telefoneExibicao,
+    href: linksContato.whatsapp,
+    externo: true,
+  },
+  {
+    icone: "instagram",
+    rotulo: `@${contato.instagram}`,
+    href: linksContato.instagram,
+    externo: true,
+  },
+  {
+    icone: "regiao",
+    rotulo: contato.regiao,
+    href: null,
+    externo: false,
+  },
+] satisfies readonly CanalContato[];
 
 export const rodape = {
   descricao: `${perfil.nome} · ${perfil.papel}`,
