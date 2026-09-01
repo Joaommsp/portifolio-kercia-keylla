@@ -170,7 +170,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | Requirement ID | Story | Phase | Status |
 | -------------- | ----- | ----- | ------ |
 | SIT-01 | P1: Visitante entende a AT | Design | Pending |
-| SIT-02 | P1: Visitante entende a AT | Design | Pending |
+| SIT-02 | P1: Visitante entende a AT | Tasks | In Tasks |
 | SIT-03 | P1: Visitante entende a AT | Design | Pending |
 | SIT-04 | P1: Visitante entende a AT | Design | Pending |
 | SIT-05 | P1: Visitante entende a AT | Design | Pending |

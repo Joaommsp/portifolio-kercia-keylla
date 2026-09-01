@@ -206,7 +206,7 @@ T38 → T39
 
 ---
 
-### T6: Conteúdo fixo do site
+### T6: Conteúdo fixo do site ✅
 
 **What**: Centralizar nome, papel, textos do hero e do sobre, os 6 pilares da AT e os canais de contato, com os campos ainda não fornecidos marcados como pendentes.
 **Where**: `src/content/site.ts`
