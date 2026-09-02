@@ -18,7 +18,9 @@ export function SectionMessage({
     <p
       role={tom === "erro" ? "alert" : undefined}
       className={cn(
-        "rounded-xs border px-6 py-10 text-center text-sm",
+        // `break-words` porque a mensagem do Firebase pode trazer URL longa
+        // sem espaço (o link de criar índice), que estouraria a caixa.
+        "rounded-xs border px-6 py-10 text-center text-sm break-words",
         tom === "erro"
           ? "border-destructive/40 bg-surface text-destructive"
           : "border-line bg-surface text-ink-soft",

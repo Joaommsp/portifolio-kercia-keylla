@@ -1,24 +1,142 @@
 rules_version = '2';
 
-// Regras do Firestore do site (SEC-01).
+// Ruleset COMPLETO do projeto Firebase `meu-portfolio-377aa`.
 //
-// O site não tem servidor próprio nem `firebase-admin` (AD-001): a leitura
-// pública e a escrita da autora saem do mesmo SDK, no navegador. Quem autoriza
-// é este arquivo — código de aplicação aqui não protege nada.
+// ATENÇÃO: este projeto é compartilhado por dois sites — o portfólio do João
+// (posts, projects, games, books, site, playing, figma, uses, guestbook) e o
+// site da Keylla (publicacoes, formacoes). O Firestore tem UM ruleset por
+// projeto: publicar este arquivo substitui as regras dos DOIS sites. Ao mexer
+// nas regras do portfólio, reflita a mudança aqui — e vice-versa.
 //
-// ── Como trocar o uid placeholder pelo real ──────────────────────────────────
-// 1. Firebase Console → Authentication → Users → Add user: e-mail e senha da
-//    Keylla (não existe cadastro aberto; a usuária é criada à mão).
+// Ordem importa: os blocos específicos vêm antes do `match /{document=**}`
+// que nega o resto (defense in depth).
+//
+// ── Como liberar a Keylla para publicar ──────────────────────────────────────
+// 1. Firebase Console → Authentication → Users → Add user: e-mail e senha dela
+//    (não existe cadastro aberto; a usuária é criada à mão).
 // 2. Copiar o "User UID" da linha criada.
-// 3. Substituir COLE_AQUI_O_UID_DA_AUTORA, abaixo, por esse uid entre aspas.
-// 4. Publicar: Console → Firestore Database → Rules → Publish, ou
-//    `firebase deploy --only firestore:rules` na raiz do projeto.
-//
-// Enquanto o placeholder estiver aqui, ninguém escreve: nenhum uid real casa
-// com ele. A leitura pública continua funcionando.
+// 3. Trocar COLE_AQUI_O_UID_DA_KEYLLA, na função `autoras()`, por esse uid.
+// 4. Publicar: `firebase deploy --only firestore:rules` na raiz de
+//    portfolio-keylla, ou colar no Console → Firestore Database → Rules.
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // PORTFÓLIO DO JOÃO
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // Verifica se o request é do admin autenticado.
+    // Mesmo valor de NEXT_PUBLIC_ADMIN_UID no portfólio.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == 'm9GLhNQbNZRbwFT3l6M8XiJSIpF3';
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // POSTS
+    //   Leitura pública: só posts com `published == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /posts/{postId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // PROJECTS
+    //   Leitura pública total (sem flag de "published" no schema).
+    //   Admin: escrita.
+    // ─────────────────────────────────────────────────────────
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // GAMES
+    //   Leitura pública: só games com `published == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /games/{gameId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // BOOKS
+    //   Leitura pública: só books com `published == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /books/{bookId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // SITE — documentos de conteúdo editável no /admin
+    //   (hoje: `currently`, os cards "O que tá rolando" da /sobre)
+    //   Leitura pública: é conteúdo do site.
+    //   Escrita: só admin.
+    // ─────────────────────────────────────────────────────────
+    match /site/{docId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /playing/{docId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // FIGMA — arquivos da Community mostrados em /figma
+    //   Cadastro manual: o Figma não expõe API de perfil da Community.
+    //   Leitura pública: só itens com `visible == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /figma/{docId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // USES — categorias do setup mostradas em /uses
+    //   Leitura pública: só categorias com `visible == true`.
+    //   Admin: leitura total + escrita.
+    // ─────────────────────────────────────────────────────────
+    match /uses/{docId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // GUESTBOOK
+    //   Leitura pública: qualquer um vê todas mensagens.
+    //   Escrita: user autenticado pode criar/editar/deletar SÓ a própria
+    //     entrada (docId === auth.uid).
+    //   Admin: pode deletar qualquer entrada (moderação de spam).
+    //   Validação: message não vazia, máx 280 chars.
+    // ─────────────────────────────────────────────────────────
+    match /guestbook/{userId} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.userId == userId
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 280;
+      allow delete: if isAdmin()
+        || (request.auth != null && request.auth.uid == userId);
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // SITE DA KEYLLA (SEC-01)
+    //
+    // O site não tem servidor próprio nem `firebase-admin` (AD-001): a leitura
+    // pública e a escrita da autora saem do mesmo SDK, no navegador. Quem
+    // autoriza é este arquivo — código de aplicação aqui não protege nada.
+    // ═════════════════════════════════════════════════════════════════════════
 
     // A allowlist mora NAS REGRAS, nunca em campo de documento: a autora tem
     // escrita na coleção e poderia promover a si mesma se o papel morasse no
@@ -28,7 +146,8 @@ service cloud.firestore {
     // esperando aspas simples — mantenha o formato ao editar.
     function autoras() {
       return [
-        'COLE_AQUI_O_UID_DA_AUTORA'
+        'COLE_AQUI_O_UID_DA_KEYLLA',
+        'm9GLhNQbNZRbwFT3l6M8XiJSIpF3'
       ];
     }
 
@@ -63,7 +182,9 @@ service cloud.firestore {
       allow create, update, delete: if ehAutora();
     }
 
-    // Coleção não declarada acima já é negada por padrão — o Firestore só
-    // libera o que uma regra permite explicitamente.
+    // Default: nega tudo (defense in depth).
+    match /{document=**} {
+      allow read, write: if false;
+    }
   }
 }
