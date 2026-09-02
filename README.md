@@ -1,10 +1,18 @@
 # Site da Keylla Melo — Assistente Terapêutica
 
-Site de apresentação com publicações e formações mantidas pela própria autora,
-por um painel em `/admin`. Next 16 (App Router) com Firebase — Firestore para os
-dados e Auth para a entrada no painel. Não há servidor próprio: a leitura
-pública roda em Server Component e a escrita roda no navegador autenticado; quem
-autoriza é o `firestore.rules`.
+Página única que apresenta o trabalho da Keylla — pedagoga e Assistente
+Terapêutica — com publicações e certificações mantidas por ela mesma, num painel
+em `/admin`.
+
+Next 16 (App Router) com Firebase: Firestore para os dados e Auth para a entrada
+no painel. Não há servidor próprio — a leitura pública roda em Server Component
+e a escrita roda no navegador autenticado; quem autoriza é o `firestore.rules`.
+
+A home tem, nesta ordem: abertura com o retrato, "O que faz uma AT" (os seis
+pilares do trabalho), "Pedagogia" (as quatro frentes de formação que sustentam a
+prática), "Sobre", "Certificações" (dinâmica), "Publicações" (dinâmica) e
+contato. Cada publicação também tem página própria em `/publicacoes/[slug]`,
+indexável e compartilhável.
 
 ## Requisitos
 
@@ -55,7 +63,7 @@ Ainda assim, `.env.local` não é versionado; só o `.env.example`, sem valores.
 4. **Criar a usuária**: Authentication → Users → Add user, com o e-mail e a
    senha da autora. Copiar o **User UID** que aparece na linha criada.
 5. **Autorizar a autora**: abrir `firestore.rules` e trocar
-   `COLE_AQUI_O_UID_DA_AUTORA` por esse uid. A allowlist mora nas regras, e
+   `COLE_AQUI_O_UID_DA_KEYLLA` por esse uid. A allowlist mora nas regras, e
    nunca em campo de documento — no banco, a própria autora poderia editá-la.
 6. **Publicar regras e índice** (passo abaixo). Enquanto as regras padrão
    estiverem no ar, a home responde com "Você não tem permissão para esta
@@ -124,6 +132,12 @@ Nenhuma das duas precisa ser criada à mão: o painel cria o documento na
 primeira gravação. Os limites de cada campo vivem nos `schemas.ts` de cada
 domínio.
 
+As duas seções que falam de formação têm papéis separados: **Pedagogia** é o
+argumento — o que cada frente faz no atendimento, texto fixo em
+`src/content/site.ts` —, e **Certificações** é o registro, com instituição, ano e
+situação, vindo de `formacoes/`. Um mesmo curso pode aparecer nas duas; os papéis
+é que não se misturam.
+
 Imagem não é hospedada aqui — entra por URL, e só de um host da allowlist em
 `src/content/imagens.ts`, que é a mesma lista dos `remotePatterns` do
 `next.config.ts`.
@@ -165,7 +179,7 @@ src/
 │   ├── publicacoes/      # schemas, converter, queries (servidor), painel e mutations (cliente)
 │   ├── formacoes/        # mesma anatomia
 │   ├── admin/            # sessão, guarda e moldura do painel
-│   └── site/sections/    # hero, o que faz uma AT, sobre, contato
+│   └── site/sections/    # hero, o que faz uma AT, pedagogia, sobre, contato
 ├── content/site.ts       # todo texto fixo do site e do painel
 ├── lib/                  # firebase, formatação, rotas, utilidades
 ├── hooks/
@@ -187,7 +201,22 @@ Aguardam os dados reais da Keylla e estão marcados com `PENDENTE` em
 - perfil do Instagram e cidade de atendimento — os dois entram também nos dados
   estruturados da home (`sameAs` e `areaServed`), então valem para o buscador
 - texto do "Sobre", escrito por ela
-- fotos do hero e da seção "Sobre" — hoje são molduras vazias
+- foto da seção "Sobre" — hoje é uma moldura vazia (a do hero já está em
+  `public/keylla-melo.jpg`, recortada em 4:5, a proporção do arco)
 
 Fora do conteúdo, seguem pendentes o uid da autora em `firestore.rules` e o
 domínio real em `NEXT_PUBLIC_SITE_URL`.
+
+## Especificação
+
+O projeto foi construído com um fluxo spec-driven, e os artefatos ficam
+versionados em `.specs/`:
+
+- `features/site-portfolio/spec.md` — 31 requisitos em EARS, com rastreabilidade
+- `features/site-portfolio/design.md` — arquitetura, modelo de dados e a paleta
+- `features/site-portfolio/tasks.md` — as tasks, uma por commit
+- `features/site-portfolio/validation.md` — relatório da verificação independente
+- `STATE.md` — decisões (AD-001 em diante) e handoff
+
+Vale ler o `design.md` antes de mexer em camada, e o `STATE.md` antes de
+desfazer alguma escolha que pareça estranha: quase toda tem um porquê registrado.
