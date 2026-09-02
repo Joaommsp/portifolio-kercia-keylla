@@ -21,13 +21,6 @@ describe("PhotoFrame", () => {
     expect(imagem).toHaveAttribute("src", expect.stringContaining("keylla-melo"));
   });
 
-  it("cai na legenda do espaço reservado quando não há foto", () => {
-    render(<PhotoFrame legenda="Foto em contexto" />);
-
-    expect(screen.getByText("Foto em contexto")).toBeInTheDocument();
-    expect(screen.queryByRole("img")).toBeNull();
-  });
-
   it("recorta a foto na moldura em vez de deformá-la", () => {
     // Proxy possível em jsdom, que não faz layout: a classe é o que decide o
     // recorte, e sem ela o retrato 4:5 esticaria dentro do arco.

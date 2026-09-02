@@ -114,6 +114,14 @@ function coresEmStyleInlineEm(fonte: string): string[] {
 /** Pasta que guarda a infra de teste, fora da varredura junto com os testes. */
 const PASTA_DE_TESTE = "test";
 
+/**
+ * Único arquivo autorizado a escrever a paleta em hex: `theme-color` e o
+ * `opengraph-image` rodam fora do CSS e não leem `var()`. Ele não pinta tela —
+ * é uma tabela de valores —, e `paleta-aprovada.test.ts` trava cada um deles
+ * contra o token correspondente, o que esta varredura não faria.
+ */
+const TABELA_DE_CORES = "lib/tema.ts";
+
 /** Código de `src/` que pinta tela: sem os testes e sem a infra de teste. */
 function arquivosDeCodigo(pasta: string): string[] {
   return readdirSync(pasta, { withFileTypes: true }).flatMap((entrada) => {
@@ -128,10 +136,12 @@ function arquivosDeCodigo(pasta: string): string[] {
 }
 
 /** Cada arquivo auditado com a fonte já lida — o disco é percorrido uma vez. */
-const arquivosLidos = arquivosDeCodigo(RAIZ).map((caminho) => ({
-  caminho: relative(RAIZ, caminho).split(sep).join("/"),
-  fonte: readFileSync(caminho, "utf8"),
-}));
+const arquivosLidos = arquivosDeCodigo(RAIZ)
+  .map((caminho) => ({
+    caminho: relative(RAIZ, caminho).split(sep).join("/"),
+    fonte: readFileSync(caminho, "utf8"),
+  }))
+  .filter(({ caminho }) => caminho !== TABELA_DE_CORES);
 
 const arquivos = arquivosLidos.map(({ caminho }) => caminho);
 

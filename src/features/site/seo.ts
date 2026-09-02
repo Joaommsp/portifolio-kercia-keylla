@@ -33,9 +33,9 @@ export const metadadosDaHome: Metadata = {
     url: CAMINHO_HOME,
   },
   twitter: {
-    // Sem imagem de compartilhamento ainda (as fotos são PENDENTE), e cartão
-    // grande sem imagem sai pior do que cartão pequeno.
-    card: "summary",
+    // `opengraph-image.tsx` do grupo `(site)` gera a imagem 1200×630; o Next a
+    // injeta em ambos os cartões, então aqui o cartão pode ser o grande.
+    card: "summary_large_image",
     title: metadadosDoSite.titulo,
     description: metadadosDoSite.descricao,
   },
@@ -55,6 +55,15 @@ export const pessoaDaAutora = {
   url: urlDoSite(CAMINHO_HOME),
   sameAs: [linksContato.instagram],
   areaServed: contato.regiao,
+  email: contato.email,
+  telephone: `+${contato.whatsapp.numero}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Paulo Afonso",
+    addressRegion: "BA",
+    addressCountry: "BR",
+  },
+  knowsAbout: [...metadadosDoSite.palavrasChave],
 } as const;
 
 /**

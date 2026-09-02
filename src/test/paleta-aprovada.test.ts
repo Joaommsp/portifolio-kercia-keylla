@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { CORES_EM_HEX } from "@/lib/tema";
+
 /**
  * Metade positiva de SIT-05: não basta faltar cor literal em componente — os
  * tokens do tema precisam carregar a paleta que foi aprovada. A metade
@@ -136,4 +138,16 @@ describe("paleta aprovada nos tokens (SIT-05)", () => {
     expect(declaracoesDoToken(folha, "olive-deep")).toEqual(["oklch(0.4 0.5 6)"]);
     expect(declaracoesDoToken(folha, "brass")).toEqual([]);
   });
+});
+
+describe("cores em hex de lib/tema", () => {
+  // `theme-color` e o `opengraph-image` rodam fora do CSS e não leem `var()`.
+  // Sem estas asserções, a barra do navegador e a prévia compartilhada poderiam
+  // divergir da paleta da página sem nada reprovar.
+  it.each(Object.entries(CORES_EM_HEX))(
+    "%s repete o hex aprovado da paleta",
+    (nome, hex) => {
+      expect(hex).toBe(PALETA_APROVADA[nome as keyof typeof PALETA_APROVADA]);
+    },
+  );
 });

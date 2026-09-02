@@ -1,11 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  contato,
-  linksContato,
-  metadadosDoSite,
-  perfil,
-} from "@/content/site";
+import { contato, linksContato, metadadosDoSite, perfil } from "@/content/site";
 // O layout raiz carrega as fontes por `next/font`, que só existe no build do
 // Next; o dublê deixa o módulo importável para conferir os metadados dele.
 vi.mock("next/font/google", () => {
@@ -35,7 +30,7 @@ describe("metadados sociais da home (SEO-02)", () => {
 
   it("declara o cartão do Twitter com o mesmo título e a mesma descrição", () => {
     expect(metadadosDaHome.twitter).toMatchObject({
-      card: "summary",
+      card: "summary_large_image",
       title: `${perfil.nome} · ${perfil.papel}`,
       description: metadadosDoSite.descricao,
     });
@@ -89,6 +84,15 @@ describe("dados estruturados Person (SEO-02)", () => {
       url: `${siteUrl}/`,
       sameAs: [linksContato.instagram],
       areaServed: contato.regiao,
+      email: contato.email,
+      telephone: `+${contato.whatsapp.numero}`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Paulo Afonso",
+        addressRegion: "BA",
+        addressCountry: "BR",
+      },
+      knowsAbout: [...metadadosDoSite.palavrasChave],
     });
   });
 });

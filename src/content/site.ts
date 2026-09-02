@@ -50,7 +50,33 @@ export const metadadosDoSite = {
   /** `%s` é o título da página; o Next completa o resto. */
   gabaritoDeTitulo: `%s · ${perfil.nome}`,
   descricao:
-    "Assistente Terapêutica: acompanhamento de crianças e adolescentes na escola e na rotina, com vínculo, mediação e incentivo à autonomia.",
+    "Pedagoga e Assistente Terapêutica em Paulo Afonso e região. Acompanhamento de crianças e adolescentes na escola, em casa e em ambiente hospitalar — educação inclusiva, autismo, Comunicação Alternativa (CAA) e dificuldades de aprendizagem.",
+  /**
+   * Termos que a família digita no buscador. Peso pequeno hoje, mas custa nada
+   * e nomeia o que a página realmente cobre.
+   */
+  palavrasChave: [
+    "assistente terapêutica",
+    "AT",
+    "acompanhante terapêutico",
+    "pedagoga",
+    "educação inclusiva",
+    "educação especial",
+    "autismo",
+    "TEA",
+    "Comunicação Alternativa",
+    "CAA",
+    "dificuldades de aprendizagem",
+    "psicopedagogia",
+    "pedagogia hospitalar",
+    "Paulo Afonso",
+    "Bahia",
+  ],
+  /** Quem desenvolveu o site — vai em `creator`, não em `author`. */
+  desenvolvedor: {
+    nome: "João Marcos",
+    url: "https://softwaredeveloper-jmmsp.vercel.app/",
+  },
 } as const;
 
 export const navegacao = [
@@ -303,7 +329,6 @@ export const secaoSobre = {
     "Trabalho lado a lado com psicólogos, terapeutas ocupacionais, fonoaudiólogos e professores — o plano é da equipe, e o meu papel é fazê-lo acontecer no cotidiano.",
   ],
   assinatura: "Keylla Melo",
-  legendaFoto: "Foto em contexto",
 } as const;
 
 export type ItemDeFormacao = {
