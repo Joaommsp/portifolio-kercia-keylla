@@ -1,357 +1,278 @@
-# Site Portfólio — Validation
+# site-portfolio — Validação
 
-## Validation: site-portfolio — FAIL ❌ (estreito · iteração 3 de 3 · escalar)
-
-**Date**: 2026-09-01
+**Data**: 2026-09-01
 **Spec**: `.specs/features/site-portfolio/spec.md` (30 requisitos)
-**Diff range**: `ddb79d4..HEAD` (`b80226f`) — lote da Fase 8 (T48–T52); o veredito é sobre a feature inteira
-**Verifier**: sub-agente independente, iteração 3 (autor ≠ verificador), evidência-ou-zero, cobertura re-derivada do zero
-**Veredito**: ❌ **FAIL estreito** — as 4 lacunas da iteração 2 fecharam com asserção discriminante (4/4 mutantes mortos por injeção, nenhuma aceita por alegação). O sensor desta rodada achou **2 sobreviventes materiais novos**, ambos fora do que a Fase 8 se propôs a corrigir: o teto de 6 publicações de PUB-01 e a metade positiva de SIT-05.
-
-> **Limite do laço atingido.** A skill limita o ciclo corrigir→re-verificar a 3 iterações. Esta é a
-> terceira. Em vez de abrir uma quarta, o que restou vai ao usuário com materialidade e custo por
-> item (seção 7).
+**Superfície de diff**: `b48c45d..3c2266d` (T53–T56 + STATE/spec/design/tasks) · veredito sobre a **feature inteira**
+**Verificador**: sub-agente independente, iteração 4 (autor ≠ verificador; evidência-ou-zero, coberturas re-derivadas do zero)
 
 ---
 
-## O que mudou desde a iteração 2
+## Veredito
 
-| Sinal | Iteração 1 (`e83d4ef`) | Iteração 2 (`c7e1eaa`) | Iteração 3 (`b80226f`) |
-| ----- | ---------------------- | ---------------------- | ---------------------- |
-| Testes unitários | 272 em 33 arquivos | 294 em 36 | **304 em 38** |
-| Testes de regra | nenhum | 10, exit 0 | **10, exit 0** (rodados nesta sessão) |
-| Requisitos sem nenhuma evidência | 9 | 3 + SIT-06 | **0** |
-| Requisitos parciais (teste não discrimina) | — | 3 (SIT-01, PUB-03, SIT-05) | **2 (PUB-01, SIT-05)** |
-| Mutantes sobreviventes | 2 | 4 | **2 materiais** (+1 menor, +1 esperado de UAT) |
+## Validation: site-portfolio — PASS ✅
 
----
+**Spec-anchored check**: 28/30 requisitos com `file:line` + expressão de asserção que bate com o desfecho da spec · 2 (SIT-04, SIT-06) sem evidência automatizada e **declarados como UAT manual**, sem nenhum teste fingindo cobri-los.
+**Gate**: 323 testes em 39 arquivos (`npm test -- --run`, exit 0) + 10 testes de regra (`npm run test:rules`, emulador Firestore, exit 0, **rodado nesta sessão**) · `tsc --noEmit` exit 0 · `eslint` exit 0 · `next build` exit 0.
+**Sensor**: 15 mutações de comportamento injetadas, **15 mortas, 0 sobreviventes**; 4 sondas de burla, 4 bloqueadas; 1 mutação de controle sobrevive por desenho (documentada).
 
-## 1. Auditoria adversarial das 4 lacunas alegadas
-
-Cada uma reconferida lendo a asserção à mão **e** injetando o mutante correspondente em worktree
-isolada. Nenhuma passou por alegação.
-
-| # | Lacuna da iteração 2 | Fechou? | Asserção que prova (`arquivo:linha` + expressão) | Mutante injetado agora |
-| - | -------------------- | ------- | ----------------------------------------------- | ---------------------- |
-| 1 | **SIT-02** — contagem dos pilares sem evidência | ✅ | `src/features/site/sections/o-que-faz-uma-at.test.tsx:12` — `const PILARES_DA_SPEC = 6` (**literal da spec**, não `pilares.length`); `:16` — `expect(secaoAt.pilares).toHaveLength(PILARES_DA_SPEC)`; `:22` — `expect(screen.getAllByRole("article")).toHaveLength(PILARES_DA_SPEC)`; `:32` — `expect(titulos).toEqual(secaoAt.pilares.map((p) => p.titulo))` | **A1** (pilar "Parceria com a família" removido de `content/site.ts:131-137`) → **morto**, 2 testes reprovam · **A2** (`secaoAt.pilares.slice(0, 3).map` em `o-que-faz-uma-at.tsx:34`) → **morto**, 2 testes reprovam |
-| 2 | **PUB-03** — vazio comparado com a própria constante | ✅ | `src/features/publicacoes/components/publicacoes-section.test.tsx:19` — `const MENSAGEM_DE_VAZIO_DA_SPEC = "Nenhuma publicação por aqui ainda."` (**literal**); `:67` — `getByText(MENSAGEM_DE_VAZIO_DA_SPEC)`; `:72` — `expect(secaoPublicacoes.vazio).toBe(MENSAGEM_DE_VAZIO_DA_SPEC)`, o caso que amarra o texto do site ao texto da spec | **A3** (`content/site.ts:166` → `"Nada por aqui."`) → **morto** · **C9** (componente troca a constante por literal próprio) → **morto**. A armadilha do M11/M54 está fechada aqui |
-| 3 | **SIT-01** — rodapé fora da asserção de ordem | ✅ | `src/app/(site)/page.test.tsx:95-103` — `expect(blocosNaOrdem(container)).toEqual([topo, at, sobre, formacao, publicacoes, contato, RODAPE])`, com a home renderizada **dentro do `SiteLayout`** (`:52-56`), que é quem traz o rodapé; `:111` — `getByRole("contentinfo")`; `:112-116` — `toEqual(["MAIN","FOOTER"])` | **A4** (`<SiteFooter />` fora de `(site)/layout.tsx:10`) → **morto**, 2 testes reprovam · **C4** (rodapé **antes** do `<main>`) → **morto** · **D7** (Sobre antes de "O que faz uma AT") → **morto** |
-| 4 | **SIT-05** — sem trava contra cor literal | ⚠️ **Parcial** | `src/test/paleta-em-tokens.test.ts:65` — `expect(infratores).toEqual([])` sobre todo `.ts`/`.tsx` de `src/` (menos os testes), **arquivo inteiro**; `:53-54` — auto-guarda da varredura (`arquivos.length > 10` + `toContain("app/layout.tsx")`) | **B1** hex em `className` → morto · **B2** hex dentro do `cva` de `components/ui/button.tsx` → morto · **B3** hex em `style` inline → morto · **B7** `RAIZ` apontada para `src/features` → morto. **Mas 3 burlas passam** — 1.1 |
-
-### 1.1 A trava de SIT-05 sob tentativa de burla
-
-Pergunta pedida: ela pega cor literal em `className`, em `style` inline **e** dentro de `cva`?
-**Sim nos três** (B1, B2, B3 mortos), e ainda se auto-guarda contra varrer a pasta errada (B7).
-O que ela **não** pega:
-
-| Burla | O que injetei | Resultado |
-| ----- | ------------- | --------- |
-| **B4** | `className="… bg-emerald-200 text-rose-600"` em `hero.tsx` | ❌ **Sobreviveu** — 304/304 verdes. Classe da paleta padrão do Tailwind não casa com `#hex` nem com `rgb(`/`oklch(`. **E isso já está no código hoje**: `src/components/ui/dialog.tsx:34` e `src/components/ui/alert-dialog.tsx:33` trazem `bg-black/10`, com a suíte verde |
-| **B5** | `style={{ color: "white", background: "darkolivegreen" }}` em `site-footer.tsx` | ❌ **Sobreviveu** — cor nomeada do CSS não é hexadecimal nem função de cor |
-| **B6** | `--olive: oklch(0.4479 0.0624 125.96)` → `oklch(0.5000 0.2000 29.00)` em `globals.css` (oliva vira vermelho) | ❌ **Sobreviveu** — a trava exclui `.css` **de propósito** (é onde o token nasce), então **nada** amarra os tokens aos quatro valores que a spec escreve por extenso |
-
-**Leitura**: a trava fecha a cláusula **negativa** de SIT-05 ("sem cor literal em componente") para o
-antipadrão que o projeto realmente usa, e o docblock em `paleta-em-tokens.test.ts:6-8` promete um
-pouco mais do que entrega ("nenhum arquivo de código escreve cor à mão" — `bg-black/10` escreve). A
-cláusula **positiva** ("aplicar a paleta aprovada `#EDF3E4`/`#F7FBF1`/`#4C5B34`/`#8E7A32`") segue com
-zero asserção: os quatro valores existem só como comentário em `globals.css:91-98`. O ponto já estava
-listado como aberto pelos revisores da Fase 8 no `STATE.md` — o que esta rodada acrescenta é a prova
-empírica de que sobrevive.
+As quatro lacunas que reprovaram a iteração 3 estão fechadas com asserção discriminante, **nenhuma aceita por alegação**: cada uma foi reinjetada por este verificador e reprovou.
 
 ---
 
-## 2. Cobertura ancorada na spec — os 30 requisitos, re-derivados
+## 1. Auditoria adversarial das 4 lacunas da iteração 3
 
-Evidência-ou-zero: requisito sem `arquivo:linha` localizado conta como não coberto.
+Cada lacuna foi reinjetada em worktree isolada e a suíte rodada inteira.
 
-### P1: Visitante entende o trabalho da AT
+| # | Lacuna da iteração 3 | Mutação injetada agora | Asserção que a mata (`file:line` + expressão) | Resultado |
+| - | -------------------- | ---------------------- | --------------------------------------------- | --------- |
+| C1 | Teto de 6 lido da constante que o código usa para cortar | `LIMITE_PUBLICACOES_HOME = 6` → `5` (`src/features/publicacoes/schemas.ts:17`) | `src/features/publicacoes/queries.test.ts:83-87` — `expect(consultaExecutada().restricoes).toEqual([… { tipo: "limit", quantidade: TETO_DA_HOME_NA_SPEC }])`, com `TETO_DA_HOME_NA_SPEC = 6` em `src/test/valores-da-spec.ts:26`; `src/features/publicacoes/components/publicacoes-section.test.tsx:54-61` — `expect(screen.getAllByRole("article")).toHaveLength(TETO_DA_HOME_NA_SPEC)` + ausência de `Publicação ${TETO+1}` | ✅ **Morta** (2 arquivos reprovam) |
+| B6 | Paleta sem cláusula positiva: hex só existia como comentário no CSS | `--olive: oklch(0.4479 0.0624 125.96)` → `oklch(0.5500 0.2200 27.00)` (vermelho), `src/app/globals.css:96` | `src/test/paleta-aprovada.test.ts:104-125` — `it.each` sobre os 10 tokens, `hexParaOklch("#4C5B34")` comparado com a declaração lida do CSS, folga `{L 0.0005, C 0.0005, H 0.05}` (`:44`) | ✅ **Morta** |
+| B4 | Trava não via classe utilitária fora dos tokens | `bg-emerald-200` acrescentado ao `<h3>` de `src/features/site/sections/o-que-faz-uma-at.tsx:42` | `src/test/paleta-em-tokens.test.ts:169-171` — `expect(infratoresDe(classesForaDaPaletaEm, semAsClassesDeTerceiro)).toEqual([])`, detector em `:57-60` | ✅ **Morta** |
+| B5 | Trava não via cor em `style` inline | `style={{ color: "white" }}` acrescentado ao mesmo `<h3>` | `src/test/paleta-em-tokens.test.ts:173-175` — `expect(infratoresDe(coresEmStyleInlineEm)).toEqual([])`, detector em `:66-74` (regra por **valor**, pega cor nomeada do CSS) | ✅ **Morta** |
+| C6 | Descrições dos pilares não travadas | `{pilar.descricao}` → literal fixo em `src/features/site/sections/o-que-faz-uma-at.tsx:43` | `src/features/site/sections/o-que-faz-uma-at.test.tsx:36-38` — `secaoAt.pilares.forEach((pilar, i) => expect(within(cards[i]).getByText(pilar.descricao)).toBeInTheDocument())` | ✅ **Morta** |
 
-| Critério | Resultado definido pela spec | `arquivo:linha` + asserção | Resultado |
-| -------- | ---------------------------- | -------------------------- | --------- |
-| SIT-01 hero → AT → Sobre → Formação → Publicações → contato → rodapé | ordem exata dos 7 blocos | `src/app/(site)/page.test.tsx:95-103` — `toEqual([…6 âncoras…, RODAPE])` sobre `querySelectorAll("section[id], footer")`; `:111-116` — `contentinfo` + `["MAIN","FOOTER"]` | ✅ **PASS** (A4, C4, D7 mortos) |
-| SIT-02 6 pilares vindos de `content/site.ts`, sem texto duplicado em componente | exatamente 6, fonte única | `o-que-faz-uma-at.test.tsx:12,16,22,32` | ⚠️ **PASS com ressalva** — contagem e **títulos** travados; a **descrição** não: fixá-la no componente (C6) passa 304/304 |
-| SIT-03 clique no menu rola até a seção | âncora do menu leva a seção existente | `page.test.tsx:127` — `expect(ancorasDoMenu.length).toBeGreaterThan(0)`; `:132` — para cada `a[href^="#"]` do header, `expect(container.querySelector(ancora)).not.toBeNull()` | ✅ **PASS** (D5b morto) |
-| SIT-04 viewport de 360px sem rolagem horizontal | nenhuma barra horizontal | — nenhuma asserção; `grep -rn '360'` nos testes → **0 ocorrências** | ⏭️ **UAT pendente** — **confirmado honesto**, ninguém maquia |
-| SIT-05 paleta aprovada por tokens, sem cor literal em componente | 4 hex aprovados aplicados **e** zero cor literal | `src/test/paleta-em-tokens.test.ts:65` (cláusula negativa) + `:53-54` (auto-guarda); tokens em `src/app/globals.css:91-98` | ⚠️ **Parcial** — cláusula negativa travada para hex/função de cor (B1–B3, B7 mortos); cláusula positiva **sem evidência** (B6 sobrevive) e burla por classe Tailwind/cor nomeada (B4, B5) |
-| SIT-06 `prefers-reduced-motion: reduce` sem animação de entrada | todas as seções sem animação | — nenhuma asserção; `grep 'reduced-motion|matchMedia'` nos testes → **0**; implementação em `globals.css:169-177` | ⏭️ **UAT pendente** — **confirmado honesto** (C5 sobrevive, como esperado: jsdom não avalia media query) |
+### Sondas adversariais sobre a correção
 
-### P1: Visitante lê as publicações
-
-| Critério | Resultado definido pela spec | `arquivo:linha` + asserção | Resultado |
-| -------- | ---------------------------- | -------------------------- | --------- |
-| PUB-01 lista `publicado == true`, `publicadoEm` desc, **no máximo 6** | filtro + ordem + teto **6** | `src/features/publicacoes/queries.test.ts:83-88` — `toEqual([{where publicado==true},{orderBy publicadoEm desc},{limit LIMITE_PUBLICACOES_HOME}])`; `publicacoes-section.test.tsx:56-61` — recebe 8, `toHaveLength(LIMITE_PUBLICACOES_HOME)` + "Publicação 7" ausente | ⚠️ **Parcial** — filtro e ordem travados (C3 morto), teto **não**: os dois lados leem `LIMITE_PUBLICACOES_HOME`. **C1 sobrevive** (6→5, 304/304 verdes). O literal `6` da spec só aparece no **nome** do teste (`queries.test.ts:77`), que não asserta nada |
-| PUB-02 detalhe com título, data, markdown e link de volta | os 4 elementos | `publicacao-artigo.test.tsx:33-46`; `src/app/(site)/publicacoes/[slug]/page.test.tsx:135-142` — link com `secaoPublicacoes.voltar` e `href` da home | ✅ PASS |
-| PUB-03 vazio exibe "Nenhuma publicação por aqui ainda." | **essa** frase | `publicacoes-section.test.tsx:19,67,72` | ✅ **PASS** (A3, C9 mortos) |
-| PUB-04 slug ausente ou rascunho → 404 | 404 nos dois casos | `page.test.tsx:100-106` e `:109-119` — `rejects.toBe(RESPOSTA_404)` + `notFound` 1×; `:122-130` — no ar não chama; `queries.test.ts:158-168` — `obterPorSlug` filtra `slug` **e** `publicado == true`; `tests/rules/firestore.rules.test.ts:104-108` | ✅ PASS (D3, C2, R5 mortos) |
-| PUB-05 falha de leitura mostra a mensagem do Firebase, resto utilizável | mensagem traduzida, página de pé | `queries.test.ts:107-118`; `publicacoes-section.test.tsx:78` — `getByRole("alert")` com a mensagem; `src/app/(site)/page.tsx:29-32` | ✅ PASS |
-| PUB-06 `imagemUrl` aparece no card e no detalhe | imagem nos dois lugares | `publicacao-card.test.tsx:48-55`; `publicacao-artigo.test.tsx:49-56` | ✅ PASS |
-| PUB-07 `<title>`, description e OG por publicação | do título e do resumo | `page.test.tsx:66-70`, `:73-85`, `:87-95` | ✅ PASS |
-
-### P1: Keylla publica sem depender de ninguém
-
-| Critério | Resultado definido pela spec | `arquivo:linha` + asserção | Resultado |
-| -------- | ---------------------------- | -------------------------- | --------- |
-| ADM-01 sem sessão, `/admin` → `/admin/login` | redirect + conteúdo escondido | `painel-guard.test.tsx:60-66` — `toHaveBeenCalledWith(CAMINHO_LOGIN)` + conteúdo ausente; `:48-58` carregando; `:81-89` login sem laço | ✅ PASS |
-| ADM-02 credencial aceita → `/admin` | redirect para o painel | `login-form.test.tsx:50-60` — `toHaveBeenCalledWith(CAMINHO_PAINEL)` | ✅ PASS |
-| ADM-03 credencial recusada: erro em PT, sem revelar se o e-mail existe | mensagem traduzida e idêntica nos dois códigos | `login-form.test.tsx:64-71`; `src/lib/firebase/errors.test.ts:78-97` — mesma mensagem para `auth/user-not-found` e `auth/wrong-password` | ✅ PASS |
-| ADM-04 limites 120/220/20.000 e URL https válida bloqueiam o envio | os três tetos + allowlist https | `schemas.test.ts:47-60` (120/121), `:67-76` (220/221), `:78-89` (**20000 literal** + mensagem que cita 20000), `:110-149` (https + allowlist + teto); `publicacao-form.test.tsx:133-179` | ✅ PASS (D1 morto) |
-| ADM-05 gravando desabilita controles e mostra carregamento | tudo desabilitado | `publicacao-form.test.tsx:200-225` — cada controle `toBeDisabled()`; `login-form.test.tsx:87-106`; `formacao-form.test.tsx:116-142` | ✅ PASS |
-| ADM-06 excluir pede confirmação em dialog próprio | só remove após confirmar | `publicacoes-table.test.tsx:67-104` — acionar não exclui, confirmar exclui, cancelar não | ✅ PASS |
-| ADM-07 falha de gravação preserva o formulário e mostra a mensagem | dados mantidos + mensagem do Firebase | `publicacao-form.test.tsx:226-…`; `publicacoes-painel.test.tsx:134-148` | ✅ PASS |
-| ADM-08 alternar persiste `publicado` e reflete na listagem | grava e recarrega | `publicacoes-painel.test.tsx:104-116`; `publicacoes-table.test.tsx:130-138`; `mutations.test.ts:223-244` | ✅ PASS |
-| ADM-09 nunca `window.confirm/alert/prompt` | nenhuma chamada nativa | `publicacoes-table.test.tsx:105-116` — `expect(confirmNativo).not.toHaveBeenCalled()` com `vi.spyOn(window,"confirm")` | ✅ PASS |
-
-### P2: Formação e certificações
-
-| Critério | Resultado definido pela spec | `arquivo:linha` + asserção | Resultado |
-| -------- | ---------------------------- | -------------------------- | --------- |
-| FOR-01 `ordem` asc, empate por `ano` desc | essa ordenação | `formacoes/queries.test.ts:61-92` — ordem item a item; `:93-117` sentinelas | ✅ PASS |
-| FOR-02 `em_andamento` com rótulo distinto de "Concluído" | dois rótulos distintos | `formacoes-section.test.tsx:47-59` — rótulos **literais** com classes distintas; `:60-65` sufixo de continuidade | ✅ PASS (D4 morto) |
-| FOR-03 falha de leitura mostra a mensagem do Firebase | mensagem traduzida | `formacoes-section.test.tsx:88-97`; `formacoes/queries.test.ts:149-161` | ✅ PASS |
-| FOR-04 sem formações, a seção some inteira, inclusive o título | nada renderizado | `formacoes-section.test.tsx:79-87` — `queryByText(secaoFormacao.titulo)).not.toBeInTheDocument()` | ✅ PASS (D6 morto) |
-| FOR-05 CRUD de formação com as mesmas regras da P1 | validação, confirmação e erro iguais | `formacao-form.test.tsx:57-160`; `formacoes-painel.test.tsx:169-212` | ✅ PASS |
-
-### P3: Encontrabilidade
-
-| Critério | Resultado definido pela spec | `arquivo:linha` + asserção | Resultado |
-| -------- | ---------------------------- | -------------------------- | --------- |
-| SEO-01 `robots.txt` + `sitemap.xml` com `/` e cada publicação no ar | as duas rotas, URLs absolutas, sem `/admin` | `robots.test.ts:14-26`; `sitemap.test.ts:40-95` — home + cada publicada absoluta, leitura filtrada, `/admin` ausente, degrada para só a home no erro | ✅ PASS |
-| SEO-02 Open Graph + `Person` na home | campos do OG e do `Person` | `src/features/site/seo.test.ts:25-92` — campo a campo; `page.test.tsx:81-82` — `JSON.parse(bloco.textContent)).toEqual(pessoaDaAutora)` | ✅ PASS |
-
-### Segurança
-
-| Critério | Resultado definido pela spec | `arquivo:linha` + asserção | Resultado |
-| -------- | ---------------------------- | -------------------------- | --------- |
-| SEC-01 escrita restrita ao uid da allowlist | uid de fora não escreve; anônimo não lê rascunho | `tests/rules/firestore.rules.test.ts:98-102` (lê no ar), `:104-108` (não lê rascunho), `:110-119` (lista sem filtro negada), `:121-129` (anônimo não escreve), `:131-138` (formações), `:140-158` (autora lê rascunho e escreve), `:160-172` (uid de fora não escreve nem lê rascunho) | ✅ **PASS** — suíte **rodada nesta sessão**: 10/10, exit 0; **5/5 afrouxamentos mortos** |
-
-**Status**: **26/30 ✅** · **2 ⚠️ parciais** (PUB-01 teto de 6, SIT-05 cláusula positiva) · **2 ⏭️ UAT**
-(SIT-04, SIT-06 — confirmados honestos por grep: nenhum teste finge cobri-los).
-**0 requisitos sem nenhuma evidência** — eram 9 na iteração 1 e 3 na iteração 2.
+| Sonda | Pergunta | Resultado |
+| ----- | -------- | --------- |
+| **P1/P5** | `src/test/valores-da-spec.ts` resolve a armadilha ou só a move um nível? | **Move um nível — e o nível novo é o certo, mas não é travado.** Alterar `LIMITE_PUBLICACOES_HOME` **e** `TETO_DA_HOME_NA_SPEC` juntos (6→5) passa 323/323. O módulo só vale enquanto for transcrição fiel da spec, e **nada no repositório liga `valores-da-spec.ts` a `spec.md`**. Ver residual R2. |
+| **P2** | `no-restricted-imports` pega caminho relativo, além do alias? | **Pega os dois.** `import … from "@/test/valores-da-spec"` e `import … from "../../../test/valores-da-spec"` em `publicacoes-section.tsx` → `eslint` erro `no-restricted-imports` nas duas formas (grupo `["@/test/*", "**/test/*"]`, `eslint.config.mjs:25`). |
+| **P3** | Qual a tolerância real da comparação de cor? | **Apertada de verdade.** `--brass` girado **+15°** de matiz reprova; girado **+1°** também reprova (folga declarada é 0,05°, desvio real de arredondamento medido é ~0,005°). A trava reprova desvio de cor, não só troca grosseira. |
+| **P4** | Dá para burlar a exceção do shadcn com arquivo novo em `src/components/ui/`? | **Não.** Arquivo novo `src/components/ui/veu.tsx` com `bg-black bg-emerald-200` + `style={{color:"white"}}` reprova em 2 testes — a exceção é chaveada pelo **caminho exato** (`paleta-em-tokens.test.ts:87-90`). Um `bg-black` **a mais dentro do próprio `dialog.tsx`** também reprova, em 2 testes, porque a exceção registra **quantidade**. |
+| **P6** | A spec fixa algum dos valores que o autor deixou lendo a constante? | **Não.** Varredura de `spec.md`: os únicos números escritos por extenso são 6 (pilares, SIT-02), 6 (teto da home, PUB-01), 360px (SIT-04, sem teste por desenho) e 120/220/20.000 (ADM-04). `LIMITE_PUBLICACOES_PAINEL` (200), `LIMITE_PUBLICACOES_SITEMAP` (1000), `LIMITES_PUBLICACAO.slug/.tag/.imagemUrl`, todo `LIMITES_FORMACAO` e `ORDEM_MAXIMA_FORMACAO` (999) **não aparecem na spec** — a constante do código é mesmo o contrato, e a decisão de AD-040 está correta. Ressalva menor em R3 (SEO-01). |
 
 ---
 
-## 3. Edge Cases
+## 2. Cobertura ancorada na spec (evidência-ou-zero, 30 requisitos)
 
-| Edge case da spec | `arquivo:linha` | Resultado |
-| ----------------- | --------------- | --------- |
-| `imagemUrl` fora da allowlist renderiza sem imagem, sem quebrar | `publicacao-card.test.tsx:67-78`; `publicacao-artigo.test.tsx:87-96`; `schemas.test.ts:161-166` (subdomínio parecido recusado) | ✅ |
-| HTML bruto no markdown vira texto, não executa | `corpo-markdown.test.tsx:30-43` | ✅ |
-| Slug duplicado bloqueia a segunda gravação | `mutations.test.ts:112-121`, `:171-191` | ✅ |
-| Título com 120 é aceito e o contador indica 120/120 | `publicacao-form.test.tsx:92-110` e `:112-131` (6/120 — o caso que discrimina) | ✅ (D2 morto) |
-| Firestore fora do ar mantém a página de pé | `queries.test.ts:130-138`; `publicacoes-section.test.tsx:76-81`; observado no `npm run build` desta sessão | ✅ |
-| Variável de ambiente ausente nomeia a variável | `src/lib/firebase/config.test.ts:39-69` | ✅ |
+Re-derivada desta rodada, a partir do mapeamento de todos os 40 arquivos de teste. Requisito sem `file:line` conta como **não coberto**.
 
----
+### P1 — Visitante entende o trabalho da AT
 
-## 4. Discrimination Sensor
+| Critério | Desfecho fixado pela spec | `file:line` + expressão | Resultado |
+| -------- | ------------------------- | ----------------------- | --------- |
+| SIT-01 home com hero → AT → Sobre → Formação → Publicações → contato → rodapé, nesta ordem | os 7 blocos na ordem exata | `src/app/(site)/page.test.tsx:95-103` — `expect(blocosNaOrdem(container)).toEqual([ancoras.topo, ancoras.at, ancoras.sobre, ancoras.formacao, ancoras.publicacoes, ancoras.contato, RODAPE])`; `:110-116` — `["MAIN","FOOTER"]` | ✅ PASS |
+| SIT-02 6 pilares vindos de `content/site.ts`, sem texto duplicado em componente | exatamente 6, título **e** descrição com fonte única | `o-que-faz-uma-at.test.tsx:16` — `expect(secaoAt.pilares).toHaveLength(PILARES_DA_SPEC /* 6 */)`; `:22` — `getAllByRole("article")).toHaveLength(6)`; `:31-33` títulos na ordem; `:36-38` **descrições** por card | ✅ PASS (C6 morto) |
+| SIT-03 clique no menu rola até a seção | âncora do menu resolve para seção existente na home | `page.test.tsx:127` — `expect(ancorasDoMenu.length).toBeGreaterThan(0)`; `:131-133` — para cada `a[href^="#"]`, `expect(container.querySelector(ancora)).not.toBeNull()` | ⚠️ PASS parcial — prova o **destino**, não a rolagem (jsdom não rola). Rolagem suave vem de `scroll-mt-cabecalho` + CSS; fecha no UAT junto de SIT-06. |
+| SIT-04 viewport de 360px sem rolagem horizontal | nenhuma barra horizontal | **nenhuma asserção** — `grep -rn "360" src tests` nos testes → 0 ocorrências | ⏭️ **UAT manual** — confirmado honesto, nenhum teste finge cobrir |
+| SIT-05 paleta aprovada por tokens, sem cor literal em componente | as 4 cores nomeadas na spec + as 6 do design, e zero cor à mão | **positiva**: `paleta-aprovada.test.ts:104-125` (10 tokens, hex→OKLCH, folga 0,0005/0,05); **negativa**: `paleta-em-tokens.test.ts:165-167` (literal), `:169-171` (classe Tailwind), `:173-175` (`style` inline), `:177-190` (exceção de terceiro ainda aponta para código real) | ✅ PASS (B4, B5, B6 mortos) |
+| SIT-06 `prefers-reduced-motion: reduce` sem animação de entrada | todas as seções sem animação | **nenhuma asserção** — implementação em `src/app/globals.css:169-177`; jsdom não avalia media query | ⏭️ **UAT manual** — confirmado honesto. **Rastreabilidade errada, ver R1.** |
 
-**Isolamento**: worktree temporária (`git worktree add … HEAD --detach`) com `node_modules` por
-symlink; cada mutação revertida com `git checkout -- .`; worktree removida com `git worktree remove
---force` + `prune`. **Nunca `git stash`, nunca a árvore real.** Baseline `git status --porcelain`
-capturado **vazio** antes do sensor e conferido por `diff` depois — **idêntico**; `git worktree list`
-volta a listar só o repositório.
+### P1 — Visitante lê as publicações
 
-**Profundidade**: P0-full — **24 mutações válidas**, priorizando o diff `ddb79d4..HEAD`, as regras do
-Firestore e os pontos onde a cobertura parecia rasa.
+| Critério | Desfecho fixado pela spec | `file:line` + expressão | Resultado |
+| -------- | ------------------------- | ----------------------- | --------- |
+| PUB-01 `publicado == true`, `publicadoEm` desc, no máximo 6 | os três, com o 6 da spec | `queries.test.ts:82-87` — `toEqual([{where publicado == true}, {orderBy publicadoEm desc}, {limit TETO_DA_HOME_NA_SPEC}])`; `publicacoes-section.test.tsx:54-61` corte na tela | ✅ PASS (C1 morto) |
+| PUB-02 detalhe com título, data, markdown e link de volta | os 4 elementos | `publicacao-artigo.test.tsx:33-48`; `src/app/(site)/publicacoes/[slug]/page.test.tsx:135-142` (link de volta com o rótulo do conteúdo) | ✅ PASS |
+| PUB-03 vazio exibe "Nenhuma publicação por aqui ainda." | **essa** frase | `publicacoes-section.test.tsx:64-69` — `getByText(MENSAGEM_DE_VAZIO_DA_SPEC)` + ausência de `article`; `:71-73` — `expect(secaoPublicacoes.vazio).toBe(MENSAGEM_DE_VAZIO_DA_SPEC)` (liga conteúdo↔spec) | ✅ PASS |
+| PUB-04 slug ausente ou rascunho → 404 | 404 nos dois casos | `[slug]/page.test.tsx:100-107` e `:109-120` — `rejects.toBe(RESPOSTA_404)` + `notFound` 1×; `:122-132` publicado não chama; `queries.test.ts:158-168` — `obterPorSlug` filtra `slug` **e** `publicado == true`; `tests/rules/firestore.rules.test.ts` (anônimo não lê rascunho) | ✅ PASS (M6, R3 mortos) |
+| PUB-05 falha de leitura mostra a mensagem do Firebase, resto utilizável | mensagem traduzida, página de pé | `queries.test.ts:107-118` (`{ erro }`, sem lançar); `publicacoes-section.test.tsx:75-81` — mensagem do Firebase em `role="alert"`, título da seção preservado (`:83-98`) | ✅ PASS (M10 morto) |
+| PUB-06 `imagemUrl` no card e no detalhe | imagem nos dois lugares | `publicacao-card.test.tsx:48-54` — `getByRole("img", { name: "Quando a criança diz não" })`; `publicacao-artigo.test.tsx:49-56` | ✅ PASS |
+| PUB-07 `<title>`, description e OG por publicação | do título e do resumo | `[slug]/page.test.tsx:60-72`, `:73-86` (OG com título, resumo, endereço, data), `:87-98` (slug ausente não vaza `undefined`) | ✅ PASS |
 
-### 4.1 As 4 lacunas alegadas (grupo A)
+### P1 — Keylla publica sem depender de ninguém
 
-| # | Mutação | Arquivo:linha | Morto? |
-| - | ------- | ------------- | ------ |
-| A1 | Pilar "Parceria com a família" removido do conteúdo (ficam 5) | `src/content/site.ts:131-137` | ✅ Morto (2 testes) |
-| A2 | Componente renderiza `pilares.slice(0, 3)` | `src/features/site/sections/o-que-faz-uma-at.tsx:34` | ✅ Morto (2 testes) |
-| A3 | Texto do vazio → "Nada por aqui." | `src/content/site.ts:166` | ✅ Morto (2 testes) |
-| A4 | `<SiteFooter />` removido do layout | `src/app/(site)/layout.tsx:10` | ✅ Morto (2 testes) |
+| Critério | Desfecho fixado pela spec | `file:line` + expressão | Resultado |
+| -------- | ------------------------- | ----------------------- | --------- |
+| ADM-01 sem sessão, `/admin` → `/admin/login` | redirect + conteúdo escondido | `painel-guard.test.tsx:60-67` — `expect(substituir).toHaveBeenCalledWith(CAMINHO_LOGIN)` + `queryByText(CONTEUDO_DO_PAINEL)).not.toBeInTheDocument()`; `:48-58` carregando não vaza; `:81-89` login sem laço | ✅ PASS (M9 morto) |
+| ADM-02 credencial aceita → `/admin` | redirect para o painel | `login-form.test.tsx:50-63` — `toHaveBeenCalledWith(CAMINHO_PAINEL)` | ✅ PASS |
+| ADM-03 credencial recusada: erro em PT, sem revelar se o e-mail existe | mensagem traduzida e **idêntica** nos códigos de credencial | `src/lib/firebase/errors.test.ts:78-97` — mesma string para `auth/user-not-found` e `auth/wrong-password`; `auth.test.ts:45-59`; `login-form.test.tsx:64-75` | ✅ PASS (M10 morto) |
+| ADM-04 limites 120/220/20.000 e URL https válida bloqueiam o envio | os três tetos, inclusivos, + allowlist https | `schemas.test.ts:41-57` (120 aceita / 121 recusa citando 120), `:64-77` (220/221), `:78-94` (20000/20001), `:114-153` (https, allowlist, teto de caracteres, não-URL) — todos contra `LIMITES_DE_PUBLICACAO_DA_SPEC`; `publicacao-form.test.tsx:90-111` (contador 120/120), `:133-179` | ✅ PASS |
+| ADM-05 gravando desabilita controles e mostra carregamento | tudo desabilitado | `publicacao-form.test.tsx:200-225` — cada controle `toBeDisabled()`; `login-form.test.tsx:87-107`; `formacao-form.test.tsx:116-142` | ✅ PASS |
+| ADM-06 excluir pede confirmação em dialog próprio | só remove após confirmação explícita | `publicacoes-table.test.tsx:67-77` (acionar só abre), `:78-90` (confirmar exclui), `:91-104` (cancelar não exclui); `publicacoes-painel.test.tsx:118-133` | ✅ PASS |
+| ADM-07 falha de gravação preserva o formulário e mostra a mensagem | dados mantidos + mensagem do Firebase | `publicacao-form.test.tsx:226-…`; `publicacao-editor.test.tsx:138-…` (não sai da tela); `publicacoes-painel.test.tsx:134-149` | ✅ PASS |
+| ADM-08 alternar persiste `publicado` e reflete na listagem | grava e recarrega | `mutations.test.ts:223-244` (põe no ar / volta a rascunho, devolve novo estado), `:245-260` (`publicadoEm` ganha data); `publicacoes-painel.test.tsx:104-117` | ✅ PASS (M7 morto) |
+| ADM-09 nunca `window.confirm/alert/prompt` | nenhuma chamada nativa | `publicacoes-table.test.tsx:105-116` — `vi.spyOn(window,"confirm")` + `expect(confirmNativo).not.toHaveBeenCalled()` no fluxo completo de exclusão | ✅ PASS |
 
-### 4.2 A trava de SIT-05 (grupo B)
+### P2 — Formação
 
-| # | Mutação | Arquivo:linha | Morto? |
-| - | ------- | ------------- | ------ |
-| B1 | `bg-[#EDF3E4]` no `className` | `src/features/site/sections/hero.tsx:9` | ✅ Morto |
-| B2 | `bg-[#8E7A32]` dentro do `cva(...)` | `src/components/ui/button.tsx` | ✅ Morto |
-| B3 | `style={{ color: "#8E7A32" }}` inline | `src/components/layout/site-footer.tsx:10` | ✅ Morto |
-| B7 | `RAIZ` da varredura apontada para `src/features` | `src/test/paleta-em-tokens.test.ts:25` | ✅ Morto (auto-guarda funciona) |
-| **B4** | **`bg-emerald-200 text-rose-600` (paleta padrão do Tailwind)** | `src/features/site/sections/hero.tsx:9` | ❌ **Sobreviveu** |
-| **B5** | **`style={{ color: "white", background: "darkolivegreen" }}` (cor nomeada do CSS)** | `src/components/layout/site-footer.tsx:10` | ❌ **Sobreviveu** |
-| **B6** | **`--olive` trocado de oliva para vermelho** | `src/app/globals.css:96` | ❌ **Sobreviveu** |
+| Critério | Desfecho fixado pela spec | `file:line` + expressão | Resultado |
+| -------- | ------------------------- | ----------------------- | --------- |
+| FOR-01 `ordem` asc, empate por `ano` desc | essa ordenação | `formacoes/queries.test.ts:61-76` (ordem), `:77-92` (empate pelo ano desc), `:93-117` (sem ordem/sem ano vão para o fim sem sumir); `formacoes/painel.test.ts:32-65` | ✅ PASS (M8 morto) |
+| FOR-02 `em_andamento` com rótulo distinto de "Concluído" | dois rótulos literais e visualmente distintos | `formacoes-section.test.tsx:47-59` — `getByText("Em andamento")`, `getByText("Concluído")`, `expect(emCurso.className).not.toBe(concluido.className)` | ✅ PASS |
+| FOR-03 falha de leitura mostra a mensagem do Firebase | mensagem traduzida | `formacoes-section.test.tsx:88-97`; `formacoes/queries.test.ts:149-181` (erro, config ausente, código desconhecido — sem lançar em nenhum) | ✅ PASS |
+| FOR-04 sem formações, a seção some inteira, inclusive o título | nada renderizado | `formacoes-section.test.tsx:79-87` — `expect(container).toBeEmptyDOMElement()` + `queryByRole("heading", { name: secaoFormacao.titulo })).not.toBeInTheDocument()` | ✅ PASS |
+| FOR-05 CRUD de formação com as mesmas regras da P1 | validação, confirmação e erro iguais | `formacao-form.test.tsx:57-160` (limite, intervalo de ano, teto de ordem, desabilitar ao salvar, erro fiel preservando o preenchido); `formacoes-painel.test.tsx:169-212` (exclui só após confirmar, cancelar não exclui, erro não perde a lista) | ✅ PASS |
 
-### 4.3 Mutações novas de cobertura (grupo C) e regressões das rodadas anteriores (grupo D)
+### P3 — Encontrabilidade · Segurança
 
-| # | Mutação | Arquivo:linha | Morto? |
-| - | ------- | ------------- | ------ |
-| **C1** | **`LIMITE_PUBLICACOES_HOME` 6 → 5** (a spec fixa "no máximo 6") | `src/features/publicacoes/schemas.ts:17` | ❌ **Sobreviveu** (304/304) |
-| C2 | `obterPorSlug` sem `where("publicado","==",true)` — rascunho vaza na rota | `src/features/publicacoes/queries.ts:68` | ✅ Morto |
-| C3 | `orderBy("publicadoEm","desc")` → `"asc"` | `src/features/publicacoes/queries.ts:41` | ✅ Morto |
-| C4 | Rodapé antes do `<main>` no `SiteLayout` | `src/app/(site)/layout.tsx:9-10` | ✅ Morto (2 testes) |
-| C8 | Seção de publicações deixa de cortar em `LIMITE` (renderiza tudo) | `publicacoes-section.tsx:32` | ✅ Morto |
-| C9 | Componente troca `secaoPublicacoes.vazio` por literal próprio | `publicacoes-section.tsx` | ✅ Morto |
-| **C5** | **Bloco `prefers-reduced-motion` removido** | `src/app/globals.css:169-177` | ❌ Sobreviveu — **esperado**: SIT-06 é UAT declarado, jsdom não avalia media query |
-| **C6** | **Descrição do 1º pilar fixada no componente, ignorando o conteúdo** | `o-que-faz-uma-at.tsx:45` | ❌ **Sobreviveu** (metade "sem texto duplicado" de SIT-02) |
-| D1 | Regressão M11: `LIMITES_PUBLICACAO.corpo` 20000 → 20001 | `schemas.ts:38` | ✅ Morto (segue fechado) |
-| D2 | Regressão M30: contador imprime `usados/usados` | `src/components/form/campo.tsx:38` | ✅ Morto (segue fechado) |
-| D3 | Regressão M47: rota não chama `notFound()` para `dados === null` | `(site)/publicacoes/[slug]/page.tsx:65-67` | ✅ Morto |
-| D4 | Regressão M28: os dois status de formação com a mesma classe | `formacoes-section.tsx:22` | ✅ Morto |
-| D5b | Regressão M50: `href` do menu "Sobre" fixado em `#nao-existe` | `src/content/site.ts:58` | ✅ Morto |
-| D6 | Regressão M17: seção de formação renderiza mesmo sem registros | `formacoes-section.tsx` | ✅ Morto |
-| D7 | Regressão M49: "Sobre" antes de "O que faz uma AT" | `src/app/(site)/page.tsx:43-45` | ✅ Morto |
+| Critério | Desfecho fixado pela spec | `file:line` + expressão | Resultado |
+| -------- | ------------------------- | ----------------------- | --------- |
+| SEO-01 `robots.txt` + `sitemap.xml` com `/` e cada publicação no ar | as duas rotas, URLs absolutas, `/admin` fora | `robots.test.ts:14-26` (libera, bloqueia painel, sitemap absoluto); `sitemap.test.ts:40-95` (home + cada publicada absoluta, leitura filtrada com o teto do sitemap, `lastModified`, degrada para só a home no erro, `/admin` ausente) | ✅ PASS (ressalva R3) |
+| SEO-02 Open Graph + dados estruturados `Person` na home | campos do OG e do `Person` | `src/features/site/seo.test.ts:25-92` — campo a campo, canonical, `sameAs`, escape de `<`, JSON válido; `page.test.tsx:70-85` — `JSON.parse` do bloco JSON-LD `toEqual(pessoaDaAutora)` | ✅ PASS |
+| SEC-01 escrita restrita ao uid da allowlist | uid de fora não escreve; anônimo não lê rascunho | `tests/rules/firestore.rules.test.ts` — 10/10 verdes contra o emulador **nesta sessão** (`npm run test:rules`, exit 0): anônimo lê no ar / não lê rascunho / não lista sem filtro / não escreve; uid fora da allowlist não escreve nem lê rascunho; autora lê rascunho e escreve | ✅ PASS (R1, R2, R3 mortos) |
 
-**Descartada como mutante equivalente**: trocar o valor de `ancoras.sobre` em `content/site.ts` move a
-âncora do menu **e** o `id` da seção juntos — a navegação continua funcionando, então não é falha de
-comportamento e não conta como sobrevivente. Refeita como D5b, que quebra só um lado.
-
-### 4.4 Regras do Firestore (grupo R) — suíte rodada, não alegada
-
-`export PATH="$(brew --prefix openjdk@21)/bin:$PATH"` (openjdk 21.0.12.1) + `npm run test:rules`.
-**Baseline: 10 passaram, exit 0.** Cada mutação sai com exit 1.
-
-| # | Mutação | Arquivo:linha | Morto? |
-| - | ------- | ------------- | ------ |
-| R5 | `allow get: if true` — anônimo lê rascunho | `firestore.rules:42` | ✅ Morto (2 casos, exit 1) |
-| R6 | `allow list: if true` — listagem sem filtro liberada | `firestore.rules:55` | ✅ Morto (exit 1) |
-| R7 | `ehAutora()` → `request.auth != null` — qualquer autenticado escreve | `firestore.rules:36` | ✅ Morto (2 casos, exit 1) |
-| R8 | `formacoes`: escrita liberada para todos | `firestore.rules:63` | ✅ Morto (2 casos, exit 1) |
-| R9 | `publicacoes`: `delete` liberado para anônimo (só o delete) | `firestore.rules:57` | ✅ Morto (2 casos, exit 1) |
-
-**Resultado do sensor**: **24 mutações válidas · 20 mortas · 4 sobreviventes**.
-Por materialidade: **2 sobreviventes materiais** (C1, B6 — este último com B4/B5 no mesmo requisito),
-**1 menor** (C6), **1 esperado** (C5, UAT declarado).
+**Status**: **28/30 com evidência discriminante** · **2 ⏭️ UAT manual** (SIT-04, SIT-06 — nenhum teste os maquia) · **1 ⚠️ parcial declarado** (SIT-03: destino travado, rolagem no UAT).
 
 ---
 
-## 5. Gate Check
+## 3. Sensor de discriminação
+
+**Isolamento**: worktree temporária (`git worktree add … HEAD`), `node_modules` por symlink. Baseline `git status --porcelain` do repositório real capturado antes (**vazio**, 0 bytes), worktree removida com `git worktree remove --force` + `git worktree prune`, porcelain reconferido depois: **idêntico ao baseline**. Nenhum `git stash`, nenhuma edição na árvore real.
+
+### As 5 mutações da auditoria
+
+| # | Mutação | `file:line` | Morta? |
+| - | ------- | ----------- | ------ |
+| M1 | `LIMITE_PUBLICACOES_HOME` 6 → 5 (C1) | `src/features/publicacoes/schemas.ts:17` | ✅ 2 arquivos |
+| M2 | `--olive` vira vermelho `oklch(0.55 0.22 27)` (B6) | `src/app/globals.css:96` | ✅ |
+| M3 | `bg-emerald-200` no card do pilar (B4) | `src/features/site/sections/o-que-faz-uma-at.tsx:42` | ✅ |
+| M4 | `style={{ color: "white" }}` no mesmo card (B5) | `src/features/site/sections/o-que-faz-uma-at.tsx:42` | ✅ |
+| M5 | Descrição do pilar fixada no componente (C6) | `src/features/site/sections/o-que-faz-uma-at.tsx:43` | ✅ |
+
+### Famílias que doeriam em produção
+
+| # | Mutação | `file:line` | Morta? |
+| - | ------- | ----------- | ------ |
+| M6 | Rascunho vaza em `/publicacoes/[slug]`: removido `where("publicado","==",true)` | `src/features/publicacoes/queries.ts:68` | ✅ |
+| M7 | `publicadoEm` não gravada no `criarPublicacao` (publicação sumiria da home) | `src/features/publicacoes/mutations.ts:82` | ✅ 2 testes |
+| M8 | Ordem das formações invertida (`a.ordem - b.ordem` → `b.ordem - a.ordem`) | `src/features/formacoes/converter.ts:86` | ✅ 4 testes |
+| M9 | Guard não manda para o login (`!ehLogin` → `ehLogin`) | `src/features/admin/components/painel-guard.tsx:60` | ✅ 2 testes |
+| M10 | Erro do Firebase vira genérico (sempre `MENSAGEM_SEM_DETALHE`) | `src/lib/firebase/errors.ts:58-66` | ✅ 4+ testes |
+
+### Regras do Firestore (`npm run test:rules` rodado, não alegado)
+
+| # | Mutação | `firestore.rules` | Morta? |
+| - | ------- | ----------------- | ------ |
+| R1 | `allow list` liberado para qualquer um | `:55` | ✅ (`visitante anônimo > não lista a coleção sem filtrar pelo que está no ar`) |
+| R2 | Escrita de publicações passa a exigir só estar logado | `:57` | ✅ (`uid fora da allowlist > não escreve publicação nem formação`) |
+| R3 | `allow get` liberado (rascunho vaza por id) | `:42` | ✅ 2 testes |
+
+### Sondas de burla
+
+| # | Sonda | Resultado |
+| - | ----- | --------- |
+| P2a | `import "@/test/valores-da-spec"` em componente de produção | 🔒 `eslint` reprova (`no-restricted-imports`) |
+| P2b | O mesmo import por caminho relativo `../../../test/valores-da-spec` | 🔒 `eslint` reprova |
+| P3 | `--brass` girado +15° e +1° de matiz | 🔒 reprova nos dois (tolerância real ~0,05°) |
+| P4a | Arquivo novo `src/components/ui/veu.tsx` com `bg-black bg-emerald-200` + `style` branco | 🔒 reprova em 2 testes — exceção é por caminho exato |
+| P4b | Um `bg-black` **a mais** dentro do próprio `dialog.tsx` | 🔒 reprova em 2 testes — exceção registra quantidade |
+
+### Mutação de controle (sobrevive por desenho)
+
+| # | Mutação | Resultado |
+| - | ------- | --------- |
+| P5 | `LIMITE_PUBLICACOES_HOME` 6→5 **e** `TETO_DA_HOME_NA_SPEC` 6→5, juntos | ❌ **Sobrevive** (323/323 verdes) — esperado: `valores-da-spec.ts` é a transcrição da spec, editá-lo equivale a editar a spec. Mas **nada liga esse arquivo a `spec.md`**: a armadilha mudou de endereço, não desapareceu. → **R2**. |
+
+**Profundidade**: leve-expandida (15 mutações de comportamento + 5 sondas), acima do mínimo de 1–3, por causa da superfície de segurança (SEC-01) e do histórico de 3 reprovações.
+**Resultado**: **15/15 mortas** — ✅ PASS.
+
+---
+
+## 4. Gate
 
 | Comando | Resultado |
 | ------- | --------- |
-| `npm test -- --run` | **304 passaram**, 0 falharam, 0 pulados — 38 arquivos |
-| `npm run test:rules` | **10 passaram**, exit 0 — emulador do Firestore, openjdk 21.0.12.1 |
+| `npm test -- --run` | **323 passaram / 0 falharam**, 39 arquivos, 4,35s, exit 0 |
+| `npm run test:rules` (emulador Firestore, `openjdk@21` no PATH) | **10 passaram / 0 falharam**, exit 0 |
 | `npx tsc --noEmit` | exit 0 |
-| `npm run lint` | exit 0, sem achado |
-| `npm run build` | exit 0 — 9 rotas; `/` e `/sitemap.xml` com `revalidate 5m` |
+| `npm run lint` | exit 0 |
+| `npm run build` | exit 0 — 9 rotas geradas, `/` e `/sitemap.xml` com `revalidate 5m` |
 
-- **Antes da Fase 8**: 294 em 36 arquivos · **depois**: 304 em 38 · **delta**: +10 testes, +2 arquivos
-- **Pulados**: nenhum. **Asserção enfraquecida**: nenhuma — o diff só troca comparação-contra-constante
-  por comparação-contra-literal, que é estritamente mais forte
-- **Ruído esperado do ambiente**: o build loga `permission-denied` do Firestore ao pré-renderizar a
-  home. As regras não estão publicadas e o uid da autora é placeholder (`firestore.rules:31`). É
-  estado do ambiente, não defeito: a home degrada para o estado de erro em vez de derrubar o build —
-  PUB-05/FOR-03 funcionando
+**Contagem antes desta fase**: 304 testes em 38 arquivos (handoff da Fase 8). **Depois**: 323 em 39. **Delta +19, 0 removidos, 0 pulados.** Nenhuma asserção foi enfraquecida: as trocas de `LIMITES_PUBLICACAO.x` por `LIMITES_DE_PUBLICACAO_DA_SPEC.x` movem o lado direito da comparação para longe do código sob teste — é fortalecimento, comprovado por M1.
+
+O `build` renderiza a home em `permission-denied` porque as regras não estão publicadas e o uid é placeholder. **Não é defeito**: é PUB-05/FOR-03 funcionando, e o build conclui exit 0 com a página de pé.
 
 ---
 
-## 6. Code Quality
+## 5. Qualidade de código (diff `b48c45d..HEAD`)
 
 | Princípio | Status |
 | --------- | ------ |
-| Código mínimo, sem feature além do pedido | ✅ — o lote da Fase 8 é só teste, com uma exceção de escopo justificada (T52 endureceu a trava criada em T51) |
-| Sem abstração para uso único | ✅ |
-| Só os arquivos necessários tocados | ✅ — nenhum arquivo de produção alterado em `ddb79d4..HEAD` |
-| Segue o padrão do projeto | ✅ (AD-036; AD-037/038/039 registrados) |
-| Verificação ancorada na spec (valor asserido = valor da spec) | ⚠️ — AD-037 aplicada em SIT-02 e PUB-03, **mas não em PUB-01**: o "6" do teto continua lendo a constante |
-| Cobertura por camada: domínio 1:1 com ACs; rotas com feliz + borda + erro | ✅ |
-| Todo teste mapeia para requisito/edge case/Done-when — sem teste órfão | ✅ |
-| Diretrizes documentadas seguidas | ✅ `tasks.md` (Test Coverage Matrix) + defaults da skill |
-| Anti-hardcode | ⚠️ `bg-black/10` em `dialog.tsx:34` e `alert-dialog.tsx:33` é cor fora dos tokens, hoje, com a trava verde |
-| Moeda em BRL completo | N/A — o projeto não exibe valores monetários |
+| Código mínimo, sem feature além do pedido | ✅ — o diff é 100% teste/config; `src/` de produção não foi tocado |
+| Sem abstração para uso único | ✅ — `valores-da-spec.ts` tem 2 exports usados por 4 arquivos |
+| Mudanças cirúrgicas, só nos arquivos necessários | ✅ |
+| Casa com os padrões do projeto | ✅ — docblock em PT-BR explicando o **porquê**, nomes em português, `as const` |
+| Check spec-anchored: valor asserido bate com o da spec | ✅ (28/30; 2 declarados sem asserção) |
+| Todo teste mapeia para requisito/edge case/done-when | ✅ — os testes de `detectores da trava` (`paleta-em-tokens.test.ts:193-256`) e `:126-137` de `paleta-aprovada` são autoteste do detector, que é o que evita a trava passar vazia |
+| Regra de lint torna a convenção verificável, não combinada | ✅ — `eslint.config.mjs:16-38`, provada por P2a/P2b |
 
 ---
 
-## 7. Gaps ranqueados
+## 6. Edge cases da spec
 
-1. **PUB-01 — o teto de 6 não discrimina (Major).** A spec escreve "no máximo 6" por extenso, e as
-   duas asserções leem `LIMITE_PUBLICACOES_HOME`, a mesma constante que o código usa para cortar:
-   `queries.test.ts:86` e `publicacoes-section.test.tsx:57`. **C1 (`6 → 5`) passa 304/304** — a home
-   silenciosamente deixaria de mostrar uma publicação legítima e nada reprovaria. O literal `6` só
-   aparece no **nome** do teste (`queries.test.ts:77`), que não asserta nada.
-   É **exatamente a família** que reprovou as iterações 1 (M11) e 2 (M52, M54), e AD-037 existe para
-   fechá-la — mas foi aplicada só em SIT-02 e PUB-03, os dois casos que o relatório anterior citou
-   nominalmente. O gap é de **generalização**: a regra fechou os exemplos, não a classe.
-   **Correção**: `expect(LIMITE_PUBLICACOES_HOME).toBe(6)` contra um `const TETO_DA_HOME_NA_SPEC = 6`,
-   no mesmo formato de `PILARES_DA_SPEC`. **~5 minutos, 1 arquivo.**
-
-2. **SIT-05 — a paleta aprovada em si não tem asserção (Major, já conhecido).** O requisito nomeia
-   quatro valores (`#EDF3E4`, `#F7FBF1`, `#4C5B34`, `#8E7A32`) e eles existem apenas como **comentário**
-   em `globals.css:91-98`. **B6 (trocar `--olive` de oliva para vermelho) passa 304/304.** A trava
-   criada em T51/T52 fecha só a cláusula negativa. O ponto já está no `STATE.md` como aberto pelos
-   revisores da Fase 8 — o que esta rodada acrescenta é a prova empírica.
-   **Correção**: teste lendo `globals.css` e asserindo os quatro tokens contra os literais da spec
-   (comparando a string `oklch(...)` fixada, ou convertendo hex→oklch). **~30 minutos** — precisa
-   decidir a forma de comparação.
-
-3. **SIT-05 — a trava é mais estreita que o docblock promete (Minor).** `bg-emerald-200` (B4) e
-   `style={{ color: "white" }}` (B5) passam, e **`bg-black/10` já está no código** em
-   `src/components/ui/dialog.tsx:34` e `src/components/ui/alert-dialog.tsx:33`, com a suíte verde. O
-   docblock em `paleta-em-tokens.test.ts:6-8` diz "nenhum arquivo de código escreve cor à mão", o que
-   não é verdade hoje.
-   **Correção**: ou ampliar o detector (escala de cor do Tailwind + cores nomeadas do CSS) e decidir o
-   que fazer com o `bg-black/10` do shadcn, ou estreitar o docblock para o que a trava cobre de fato.
-   **~20 minutos**, e é decisão de produto tanto quanto de teste.
-
-4. **SIT-02 — a metade "sem texto duplicado em componente" cobre só os títulos (Minor).** T48 asserta
-   contagem e títulos; **C6 (fixar a descrição de um pilar no componente) passa 304/304**.
-   **Correção**: estender `o-que-faz-uma-at.test.tsx:32` para comparar também as descrições.
-   **~5 minutos.**
-
-5. **SIT-04 e SIT-06 seguem só em UAT (aceito, confirmado honesto).** `grep` por `360`,
-   `reduced-motion` e `matchMedia` nos testes → **0 ocorrências**: ninguém maquiou nada de coberto.
-   C5 sobrevive porque jsdom não avalia media query, que é a razão declarada.
+| Edge case | Evidência | Status |
+| --------- | --------- | ------ |
+| `imagemUrl` fora da allowlist → card sem imagem, sem quebrar | `publicacao-card.test.tsx:67-79`; `publicacao-artigo.test.tsx:87-…`; `schemas.test.ts:126-131`, `:165-170` (subdomínio parecido recusado) | ✅ |
+| HTML bruto no markdown renderiza como texto | `corpo-markdown.test.tsx:30-44` | ✅ |
+| Slug duplicado bloqueia a gravação da segunda | `mutations.test.ts:112-122` (criar), `:182-192` (atualizar), `:171-181` (o próprio slug é aceito) | ✅ |
+| Título com 120 caracteres aceito e contador em 120/120 | `schemas.test.ts:41-48`; `publicacao-form.test.tsx:90-111` | ✅ |
+| Firestore fora do ar → página de pé, seção em erro | `queries.test.ts:107-140`; `formacoes/queries.test.ts:149-181`; `publicacoes-section.test.tsx:75-98` | ✅ |
+| Variáveis do Firebase ausentes → erro nomeando a variável | `src/lib/firebase/config.test.ts:39-64` (nomeia **todas** as faltantes, trata em branco como ausente); `use-auth.test.ts:87-98` | ✅ |
 
 ---
 
-## 8. Interactive UAT — pendente
+## 7. Residuais em aberto (ranqueados) — nenhum bloqueia o PASS
 
-Não executado nesta sessão (sem navegador). Continua devendo:
+**R1 — Rastreabilidade de SIT-06 aponta para a task errada.** `spec.md:177` mapeia `SIT-06 → T14`, mas T14 é "Configuração validada do Firebase" (`tasks.md`), que trata do edge case de variável de ambiente — exatamente o que a própria spec **exclui** de SIT-06 ("SIT-06 trata exclusivamente de movimento"). O código já sabe disso: `src/lib/firebase/config.ts:7` comenta "SIT-06 é só reduced-motion". A implementação real de SIT-06 está em `src/app/globals.css:169-177`, entregue pelo done-when de **T4** (`tasks.md:222`). *Materialidade: baixa — o requisito está implementado; o defeito é de documentação.* *Custo: uma linha em `spec.md`.*
 
-| Critério | Como conferir |
-| -------- | ------------- |
-| SIT-04 — viewport de 360px sem rolagem horizontal | DevTools → dispositivo de 360px, percorrer a home inteira e a página de um texto: nenhuma barra horizontal, nenhum bloco cortado |
-| SIT-06 — `prefers-reduced-motion: reduce` sem animação de entrada | macOS: Ajustes → Acessibilidade → Vídeo → Reduzir movimento (ou DevTools → Rendering → Emulate `prefers-reduced-motion`), recarregar e conferir que nada anima e que a rolagem do menu é instantânea |
-| SIT-05 (visual) — a paleta na tela é a aprovada | Enquanto os quatro valores não tiverem teste (gap 2), conferir a olho que fundo, superfície, oliva e dourado são os da aprovação |
+**R2 — `src/test/valores-da-spec.ts` não é conferido contra `spec.md`.** P5 comprova: mover os dois lados juntos passa 323/323. O módulo faz o trabalho para o qual foi criado (produção não o lê, e o lint garante isso), mas a fidelidade dele à spec é hoje mantida só por disciplina. *Materialidade: média — é a mesma classe de armadilha de C1, um nível acima.* *Custo: baixo — um teste que leia `spec.md` e case os literais 6/120/220/20000, ou uma revisão obrigatória do arquivo quando a spec muda.*
 
----
+**R3 — `LIMITE_PUBLICACOES_SITEMAP = 1000` é um teto que SEO-01 não prevê.** SEO-01 pede "cada publicação publicada" no sitemap, sem teto; o código corta em 1000. Não há teste que possa pegar isso porque o desvio só aparece com >1000 publicações. *Materialidade: desprezível para uma autora só, mas é um desvio silencioso da spec.* *Custo: uma linha na spec registrando o teto, ou um comentário `// SPEC_DEVIATION`.*
 
-## 9. Requirement Traceability Update
+**R4 — 26 critérios de "Done when" seguem desmarcados em tasks marcadas ✅.** `tasks.md` linhas 166-168, 185-186, 203-204, 221-222, 239-240, 257-259, 278-279, 296-298, 315, 332-333, 350-351, 368-369, 386-387 — todas nas Fases 1–2. As tasks passaram no gate de build da época; a caixa é que não foi marcada. *Materialidade: baixa (higiene de processo), mas atrapalha qualquer reconciliação futura de estado.* *Custo: minutos.*
 
-| Requirement | Status na iteração 2 | Novo status |
-| ----------- | -------------------- | ----------- |
-| SIT-01 | ⚠️ parcial (rodapé sem asserção) | ✅ **Verificado** |
-| SIT-02 | ❌ sem evidência | ✅ **Verificado** (ressalva: descrições não travadas) |
-| SIT-03 | ✅ Verificado | ✅ Verificado |
-| SIT-04, SIT-06 | ⏭️ UAT pendente | ⏭️ UAT pendente (honesto, reconfirmado) |
-| SIT-05 | ⚠️ verdadeiro por varredura, sem trava | ⚠️ **Parcial** — cláusula negativa travada; cláusula positiva sem evidência |
-| PUB-01 | ✅ Verificado | ⚠️ **Rebaixado para parcial** — o teto de 6 não discrimina (C1) |
-| PUB-03 | ⚠️ parcial (mensagem não discrimina) | ✅ **Verificado** |
-| PUB-02, PUB-04..PUB-07 | ✅ Verificado | ✅ Verificado |
-| ADM-01..ADM-09 | ✅ Verificado | ✅ Verificado |
-| FOR-01..FOR-05 | ✅ Verificado | ✅ Verificado |
-| SEO-01, SEO-02 | ✅ Verificado | ✅ Verificado |
-| SEC-01 | ✅ Verificado | ✅ Verificado (5 novos afrouxamentos mortos) |
+**R5 — A trava de cor lê texto, não estilo computado.** Classe montada em runtime (`` `bg-${cor}-200` ``) escapa. O próprio docblock declara isso (`paleta-em-tokens.test.ts:21-24`). O item "nenhum `.css` além de `globals.css` é auditado" está **vazio hoje**: `find src -name "*.css"` devolve só `globals.css`. *Materialidade: baixa e declarada.*
+
+**R6 — Bookkeeping das lições: L-014 é duplicata de L-003 por causa da chave.** A chave do store é `signal::texto_normalizado` (`.specs/lessons.json`): L-003 entrou como `ac_gap`, L-014 com o **mesmo texto** como `surviving_mutant` → chaves diferentes, sem deduplicação. O efeito prático é que a recorrência fica diluída e nenhuma lição chega ao limiar de promoção (todas as 15 seguem `candidate, x1`). Ver seção 9.
 
 ---
 
-## 10. Summary
+## 8. UAT pendente (bloqueia o "pronto para o ar", não o PASS técnico)
 
-**Geral**: ❌ **FAIL estreito — e é a 3ª iteração, então escala em vez de virar a 4ª.**
+| # | Teste | Como conferir | Requisito |
+| - | ----- | ------------- | --------- |
+| 1 | Sem rolagem horizontal em 360px | DevTools → dispositivo de 360px de largura; percorrer a home inteira e a página de um texto: nenhuma barra horizontal, nenhum bloco cortado | SIT-04 |
+| 2 | Movimento reduzido | macOS → Ajustes → Acessibilidade → Vídeo → Reduzir movimento (ou DevTools → Rendering → emular `prefers-reduced-motion: reduce`), recarregar: nada anima na entrada | SIT-06 |
+| 3 | Rolagem do menu | Clicar cada item do menu e ver a página rolar até a seção, com o cabeçalho não cobrindo o título | SIT-03 (metade não automatizável) |
+| 4 | Fluxo completo da autora | Com o uid real nas regras publicadas: entrar, criar rascunho, publicar, editar, excluir — e ver cada efeito na home | Success criteria |
 
-**Check ancorado na spec**: 26/30 ACs com asserção casando com o resultado da spec · 2 parciais ·
-0 sem evidência · 2 em UAT declarado e confirmado honesto.
-**Sensor**: 24 mutações válidas, **20 mortas, 4 sobreviventes** — 2 materiais (C1, B6), 1 menor (C6) e
-1 esperado (C5, UAT). Regras do Firestore: **5/5 mortas, suíte rodada** (10/10, exit 0).
-**Gate**: 304 unitários + 10 de regra · `tsc`, lint e build limpos.
+---
 
-**O que funciona**: as 4 lacunas da iteração 2 fecharam de verdade — nenhuma passou por alegação, e
-cada uma morreu sob o mutante que a define. A armadilha das duas rodadas anteriores (asserção
-ancorada na constante que o próprio código renderiza) está fechada em SIT-02 e PUB-03, com o caso
-extra que amarra o conteúdo ao texto da spec. Nenhum requisito ficou sem evidência — eram 9 na
-iteração 1. SEC-01 aguenta 5 afrouxamentos distintos das regras, cada um com a suíte saindo em 1.
+## 9. Lições
 
-**Onde dói**: a correção fechou os **exemplos** citados, não a **classe**. O mesmo padrão que reprovou
-duas vezes segue vivo no teto de 6 publicações de PUB-01 (C1), num requisito P1 de MVP. E SIT-05
-ganhou trava para a metade negativa do enunciado enquanto a metade positiva — os quatro valores da
-paleta aprovada — continua sem uma única asserção (B6).
+Rodado `python3 ~/.claude/skills/tlc-spec-driven/scripts/lessons.py list --status all`: **L-001..L-015, todas `candidate, x1`, nenhuma promovida a `confirmed`**.
 
-**Custo do que falta**: ~60 minutos somados (5 + 30 + 20 + 5), em 3 arquivos de teste, sem tocar
-código de produção. Nenhum item é bloqueio de deploy: o site funciona; o que falta é o teste que
-impede a regressão.
+**L-014**: confirmada como duplicata textual exata de L-003. **Não foi removida nem editada à mão** — o store é de propriedade do script, que não tem `merge` nem `delete`, e apagar destruiria a evidência (`C6 … o-que-faz-uma-at.tsx:45`) que L-014 carrega e L-003 não. A causa está registrada em R6: a chave de deduplicação inclui o `signal`, então a mesma frase entrando por sinais diferentes escapa. Registrado como lição própria abaixo para não se repetir.
 
-**Próximos passos**: decisão do usuário sobre os 4 gaps acima; depois, o UAT de SIT-04/SIT-06 em
-navegador e a publicação das regras e do índice com o uid real.
+Lições distiladas desta iteração (todas ancoradas em achado desta rodada):
+
+- **R1 → L-016** (`ac_gap`, escopo `rastreabilidade`): linha de rastreabilidade tem de apontar para a task que implementa o requisito; task que fecha um edge case vizinho não serve de evidência.
+- **R2 → L-017** (`spec_precision_gap`, escopo `verificacao`): módulo que transcreve valores da spec precisa de um check que o ligue ao texto da spec — sem isso a armadilha só muda de arquivo.
+- **R6 → L-018** (`spec_deviation`, escopo `verificacao`): antes de `lessons.py add`, conferir `list --status all` — a chave inclui o sinal, então a mesma frase por sinal diferente cria duplicata em vez de corroborar.
+
+---
+
+## 10. O que este PASS **não** cobre
+
+Dito de forma direta, porque um PASS sem esta seção mente por omissão:
+
+1. **Nenhum navegador real.** Os 323 testes rodam em jsdom: sem layout, sem cascata de CSS, sem media query. SIT-04 e SIT-06 não têm **nenhuma** evidência automatizada, e SIT-03 tem só metade. A trava de paleta compara o **texto** de `globals.css`, não o pixel pintado.
+2. **Nenhum Firestore de verdade.** Todo o comportamento de leitura/escrita é verificado contra dublês; as regras, contra o emulador. O caminho feliz ponta a ponta (autora autenticada gravando num projeto real) **nunca foi executado**. Com o uid ainda em `COLE_AQUI_O_UID_DA_AUTORA` e as regras não publicadas, SEC-01 está provado para o **arquivo**, não para a produção.
+3. **Nenhuma prova de conteúdo real.** Nome, telefone, e-mail, cidade, texto do "Sobre" e as fotos seguem placeholder. Os testes provam que o componente lê de `content/site.ts`; não provam que o que está lá é o certo.
+4. **Nenhum teste de desempenho, acessibilidade automatizada ou E2E** — os dois últimos estão fora de escopo por decisão registrada na spec.
+5. **A fidelidade de `valores-da-spec.ts` à spec é humana** (R2), e o teto do sitemap diverge de SEO-01 sem trava possível (R3).
+
+---
+
+## 11. Rastreabilidade
+
+Atualização a aplicar em `spec.md` (o verificador não edita a spec — os 30 requisitos saem de `Implementing` para):
+
+| Requisito | Novo status |
+| --------- | ----------- |
+| SIT-01, SIT-02, SIT-05, PUB-01..PUB-07, ADM-01..ADM-09, FOR-01..FOR-05, SEO-01, SEO-02, SEC-01 (27) | ✅ Verificado |
+| SIT-03 (1) | ✅ Verificado no destino · rolagem em UAT |
+| SIT-04, SIT-06 (2) | ⏭️ UAT manual pendente |
+
+---
+
+## Resumo
+
+**Geral**: ✅ **Pronto** no que é automatizável — com 4 itens de UAT em navegador antes do ar.
+
+**O que funciona**: as 4 lacunas da iteração 3 fecharam com asserção que reprova a injeção, comprovado por reinjeção independente. O sensor matou 15/15, incluindo as 5 famílias que doeriam em produção (rascunho vazando, `publicadoEm` ausente, ordenação, guard do painel, erro genérico) e as 3 de regra, com o emulador rodado nesta sessão. Nenhuma sonda de burla passou.
+
+**O que segue aberto**: R1 (rastreabilidade de SIT-06, 1 linha), R2 (transcrição da spec sem trava, custo baixo), R3 (teto do sitemap não previsto), R4 (26 done-when desmarcados), R5/R6 (declarados). Nada disso é comportamento errado; é dívida de documentação e de bookkeeping.
+
+**Próximo passo**: rodar o UAT da seção 8, publicar as regras com o uid real, trocar os placeholders de conteúdo. Fechar R1 e R2 na próxima passagem pela spec.

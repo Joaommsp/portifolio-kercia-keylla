@@ -104,6 +104,24 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: C1 src/features/publicacoes/schemas.ts:17 (conteudo)
 - last seen: 2026-09-02T00:17:02Z
 
+### L-016 - Linha de rastreabilidade deve apontar para a task que implementa o requisito; task que fecha um edge case vizinho nao serve de evidencia.
+- signal: `ac_gap` · recurrence: 1 feature(s) · scope: `rastreabilidade` · harmful: 0
+- features: site-portfolio
+- evidence: SIT-06 .specs/features/site-portfolio/spec.md:177 (rastreabilidade)
+- last seen: 2026-09-02T01:59:19Z
+
+### L-017 - Modulo que transcreve valores da spec precisa de check que o ligue ao texto da spec; senao a armadilha so muda de arquivo.
+- signal: `spec_precision_gap` · recurrence: 1 feature(s) · scope: `verificacao` · harmful: 0
+- features: site-portfolio
+- evidence: P5 src/test/valores-da-spec.ts:26 (verificacao)
+- last seen: 2026-09-02T01:59:19Z
+
+### L-018 - Antes de registrar licao, conferir a lista completa: a chave de deduplicacao inclui o sinal, entao a mesma frase por sinal diferente cria duplicata em vez de corroborar.
+- signal: `spec_deviation` · recurrence: 1 feature(s) · scope: `verificacao` · harmful: 0
+- features: site-portfolio
+- evidence: L-014 .specs/lessons.json (verificacao)
+- last seen: 2026-09-02T01:59:19Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.
