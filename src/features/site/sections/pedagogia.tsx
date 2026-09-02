@@ -30,7 +30,7 @@ export function Pedagogia() {
               // frente entra um pouco depois da anterior, que é o argumento da
               // seção — uma sustenta a próxima.
               style={{
-                animationRange: `entry ${10 + indice * 6}% cover ${26 + indice * 6}%`,
+                animationRange: `entry ${8 + indice * 8}% cover ${30 + indice * 8}%`,
               }}
               // O traço sai de cada item, não da lista: assim ele para no
               // último número em vez de sobrar uma coluna à direita, e a `ol`

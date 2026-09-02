@@ -179,19 +179,26 @@
 
 @layer components {
   /*
-   * Entrada em sequência das frentes da Pedagogia. A ordem é o argumento da
-   * seção — uma frente sustenta a próxima —, e a entrada escalonada mostra isso
-   * em vez de só afirmar no texto.
+   * Entrada dos blocos que a página apresenta em conjunto: as frentes da
+   * Pedagogia, os pilares da AT, as famílias de competência e os cards de
+   * publicação. Onde a ordem carrega significado — a trilha da Pedagogia —, o
+   * escalonamento vem do `animation-range` inline, item a item.
    *
    * `animation-timeline: view()` é CSS puro: sem observer, sem JS, e onde o
    * navegador não suporta a regra é ignorada e o conteúdo aparece normal.
    */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
+      .entra-ao-rolar,
       .frente-da-trilha {
-        animation: entrada-da-frente linear both;
+        animation: entrada-ao-rolar linear both;
         animation-timeline: view();
+        animation-range: entry 8% cover 30%;
+      }
+
+      .frente-da-trilha {
         /* O trecho de cada frente vem inline, escalonado pela posição. */
+        animation-range: unset;
       }
     }
   }
@@ -209,10 +216,10 @@
   }
 }
 
-@keyframes entrada-da-frente {
+@keyframes entrada-ao-rolar {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;

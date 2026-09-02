@@ -30,7 +30,7 @@ export function PublicacaoCard({ publicacao }: { publicacao: Publicacao }) {
   const data = formatDateBROuNulo(publicacao.publicadoEm);
 
   return (
-    <article className="flex overflow-hidden rounded-xs border border-line bg-surface shadow-cartao transition-transform duration-toque ease-toque active:scale-[0.99] pointer-fino:hover:-translate-y-0.5">
+    <article className="entra-ao-rolar flex overflow-hidden rounded-xs border border-line bg-surface shadow-cartao transition-transform duration-toque ease-toque active:scale-[0.99] pointer-fino:hover:-translate-y-0.5">
       <Link
         href={caminhoDaPublicacao(publicacao.slug)}
         className="flex flex-1 flex-col"

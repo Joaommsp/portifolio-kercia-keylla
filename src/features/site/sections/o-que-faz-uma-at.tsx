@@ -36,7 +36,7 @@ export function OQueFazUmaAt() {
             return (
               <article
                 key={pilar.titulo}
-                className="flex min-h-48 flex-col gap-2.5 bg-surface px-6 py-7 transition-colors hover:bg-surface-2"
+                className="entra-ao-rolar flex min-h-48 flex-col gap-2.5 bg-surface px-6 py-7 transition-colors pointer-fino:hover:bg-surface-2"
               >
                 <Icone
                   aria-hidden
