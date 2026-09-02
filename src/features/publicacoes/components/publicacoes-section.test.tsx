@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { secaoPublicacoes } from "@/content/site";
 import { PublicacoesSection } from "@/features/publicacoes/components/publicacoes-section";
 import { type Publicacao } from "@/features/publicacoes/schemas";
-import { TETO_DE_PUBLICACOES_NA_HOME } from "@/test/valores-da-spec";
+import { TETO_DA_HOME_NA_SPEC } from "@/test/valores-da-spec";
 
 /** Mensagem tal como o Firebase a devolve, já traduzida pela camada de erros. */
 const ERRO_DO_FIREBASE = "Você não tem permissão para esta operação.";
@@ -52,10 +52,12 @@ describe("PublicacoesSection", () => {
     render(<PublicacoesSection resultado={{ dados: criarLista(8) }} />);
 
     expect(screen.getAllByRole("article")).toHaveLength(
-      TETO_DE_PUBLICACOES_NA_HOME,
+      TETO_DA_HOME_NA_SPEC,
     );
     expect(
-      screen.queryByRole("heading", { name: "Publicação 7" }),
+      screen.queryByRole("heading", {
+        name: `Publicação ${TETO_DA_HOME_NA_SPEC + 1}`,
+      }),
     ).not.toBeInTheDocument();
   });
 

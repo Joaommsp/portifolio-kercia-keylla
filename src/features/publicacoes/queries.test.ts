@@ -5,9 +5,8 @@ import {
   listarPublicadas,
   obterPorSlug,
 } from "@/features/publicacoes/queries";
-import { LIMITE_PUBLICACOES_HOME } from "@/features/publicacoes/schemas";
 import { obterDb } from "@/lib/firebase/client";
-import { TETO_DE_PUBLICACOES_NA_HOME } from "@/test/valores-da-spec";
+import { TETO_DA_HOME_NA_SPEC } from "@/test/valores-da-spec";
 import {
   type ConsultaFalsa,
   criarSnapshot,
@@ -84,12 +83,8 @@ describe("listarPublicadas", () => {
     expect(consultaExecutada().restricoes).toEqual([
       { tipo: "where", campo: "publicado", operador: "==", valor: true },
       { tipo: "orderBy", campo: "publicadoEm", direcao: "desc" },
-      { tipo: "limit", quantidade: TETO_DE_PUBLICACOES_NA_HOME },
+      { tipo: "limit", quantidade: TETO_DA_HOME_NA_SPEC },
     ]);
-  });
-
-  it("usa como padrão o teto de seis que a spec fixa", () => {
-    expect(LIMITE_PUBLICACOES_HOME).toBe(TETO_DE_PUBLICACOES_NA_HOME);
   });
 
   it("respeita um limite diferente do padrão", async () => {

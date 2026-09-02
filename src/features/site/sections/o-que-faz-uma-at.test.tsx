@@ -11,14 +11,6 @@ import { OQueFazUmaAt } from "@/features/site/sections/o-que-faz-uma-at";
  */
 const PILARES_DA_SPEC = 6;
 
-/**
- * Localiza a descrição dentro do card: é o parágrafo, o único texto do cartão
- * que não é o título nem o rótulo do ícone. Buscar por papel evita amarrar o
- * teste à classe do elemento.
- */
-const DESCRICAO_DE_PILAR = (_conteudo: string, elemento: Element | null) =>
-  elemento?.tagName === "P";
-
 describe("OQueFazUmaAt (SIT-02)", () => {
   it("mantém no conteúdo os seis pilares que a spec fixa", () => {
     expect(secaoAt.pilares).toHaveLength(PILARES_DA_SPEC);
@@ -33,16 +25,15 @@ describe("OQueFazUmaAt (SIT-02)", () => {
   it("tira título e descrição dos cards do conteúdo do site, na ordem", () => {
     render(<OQueFazUmaAt />);
 
-    const cards = screen.getAllByRole("article").map((card) => ({
-      titulo: within(card).getByRole("heading").textContent,
-      descricao: within(card).getByText(DESCRICAO_DE_PILAR).textContent,
-    }));
+    const cards = screen.getAllByRole("article");
 
-    expect(cards).toEqual(
-      secaoAt.pilares.map((pilar) => ({
-        titulo: pilar.titulo,
-        descricao: pilar.descricao,
-      })),
+    expect(cards.map((card) => within(card).getByRole("heading").textContent)).toEqual(
+      secaoAt.pilares.map((pilar) => pilar.titulo),
     );
+    // A descrição é buscada pelo texto do conteúdo dentro do próprio card:
+    // fixar qualquer uma delas no componente deixa de encontrar o par.
+    secaoAt.pilares.forEach((pilar, indice) => {
+      expect(within(cards[indice]).getByText(pilar.descricao)).toBeInTheDocument();
+    });
   });
 });

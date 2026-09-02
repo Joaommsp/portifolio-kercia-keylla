@@ -79,6 +79,26 @@ portfolio-keylla/
 - Nenhuma string de conteúdo dentro de componente: tudo vem de `src/content/site.ts` ou do Firestore.
 - Nenhum valor de cor/espaçamento literal: só token do tema.
 
+## Paleta aprovada
+
+SIT-05 nomeia quatro valores (fundo, superfície, oliva e dourado); os outros seis fecham a paleta que
+foi aprovada junto com o layout. Os dez entram no CSS como token de tema em `src/app/globals.css`,
+convertidos para OKLCH, e componente nenhum escreve cor à mão. Esta tabela é a fonte: o teste
+`src/test/paleta-aprovada.test.ts` a transcreve e confere token por token.
+
+| Token | Hex aprovado | Papel | Fonte |
+| ----- | ------------ | ----- | ----- |
+| `--ground` | `#EDF3E4` | fundo da página | SIT-05 |
+| `--surface` | `#F7FBF1` | superfície de cartão | SIT-05 |
+| `--surface-2` | `#E1EAD3` | superfície em realce (hover, faixa) | layout aprovado |
+| `--ink` | `#2B3322` | tinta de título e corpo | layout aprovado |
+| `--ink-soft` | `#5B6749` | tinta secundária | layout aprovado |
+| `--olive` | `#4C5B34` | cor de ação (primária) | SIT-05 |
+| `--olive-deep` | `#3B4728` | oliva em estado pressionado | layout aprovado |
+| `--brass` | `#8E7A32` | dourado de destaque | SIT-05 |
+| `--line` | `#D2DEC0` | borda e divisor | layout aprovado |
+| `--on-olive` | `#F3F8EA` | tinta sobre fundo oliva | layout aprovado |
+
 ## Modelo de dados
 
 ```

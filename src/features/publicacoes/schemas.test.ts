@@ -6,7 +6,7 @@ import {
   type PublicacaoFormulario,
   publicacaoSchema,
 } from "@/features/publicacoes/schemas";
-import { LIMITES_DE_CAMPO_DA_SPEC } from "@/test/valores-da-spec";
+import { LIMITES_DE_PUBLICACAO_DA_SPEC } from "@/test/valores-da-spec";
 
 const valida: PublicacaoFormulario = {
   titulo: "AT não é babá",
@@ -41,7 +41,7 @@ describe("publicacaoSchema", () => {
   it("aceita título com exatamente 120 caracteres", () => {
     expect(
       publicacaoSchema.safeParse(
-        com({ titulo: repetir(LIMITES_DE_CAMPO_DA_SPEC.titulo) }),
+        com({ titulo: repetir(LIMITES_DE_PUBLICACAO_DA_SPEC.titulo) }),
       ).success,
     ).toBe(true);
   });
@@ -50,7 +50,7 @@ describe("publicacaoSchema", () => {
     expect(
       primeiroErroDe(
         "titulo",
-        com({ titulo: repetir(LIMITES_DE_CAMPO_DA_SPEC.titulo + 1) }),
+        com({ titulo: repetir(LIMITES_DE_PUBLICACAO_DA_SPEC.titulo + 1) }),
       ),
     ).toBe("O título deve ter no máximo 120 caracteres.");
   });
@@ -64,13 +64,13 @@ describe("publicacaoSchema", () => {
   it("aceita resumo com exatamente 220 caracteres e rejeita 221", () => {
     expect(
       publicacaoSchema.safeParse(
-        com({ resumo: repetir(LIMITES_DE_CAMPO_DA_SPEC.resumo) }),
+        com({ resumo: repetir(LIMITES_DE_PUBLICACAO_DA_SPEC.resumo) }),
       ).success,
     ).toBe(true);
     expect(
       primeiroErroDe(
         "resumo",
-        com({ resumo: repetir(LIMITES_DE_CAMPO_DA_SPEC.resumo + 1) }),
+        com({ resumo: repetir(LIMITES_DE_PUBLICACAO_DA_SPEC.resumo + 1) }),
       ),
     ).toBe("O resumo deve ter no máximo 220 caracteres.");
   });
@@ -78,7 +78,7 @@ describe("publicacaoSchema", () => {
   it("aceita corpo com exatamente 20000 caracteres", () => {
     expect(
       publicacaoSchema.safeParse(
-        com({ corpo: repetir(LIMITES_DE_CAMPO_DA_SPEC.corpo) }),
+        com({ corpo: repetir(LIMITES_DE_PUBLICACAO_DA_SPEC.corpo) }),
       ).success,
     ).toBe(true);
   });
@@ -87,7 +87,7 @@ describe("publicacaoSchema", () => {
     expect(
       primeiroErroDe(
         "corpo",
-        com({ corpo: repetir(LIMITES_DE_CAMPO_DA_SPEC.corpo + 1) }),
+        com({ corpo: repetir(LIMITES_DE_PUBLICACAO_DA_SPEC.corpo + 1) }),
       ),
     ).toBe("O corpo do texto deve ter no máximo 20000 caracteres.");
   });

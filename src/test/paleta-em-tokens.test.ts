@@ -26,14 +26,15 @@ import { describe, expect, it } from "vitest";
  * Escopo: todo `.ts` e `.tsx` de `src/`, os componentes de `src/components/ui`
  * inclusive. Três exceções, todas deliberadas:
  *
- * 1. `globals.css` (e qualquer `.css`) fica de fora da regra 1 porque é lá que
- *    os tokens são definidos, e um token precisa nascer de um valor literal. O
- *    bloco abaixo confere o outro lado: que esses valores são os aprovados.
- * 2. Os próprios arquivos de teste ficam de fora porque cor literal é insumo
- *    legítimo deles — os casos do detector, logo abaixo, são a prova. Teste não
- *    pinta tela, que é o que SIT-05 protege.
+ * 1. `globals.css` (e qualquer `.css`) fica de fora porque é lá que os tokens
+ *    são definidos, e um token precisa nascer de um valor literal. O outro lado
+ *    — que esses valores são os aprovados — é conferido em
+ *    `paleta-aprovada.test.ts`.
+ * 2. `src/test/` inteira fica de fora, arquivos de teste e infra de teste: cor
+ *    literal é insumo legítimo deles, e os casos do detector, logo abaixo, são
+ *    a prova. Teste não pinta tela, que é o que SIT-05 protege.
  * 3. Duas classes de terceiro, nomeadas uma a uma em
- *    `CLASSES_DE_TERCEIRO_TOLERADAS`, com o motivo ao lado.
+ *    `CLASSES_DE_TERCEIRO_TOLERADAS`, com o motivo e a quantidade esperada.
  */
 const RAIZ = join(process.cwd(), "src");
 
@@ -78,13 +79,14 @@ const VALOR_NEUTRO = /^(?:transparent|currentColor|inherit|initial|revert|unset|
  * `dialog.tsx` e `alert-dialog.tsx` vêm do shadcn e são mantidos próximos do
  * upstream: o véu dos dois já chega com `bg-black/10` de fábrica, e reescrevê-lo
  * em token nosso criaria divergência a cada atualização do componente. A
- * tolerância vale **só** para esta classe nestes dois arquivos — cor literal
- * segue reprovando em `src/components/ui/` como em qualquer outro lugar, e
- * classe de cor nova nesses mesmos arquivos também reprova.
+ * tolerância vale **só** para esta classe nestes dois arquivos, e **na
+ * quantidade registrada** — um `bg-black` a mais no mesmo arquivo reprova, do
+ * mesmo jeito que qualquer outra classe de cor. Cor literal segue reprovando em
+ * `src/components/ui/` como em qualquer outro lugar.
  */
-const CLASSES_DE_TERCEIRO_TOLERADAS: Record<string, readonly string[]> = {
-  "components/ui/dialog.tsx": ["bg-black"],
-  "components/ui/alert-dialog.tsx": ["bg-black"],
+const CLASSES_DE_TERCEIRO_TOLERADAS: Record<string, Readonly<Record<string, number>>> = {
+  "components/ui/dialog.tsx": { "bg-black": 1 },
+  "components/ui/alert-dialog.tsx": { "bg-black": 1 },
 };
 
 /** Arquivo conhecido, para a varredura não passar por ter lido a pasta errada. */
@@ -109,20 +111,50 @@ function coresEmStyleInlineEm(fonte: string): string[] {
   );
 }
 
-/** Código de `src/`, sem os arquivos de teste. */
+/** Pasta que guarda a infra de teste, fora da varredura junto com os testes. */
+const PASTA_DE_TESTE = "test";
+
+/** Código de `src/` que pinta tela: sem os testes e sem a infra de teste. */
 function arquivosDeCodigo(pasta: string): string[] {
   return readdirSync(pasta, { withFileTypes: true }).flatMap((entrada) => {
     const caminho = join(pasta, entrada.name);
-    if (entrada.isDirectory()) return arquivosDeCodigo(caminho);
+    if (entrada.isDirectory()) {
+      return pasta === RAIZ && entrada.name === PASTA_DE_TESTE ? [] : arquivosDeCodigo(caminho);
+    }
     const ehCodigo = /\.tsx?$/.test(entrada.name);
     const ehTeste = /\.test\.tsx?$/.test(entrada.name);
     return ehCodigo && !ehTeste ? [caminho] : [];
   });
 }
 
-const arquivos = arquivosDeCodigo(RAIZ).map((caminho) =>
-  relative(RAIZ, caminho).split(sep).join("/"),
-);
+/** Cada arquivo auditado com a fonte já lida — o disco é percorrido uma vez. */
+const arquivosLidos = arquivosDeCodigo(RAIZ).map((caminho) => ({
+  caminho: relative(RAIZ, caminho).split(sep).join("/"),
+  fonte: readFileSync(caminho, "utf8"),
+}));
+
+const arquivos = arquivosLidos.map(({ caminho }) => caminho);
+
+/** Arquivos em que o detector achou algo, já sem o que a exceção tolera. */
+function infratoresDe(
+  detectar: (fonte: string) => string[],
+  tolerar: (caminho: string, achados: string[]) => string[] = (_, achados) => achados,
+): { caminho: string; achados: string[] }[] {
+  return arquivosLidos
+    .map(({ caminho, fonte }) => ({ caminho, achados: tolerar(caminho, detectar(fonte)) }))
+    .filter(({ achados }) => achados.length > 0);
+}
+
+/** Tira da lista as classes de terceiro registradas, até a quantidade tolerada. */
+function semAsClassesDeTerceiro(caminho: string, classes: string[]): string[] {
+  const restante = { ...(CLASSES_DE_TERCEIRO_TOLERADAS[caminho] ?? {}) };
+
+  return classes.filter((classe) => {
+    if (!restante[classe]) return true;
+    restante[classe] -= 1;
+    return false;
+  });
+}
 
 describe("paleta em tokens (SIT-05)", () => {
   it("varre o código do site", () => {
@@ -131,56 +163,34 @@ describe("paleta em tokens (SIT-05)", () => {
   });
 
   it("não deixa cor literal em nenhum arquivo de código", () => {
-    const infratores = arquivos
-      .map((caminho) => ({
-        caminho,
-        cores: coresLiteraisEm(readFileSync(join(RAIZ, caminho), "utf8")),
-      }))
-      .filter(({ cores }) => cores.length > 0);
-
-    expect(infratores).toEqual([]);
+    expect(infratoresDe(coresLiteraisEm)).toEqual([]);
   });
 
   it("não deixa classe da paleta padrão do Tailwind fora das exceções nomeadas", () => {
-    const infratores = arquivos
-      .map((caminho) => ({
-        caminho,
-        classes: classesForaDaPaletaEm(readFileSync(join(RAIZ, caminho), "utf8")).filter(
-          (classe) => !(CLASSES_DE_TERCEIRO_TOLERADAS[caminho] ?? []).includes(classe),
-        ),
-      }))
-      .filter(({ classes }) => classes.length > 0);
-
-    expect(infratores).toEqual([]);
+    expect(infratoresDe(classesForaDaPaletaEm, semAsClassesDeTerceiro)).toEqual([]);
   });
 
   it("não deixa cor escrita direto em style inline", () => {
-    const infratores = arquivos
-      .map((caminho) => ({
-        caminho,
-        cores: coresEmStyleInlineEm(readFileSync(join(RAIZ, caminho), "utf8")),
-      }))
-      .filter(({ cores }) => cores.length > 0);
-
-    expect(infratores).toEqual([]);
+    expect(infratoresDe(coresEmStyleInlineEm)).toEqual([]);
   });
 
   it("mantém as exceções de terceiro apontando para código que existe", () => {
     for (const [caminho, classes] of Object.entries(CLASSES_DE_TERCEIRO_TOLERADAS)) {
-      expect(arquivos, `exceção aponta para arquivo inexistente: ${caminho}`).toContain(caminho);
+      const arquivo = arquivosLidos.find((lido) => lido.caminho === caminho);
+      expect(arquivo, `exceção aponta para arquivo inexistente: ${caminho}`).toBeDefined();
 
-      const fonte = readFileSync(join(RAIZ, caminho), "utf8");
-      for (const classe of classes) {
+      const achadas = classesForaDaPaletaEm(arquivo!.fonte);
+      for (const [classe, quantidade] of Object.entries(classes)) {
         expect(
-          classesForaDaPaletaEm(fonte),
-          `exceção "${classe}" sobrando em ${caminho}`,
-        ).toContain(classe);
+          achadas.filter((achada) => achada === classe),
+          `exceção "${classe}" registrada ${quantidade}× e não confere em ${caminho}`,
+        ).toHaveLength(quantidade);
       }
     }
   });
 });
 
-describe("detector de cor literal", () => {
+describe("detectores da trava", () => {
   it("acusa cor escrita à mão em className e em style inline", () => {
     expect(coresLiteraisEm('<p className="bg-[#EDF3E4]" />')).toHaveLength(1);
     expect(coresLiteraisEm('<p style={{ color: "#8E7A32" }} />')).toHaveLength(1);
@@ -243,111 +253,5 @@ describe("detector de cor literal", () => {
     expect(coresEmStyleInlineEm("<p style={{ animationDelay: `${i * 60}ms` }} />")).toEqual([]);
     // Fora de `style` inline, "color:" é texto qualquer e não é auditado aqui.
     expect(coresEmStyleInlineEm('const css = `color: white;`;')).toEqual([]);
-  });
-});
-
-/**
- * Metade positiva de SIT-05: não basta faltar cor literal em componente — os
- * tokens precisam carregar a paleta que foi aprovada.
- *
- * Os quatro primeiros valores estão escritos na própria spec ("fundo `#EDF3E4`,
- * superfície `#F7FBF1`, oliva `#4C5B34`, dourado `#8E7A32`"). Os outros seis
- * completam a paleta aprovada junto com o layout e existiam só como comentário
- * em `globals.css`, isto é, sem trava nenhuma: trocar `--olive` por vermelho
- * passava a suíte inteira.
- *
- * A comparação é feita em OKLCH porque é assim que os tokens nascem no CSS. O
- * hex é convertido aqui, no teste, em vez de a expectativa ser a string do
- * arquivo — copiar a string travaria o texto, não a cor.
- */
-const PALETA_APROVADA = {
-  ground: "#EDF3E4",
-  surface: "#F7FBF1",
-  "surface-2": "#E1EAD3",
-  ink: "#2B3322",
-  "ink-soft": "#5B6749",
-  olive: "#4C5B34",
-  "olive-deep": "#3B4728",
-  brass: "#8E7A32",
-  line: "#D2DEC0",
-  "on-olive": "#F3F8EA",
-} as const;
-
-/**
- * Folga da comparação. Os tokens do CSS guardam 4 casas em L e C e 2 no matiz,
- * então a folga cobre o arredondamento com sobra e ainda reprova qualquer troca
- * de cor perceptível.
- */
-const FOLGA = { luminancia: 0.005, croma: 0.005, matiz: 0.5 } as const;
-
-type Oklch = { luminancia: number; croma: number; matiz: number };
-
-/** sRGB de 0 a 255 para o espaço linear. */
-function linearizar(canal: number): number {
-  const v = canal / 255;
-  return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-}
-
-/** Converte `#RRGGBB` para OKLCH (Björn Ottosson, sRGB → OKLab → OKLCH). */
-function hexParaOklch(hex: string): Oklch {
-  const inteiro = Number.parseInt(hex.slice(1), 16);
-  const r = linearizar((inteiro >> 16) & 255);
-  const g = linearizar((inteiro >> 8) & 255);
-  const b = linearizar(inteiro & 255);
-
-  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
-  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
-  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
-
-  const luminancia = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
-  const eixoA = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
-  const eixoB = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
-
-  const matiz = (Math.atan2(eixoB, eixoA) * 180) / Math.PI;
-  return {
-    luminancia,
-    croma: Math.hypot(eixoA, eixoB),
-    matiz: matiz < 0 ? matiz + 360 : matiz,
-  };
-}
-
-const FOLHA_DE_TEMA = readFileSync(join(process.cwd(), "src/app/globals.css"), "utf8");
-
-/** Valor OKLCH que o tema declara para o token, ou `null` se ele não existe. */
-function tokenDoTema(nome: string): Oklch | null {
-  const declaracao = new RegExp(
-    `--${nome}:\\s*oklch\\(\\s*([\\d.]+)\\s+([\\d.]+)\\s+([\\d.]+)\\s*\\)`,
-  ).exec(FOLHA_DE_TEMA);
-
-  if (!declaracao) return null;
-
-  return {
-    luminancia: Number(declaracao[1]),
-    croma: Number(declaracao[2]),
-    matiz: Number(declaracao[3]),
-  };
-}
-
-describe("paleta aprovada nos tokens (SIT-05)", () => {
-  it.each(Object.entries(PALETA_APROVADA))(
-    "declara --%s com a cor aprovada (%s)",
-    (nome, hex) => {
-      const declarado = tokenDoTema(nome);
-      const aprovado = hexParaOklch(hex);
-
-      expect(declarado, `token --${nome} não está declarado em globals.css`).not.toBeNull();
-      expect(Math.abs(declarado!.luminancia - aprovado.luminancia)).toBeLessThanOrEqual(
-        FOLGA.luminancia,
-      );
-      expect(Math.abs(declarado!.croma - aprovado.croma)).toBeLessThanOrEqual(FOLGA.croma);
-      expect(Math.abs(declarado!.matiz - aprovado.matiz)).toBeLessThanOrEqual(FOLGA.matiz);
-    },
-  );
-
-  it("converte hex para OKLCH em vez de copiar a string do tema", () => {
-    // Branco e preto puros: pontas conhecidas do espaço, independentes do tema.
-    expect(hexParaOklch("#FFFFFF").luminancia).toBeCloseTo(1, 3);
-    expect(hexParaOklch("#FFFFFF").croma).toBeCloseTo(0, 3);
-    expect(hexParaOklch("#000000").luminancia).toBeCloseTo(0, 3);
   });
 });

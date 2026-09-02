@@ -1227,3 +1227,20 @@ T48 → T56
 
 **Tests**: unit
 **Gate**: quick
+
+---
+
+### Revisão da Phase 9 (revisor-reuso-padroes + revisor-arquitetura)
+
+Os dois revisores rodaram sobre `b48c45d..16e1546`: **0 bloqueantes**. Aplicado o que fortalece a discriminação ou fecha promessa de docblock:
+
+- `FOLGA` da paleta era ~100× o erro real de arredondamento (`--surface` podia perder 1/3 do croma com a suíte verde) → apertada para `{0.0005, 0.0005, 0.05}`, e o mutante de croma passou a reprovar.
+- A exceção de terceiro tolerava a classe pelo nome, então um `bg-black` novo entrava de graça no arquivo — o docblock dizia o contrário. Passou a registrar a **quantidade** esperada.
+- A varredura auditava `src/test/*.ts` (infra de teste) como se fosse código de tela, contra o próprio docblock → `src/test/` inteira fora do escopo, e o texto diz isso.
+- A metade positiva de SIT-05 saiu para `src/test/paleta-aprovada.test.ts`: o `readFileSync` do CSS no topo do módulo derrubava junto a varredura de cor literal, que não tem relação com o tema.
+- `tokenDoTema` lia só a primeira declaração e chamava de "token ausente" qualquer formato diferente → agora reprova declaração repetida (um bloco `.dark` não passa despercebido) e mostra o valor lido.
+- Os dez hex viraram tabela em `design.md`: o teste os **transcreve**, em vez de ser a fonte canônica da paleta.
+- `no-restricted-imports` no `eslint.config.mjs` impede produção de importar `src/test/` — sem isso, "produção não lê a transcrição da spec" era só combinado.
+- Renomeados `TETO_DA_HOME_NA_SPEC` e `LIMITES_DE_PUBLICACAO_DA_SPEC`; docblock de `valores-da-spec.ts` passou a descrever a fronteira real (número da spec **que tem constante espelhada em produção**); removida a asserção constante-contra-constante de `queries.test.ts`, redundante com o `limit`; `"Publicação 7"` derivado do teto; descrição do pilar localizada pelo texto do conteúdo, não por `tagName`.
+
+Ficou de fora, por ser observação sem efeito na discriminação: mover `PILARES_DA_SPEC` para o módulo compartilhado (não há constante de produção espelhando o 6 dos pilares — o critério do módulo é justamente esse).
