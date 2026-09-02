@@ -24,6 +24,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | i18n | Público exclusivamente PT-BR |
 | Agendamento online | Não pedido |
 | Testes E2E | Usuário escolheu unitário/componente (Vitest + Testing Library) |
+| CRUD de formação no painel | Decisão do usuário (AD-046): formação virou conteúdo fixo; um CRUD sem consumidor na página seria superfície de escrita sem uso |
 | Deploy, domínio e DNS | Etapa posterior, conduzida pelo usuário |
 
 ---
@@ -71,7 +72,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 
 **Acceptance Criteria**:
 
-1. The system SHALL render a home em `/` com as seções hero, "O que faz uma AT", "Pedagogia", "Competências", "Atendimento", "Sobre", "Certificações", "Publicações", contato e rodapé, nesta ordem.
+1. The system SHALL render a home em `/` com as seções hero, "O que faz uma AT", "Pedagogia", "Competências", "Atendimento", "Sobre", "Formação", "Publicações", contato e rodapé, nesta ordem.
 2. The system SHALL exibir os 6 pilares do trabalho da AT a partir de `src/content/site.ts`, sem texto duplicado em componente.
 3. WHEN o visitante clica em um item do menu THEN the system SHALL rolar até a seção correspondente da mesma página.
 4. WHEN a home é carregada em viewport de 360px de largura THEN the system SHALL exibir todo o conteúdo sem rolagem horizontal.
@@ -128,21 +129,20 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 
 ---
 
-### P2: Formação e certificações mantidas por ela
+### P2: Formação visível na página
 
-**User Story**: Como autora, quero cadastrar minha formação, incluindo cursos em andamento, para mostrar atualização contínua.
+**User Story**: Como visitante, quero ver a formação da Keylla sem sair da página, para saber com quem estou falando.
 
 **Why P2**: Reforça credibilidade, mas o site já entrega valor sem isso.
 
 **Acceptance Criteria**:
 
-1. WHEN a home é renderizada THEN the system SHALL listar as formações ordenadas por `ordem` crescente e, em empate, por `ano` decrescente.
-2. WHERE uma formação tem `status == "em_andamento"` the system SHALL exibi-la com o rótulo "Em andamento", distinto do rótulo "Concluído".
-3. IF a leitura do Firestore falha THEN the system SHALL exibir a seção em estado de erro com a mensagem retornada pelo Firebase.
-4. IF não há formações cadastradas THEN the system SHALL ocultar a seção inteira, inclusive o título.
-5. WHEN a autora cria, edita ou exclui uma formação no `/admin` THEN the system SHALL aplicar as mesmas regras de validação, confirmação e erro da P1 de publicações.
+1. The system SHALL exibir a formação em dois grupos — "Formação acadêmica" e "Aperfeiçoamento e capacitação" —, lidos de `src/content/site.ts`.
+2. WHERE um item registra o ano the system SHALL exibi-lo ao lado do título.
+3. IF o currículo não registra o ano de um item THEN the system SHALL exibir a linha sem ano, nunca uma data suposta.
+4. The system SHALL juntar instituição e detalhe do item numa linha só.
 
-**Independent Test**: Cadastrar duas formações, uma concluída e uma em andamento, e conferir ordem e rótulos na home.
+**Independent Test**: Abrir `/` sem Firebase configurado e ver a formação completa, com e sem ano.
 
 ---
 
@@ -199,11 +199,11 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | ADM-07 | P1: Keylla publica | T31,T32 | Verified |
 | ADM-08 | P1: Keylla publica | T31,T33 | Verified |
 | ADM-09 | P1: Keylla publica | T33 | Verified |
-| FOR-01 | P2: Formação | T22,T25 | Verified |
-| FOR-02 | P2: Formação | T25 | Verified |
-| FOR-03 | P2: Formação | T22,T25 | Verified |
-| FOR-04 | P2: Formação | T25 | Verified |
-| FOR-05 | P2: Formação | T20,T35 | Verified |
+| FOR-01 | P2: Formação | T64 | Pending |
+| FOR-02 | P2: Formação | T64 | Pending |
+| FOR-03 | P2: Formação | T64 | Pending |
+| FOR-04 | P2: Formação | T64 | Pending |
+| FOR-05 | P2: Formação | — | Removido (AD-046) |
 | SEO-01 | P3: Encontrabilidade | T38 | Verified |
 | SEO-02 | P3: Encontrabilidade | T41 | Verified |
 | SEC-01 | P1: Keylla publica | T36,T46 | Verified |

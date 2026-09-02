@@ -5,8 +5,6 @@ import SiteLayout from "@/app/(site)/layout";
 import Home, { metadata } from "@/app/(site)/page";
 import { SiteHeader } from "@/components/layout/site-header";
 import { ancoras } from "@/content/site";
-import type { Formacao } from "@/features/formacoes/schemas";
-import { listarFormacoes } from "@/features/formacoes/queries";
 import { listarPublicadas } from "@/features/publicacoes/queries";
 import { metadadosDaHome, pessoaDaAutora } from "@/features/site/seo";
 
@@ -14,23 +12,7 @@ vi.mock("@/features/publicacoes/queries", () => ({
   listarPublicadas: vi.fn(),
 }));
 
-vi.mock("@/features/formacoes/queries", () => ({
-  listarFormacoes: vi.fn(),
-}));
-
 const listarPublicadasFalso = listarPublicadas as unknown as Mock;
-const listarFormacoesFalso = listarFormacoes as unknown as Mock;
-
-/** Formação cadastrada, para a seção aparecer (FOR-04). */
-const formacao = (): Formacao => ({
-  id: "pedagogia",
-  titulo: "Pedagogia",
-  instituicao: "Universidade",
-  descricao: null,
-  ano: 2018,
-  status: "concluido",
-  ordem: 1,
-});
 
 /**
  * Rótulo do décimo bloco de SIT-01. O rodapé não é uma `<section id>` — vem da
@@ -63,7 +45,6 @@ function blocosNaOrdem(container: HTMLElement) {
 beforeEach(() => {
   vi.clearAllMocks();
   listarPublicadasFalso.mockResolvedValue({ dados: [] });
-  listarFormacoesFalso.mockResolvedValue({ dados: [] });
 });
 
 describe("home", () => {
@@ -85,10 +66,8 @@ describe("home", () => {
 
 describe("seções da home (SIT-01, SIT-03)", () => {
   it("apresenta os dez blocos na ordem da spec", async () => {
-    // A seção de formação some quando não há nada cadastrado (FOR-04); a de
-    // publicações fica de pé nos três estados (AD-018). Então basta uma
-    // formação para a home mostrar os dez blocos.
-    listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
+    // Formação virou conteúdo fixo (AD-046): a seção está sempre lá. A de
+    // publicações fica de pé nos três estados (AD-018).
 
     const { container } = await renderizarPaginaCompleta();
 
@@ -107,7 +86,6 @@ describe("seções da home (SIT-01, SIT-03)", () => {
   });
 
   it("fecha a página com o rodapé, depois do conteúdo principal", async () => {
-    listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
 
     const { container } = await renderizarPaginaCompleta();
 
@@ -120,7 +98,6 @@ describe("seções da home (SIT-01, SIT-03)", () => {
   });
 
   it("cada âncora do menu aponta para uma seção que existe na home", async () => {
-    listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
 
     const cabecalho = render(<SiteHeader />);
     const ancorasDoMenu = Array.from(

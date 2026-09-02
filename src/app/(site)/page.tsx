@@ -1,17 +1,15 @@
 /**
  * Home do site.
  *
- * As duas leituras rodam aqui, no servidor, e descem por prop para as seções
- * (AD-002). Nenhuma delas lança: `listarPublicadas` e `listarFormacoes`
- * devolvem `{ erro }` quando o Firestore falha, então a falha de uma consulta
- * degrada a própria seção e o resto da página continua de pé (PUB-05, FOR-03).
+ * A leitura das publicações roda aqui, no servidor, e desce por prop para a
+ * seção (AD-002). Ela não lança: `listarPublicadas` devolve `{ erro }` quando o
+ * Firestore falha, então a falha degrada a própria seção e o resto da página
+ * continua de pé (PUB-05). Formação é conteúdo fixo (AD-046).
  *
  * Os metadados sociais e o JSON-LD da autora vêm prontos de `features/site/seo`
  * (SEO-02); aqui eles só são declarados e impressos.
  */
 
-import { FormacoesSection } from "@/features/formacoes/components/formacoes-section";
-import { listarFormacoes } from "@/features/formacoes/queries";
 import { PublicacoesSection } from "@/features/publicacoes/components/publicacoes-section";
 import { listarPublicadas } from "@/features/publicacoes/queries";
 import { Contato } from "@/features/site/sections/contato";
@@ -19,6 +17,7 @@ import { Hero } from "@/features/site/sections/hero";
 import { OQueFazUmaAt } from "@/features/site/sections/o-que-faz-uma-at";
 import { Atendimento } from "@/features/site/sections/atendimento";
 import { Competencias } from "@/features/site/sections/competencias";
+import { Formacao } from "@/features/site/sections/formacao";
 import { Pedagogia } from "@/features/site/sections/pedagogia";
 import { Sobre } from "@/features/site/sections/sobre";
 import { jsonLdDaAutora, metadadosDaHome } from "@/features/site/seo";
@@ -29,10 +28,7 @@ export const revalidate = 300;
 export const metadata = metadadosDaHome;
 
 export default async function Home() {
-  const [publicacoes, formacoes] = await Promise.all([
-    listarPublicadas(),
-    listarFormacoes(),
-  ]);
+  const publicacoes = await listarPublicadas();
 
   return (
     <>
@@ -49,7 +45,7 @@ export default async function Home() {
       <Competencias />
       <Atendimento />
       <Sobre />
-      <FormacoesSection resultado={formacoes} />
+      <Formacao />
       <PublicacoesSection resultado={publicacoes} />
       <Contato />
     </>

@@ -10,7 +10,6 @@ import { formatarTelefoneBR, juntarMeta } from "@/lib/format";
 import {
   CAMINHO_HOME,
   CAMINHO_PAINEL,
-  CAMINHO_PAINEL_FORMACOES,
 } from "@/lib/rotas";
 
 export const PENDENTE = "PENDENTE" as const;
@@ -61,7 +60,7 @@ export const navegacao = [
   { rotulo: "O que é uma AT", href: ancora(ancoras.at) },
   { rotulo: "Pedagogia", href: ancora(ancoras.pedagogia) },
   { rotulo: "Sobre", href: ancora(ancoras.sobre) },
-  { rotulo: "Certificações", href: ancora(ancoras.formacao) },
+  { rotulo: "Formação", href: ancora(ancoras.formacao) },
   { rotulo: "Publicações", href: ancora(ancoras.publicacoes) },
   { rotulo: "Contato", href: ancora(ancoras.contato) },
 ] as const;
@@ -310,21 +309,122 @@ export const secaoSobre = {
   legendaFoto: "Foto em contexto",
 } as const;
 
+export type ItemDeFormacao = {
+  readonly titulo: string;
+  readonly instituicao: string;
+  /** Carga horária, modalidade ou período. Omitir quando não houver. */
+  readonly detalhe?: string;
+  /** Ano de conclusão. Ausente quando o currículo não registra a data. */
+  readonly ano?: number;
+};
+
 /**
- * O REGISTRO da formação: instituição, ano e situação, vindos do Firestore.
- * O argumento — o que cada frente faz no atendimento — é da seção Pedagogia
- * (AD-044). Nomes de curso podem aparecer nas duas; os papéis é que não se
- * misturam.
+ * Formação da Keylla, transcrita do currículo. É conteúdo fixo: muda de tempos
+ * em tempos e não vale a superfície de um CRUD.
+ *
+ * Onde o currículo não traz a data, o `ano` fica de fora — a linha aparece sem
+ * ano, em vez de com uma data inventada.
  */
 export const secaoFormacao = {
   eyebrow: "Trajetória",
-  titulo: "Certificações",
-  /** Acompanha o ano de uma formação ainda em curso: "2026 —". */
-  sufixoEmAndamento: " —",
-  rotulos: {
-    concluido: "Concluído",
-    em_andamento: "Em andamento",
-  },
+  titulo: "Formação",
+  grupos: [
+    {
+      titulo: "Formação acadêmica",
+      itens: [
+        {
+          titulo: "Pós-graduação em Pedagogia Hospitalar",
+          instituicao: "Faculdade Venda Nova do Imigrante — FAVENI",
+          detalhe: "720 horas",
+        },
+        {
+          titulo: "Licenciatura em Pedagogia",
+          instituicao: "Centro Universitário Leonardo da Vinci — UNIASSELVI",
+          detalhe: "Semipresencial · 2018–2022",
+          ano: 2022,
+        },
+        {
+          titulo: "Formação de Missionários Transculturais",
+          instituicao: "Instituto Missionário Shekinah",
+          detalhe: "Presencial · 2001–2002",
+          ano: 2002,
+        },
+        {
+          titulo: "Curso Sócio-Cultural e Linguístico",
+          instituicao: "Instituto Linguístico Ebenézer",
+          detalhe: "Presencial · 2º semestre",
+          ano: 2002,
+        },
+        {
+          titulo: "Curso Médio em Teologia",
+          instituicao: "Instituto Bíblico e Missionário Macedônia",
+          detalhe: "Presencial · 1998–2000",
+          ano: 2000,
+        },
+      ],
+    },
+    {
+      titulo: "Aperfeiçoamento e capacitação",
+      itens: [
+        {
+          titulo: "Psicomotricidade e Aprendizagem",
+          instituicao: "FAVENI",
+          detalhe: "240 horas",
+        },
+        {
+          titulo: "Formação de Assistentes Terapêuticos",
+          instituicao: "Edu Ciranda",
+          detalhe: "120 horas",
+        },
+        {
+          titulo: "Educação Escolar e Inclusão Escolar",
+          instituicao: "FAVENI",
+          detalhe: "80 horas",
+        },
+        {
+          titulo: "Práticas Inclusivas para Formação de Professores",
+          instituicao: "UNIASSELVI",
+          detalhe: "40 horas",
+        },
+        {
+          titulo: "Dificuldade de Aprendizagem",
+          instituicao: "UEMA — Cursos Abertos",
+          detalhe: "45 horas",
+        },
+        {
+          titulo: "Psicopedagogia",
+          instituicao: "Centro Educacional Sete de Setembro",
+          detalhe: "40 horas",
+        },
+        {
+          titulo: "Nivelamento em Libras I e II",
+          instituicao: "UNIASSELVI",
+          detalhe: "40 horas cada",
+        },
+        {
+          titulo: "Comunicação Alternativa na Escola",
+          instituicao: "CAA — Comunicação Alternativa",
+          detalhe: "4 horas",
+          ano: 2026,
+        },
+        {
+          titulo: "Seminário Nacional de Autismo",
+          instituicao: "UNIASSELVI",
+          detalhe: "3 horas",
+        },
+        {
+          titulo: "Metodologia de Pesquisa",
+          instituicao: "UNIASSELVI",
+          detalhe: "40 horas",
+        },
+        {
+          titulo: "Redação",
+          instituicao: "UNIASSELVI",
+          detalhe: "40 horas",
+        },
+      ],
+    },
+  ],
 } as const;
 
 export const secaoPublicacoes = {
@@ -424,55 +524,10 @@ export const painel = {
   marca: "Painel",
   verificandoSessao: "Verificando sua sessão…",
   redirecionando: "Levando você para o lugar certo…",
-  navegacao: [
-    { rotulo: "Publicações", href: CAMINHO_PAINEL },
-    { rotulo: "Formações", href: CAMINHO_PAINEL_FORMACOES },
-  ],
+  navegacao: [{ rotulo: "Publicações", href: CAMINHO_PAINEL }],
   rotuloNavegacao: "Seções do painel",
   sair: { rotulo: "Sair", emAndamento: "Saindo…" },
   verSite: "Ver o site",
-  formacoes: {
-    titulo: "Formações",
-    carregando: "Carregando as formações…",
-    vazio: "Nenhuma formação cadastrada ainda.",
-    novo: "Nova formação",
-    edicao: "Editar formação",
-    campos: {
-      titulo: "Curso",
-      instituicao: "Instituição",
-      descricao: "Descrição",
-      ano: "Ano",
-      status: "Situação",
-      ordem: "Ordem na lista",
-    },
-    ajuda: {
-      ordem: "Quem tem o número menor aparece antes na página.",
-    },
-    situacoes: secaoFormacao.rotulos,
-    semAno: "Sem ano",
-    semOrdem: "Sem ordem",
-    colunas: {
-      formacao: "Formação",
-      ano: "Ano",
-      situacao: "Situação",
-      ordem: "Ordem",
-      acoes: "Ações",
-    },
-    acoes: {
-      salvar: "Salvar formação",
-      emAndamento: "Salvando…",
-      cancelar: "Cancelar a edição",
-      editar: "Editar",
-      excluir: "Excluir",
-    },
-    exclusao: {
-      titulo: "Excluir esta formação?",
-      mensagem: (titulo: string) =>
-        `“${titulo}” será apagada em definitivo, e não dá para desfazer.`,
-      confirmar: "Excluir em definitivo",
-      cancelar: "Manter a formação",
-    },
-  },
   listaDePublicacoes: {
     titulo: "Publicações",
     carregando: "Carregando as publicações…",

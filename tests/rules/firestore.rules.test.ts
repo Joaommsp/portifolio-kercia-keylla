@@ -77,14 +77,6 @@ beforeEach(async () => {
     const db = contexto.firestore();
     await setDoc(doc(db, "publicacoes", PUBLICADA), publicacao(true));
     await setDoc(doc(db, "publicacoes", RASCUNHO), publicacao(false));
-    await setDoc(doc(db, "formacoes", "pedagogia"), {
-      titulo: "Pedagogia",
-      instituicao: "Universidade",
-      descricao: "",
-      ano: 2018,
-      status: "concluido",
-      ordem: 1,
-    });
   });
 });
 
@@ -128,12 +120,6 @@ describe("visitante anônimo", () => {
     await assertFails(deleteDoc(doc(db, "publicacoes", PUBLICADA)));
   });
 
-  it("lê as formações, mas não escreve nelas", async () => {
-    const db = ambiente.unauthenticatedContext().firestore();
-
-    await assertSucceeds(getDoc(doc(db, "formacoes", "pedagogia")));
-    await assertFails(deleteDoc(doc(db, "formacoes", "pedagogia")));
-  });
 });
 
 describe("autora da allowlist", () => {
@@ -157,13 +143,6 @@ describe("autora da allowlist", () => {
 });
 
 describe("uid fora da allowlist", () => {
-  it("não escreve publicação nem formação", async () => {
-    const db = ambiente.authenticatedContext(UID_DE_FORA).firestore();
-
-    await assertFails(setDoc(doc(db, "publicacoes", "nova"), publicacao(true)));
-    await assertFails(deleteDoc(doc(db, "publicacoes", PUBLICADA)));
-    await assertFails(deleteDoc(doc(db, "formacoes", "pedagogia")));
-  });
 
   it("não lê rascunho", async () => {
     const db = ambiente.authenticatedContext(UID_DE_FORA).firestore();

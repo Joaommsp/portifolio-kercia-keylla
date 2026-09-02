@@ -11,6 +11,8 @@
 | AD-005 | Site em tema claro único; bloco `.dark` do shadcn removido | Direção visual aprovada pelo João; evita meia-implementação de tema |
 | AD-006 | Paleta aprovada mapeada nos tokens do shadcn (`--primary` = olive etc.) | Componente shadcn nasce na cor certa, sem override por componente |
 | AD-007 | shadcn no preset `base-nova` (@base-ui) | Mesma base do portfólio do João, já conhecida |
+| AD-046 | Formação é conteúdo fixo em `src/content/site.ts`, não Firestore; o CRUD de formação saiu do painel, junto com queries, mutations, schemas e as regras da coleção | Decisão do usuário: a lista muda de tempos em tempos e não justifica CRUD. Manter o painel gravando o que a página ignora seria pior — superfície de escrita sem consumidor |
+| AD-047 | Item de formação sem ano aparece sem ano | O currículo não registra a data de 9 dos 14 cursos; data suposta é pior que ausência |
 | AD-008 | `ActionLink` no site público, `Button` do shadcn no painel | Link de navegação e ação com estado são coisas diferentes; unificar traria estado inútil ao site |
 | AD-009 | Primitivos `Container`, `ActionLink`, `SectionHeading`, `PhotoFrame` em `components/layout/` | Reúso pesa mais que o campo `Where` da task; `SectionHeading` já serve T24/T25 |
 | AD-010 | Compartilhados da camada de dados fora do `Where` das tasks: `lib/resultado.ts` (tipo `Resultado`), `lib/validacao.ts` (forma da regra de texto), `lib/documento.ts` (normalização na fronteira do Firestore), `test/firestore.ts` (Firestore falso) | Os dois domínios precisam das mesmas peças; duplicar em `publicacoes/` e `formacoes/` seria a alternativa |

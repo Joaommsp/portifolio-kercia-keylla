@@ -24,7 +24,6 @@ export const CAMINHO_PAINEL = "/admin";
 export const CAMINHO_LOGIN = `${CAMINHO_PAINEL}/login`;
 
 /** Tela de manutenção das formações. */
-export const CAMINHO_PAINEL_FORMACOES = `${CAMINHO_PAINEL}/formacoes`;
 
 /** Id que a rota de edição usa para dizer "publicação nova" (ADM-05). */
 export const ID_NOVA_PUBLICACAO = "nova";
