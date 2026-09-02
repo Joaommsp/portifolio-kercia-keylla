@@ -36,7 +36,7 @@ export const perfil = {
   papel: "Professora e Assistente Terapêutica",
   saudacao: "Olá, eu sou a",
   apresentacao:
-    "São mais de 15 anos em sala de aula com educação infantil. Hoje acompanho crianças e adolescentes como Assistente Terapêutica, criando vínculo, mediando atividades e sustentando a autonomia de cada um — sempre junto da família e da equipe.",
+    "São mais de 15 anos em sala de aula com educação infantil. Foi essa experiência que me levou ao acompanhamento terapêutico: criar vínculo, mediar atividades e sustentar a autonomia de cada criança, junto da família e da equipe.",
   /** Frase da placa ancorada à esquerda do retrato. */
   selo: "Presença que constrói autonomia",
 } as const;
@@ -113,7 +113,7 @@ export const secaoHero = {
     alt: `${perfil.nome}, ${perfil.papel}`,
   },
   acoes: {
-    primaria: { rotulo: "Conversar comigo", href: ancora(ancoras.contato) },
+    primaria: { rotulo: "Falar sobre o seu filho", href: ancora(ancoras.contato) },
     secundaria: {
       rotulo: "Entenda o trabalho de uma\u00A0AT",
       href: ancora(ancoras.at),
@@ -151,19 +151,19 @@ export const secaoAt = {
       icone: "observacao",
       titulo: "Observação e registro",
       descricao:
-        "Registro diário do que avança e do que trava, para a equipe terapêutica decidir com dados, não com impressão.",
+        "O registro diário do que avança e do que trava dá à equipe terapêutica dados para decidir — em vez de impressões.",
     },
     {
       icone: "mediacao",
       titulo: "Mediação de atividades",
       descricao:
-        "Adapto a proposta ao tempo e ao interesse da criança, para que ela participe de verdade — e não apenas assista.",
+        "A proposta se ajusta ao tempo e ao interesse da criança, para que ela participe de verdade — e não apenas assista.",
     },
     {
       icone: "autonomia",
       titulo: "Incentivo à autonomia",
       descricao:
-        "Ajudo o suficiente para que dê certo e recuo o quanto der, até a criança fazer sozinha.",
+        "Ajuda na medida certa: o bastante para dar certo, recuando a cada passo até a criança fazer sozinha.",
     },
     {
       icone: "inclusao",
@@ -315,11 +315,11 @@ export const secaoCompetencias = {
  */
 export const secaoAtendimento = {
   eyebrow: "Atendimento",
-  titulo: "Especialidades e onde atendo",
+  titulo: "Especialidades e onde posso acompanhar",
   chamada: "O acompanhamento vai até a criança — não o contrário.",
   rotulos: {
     especialidades: "Especialidades",
-    contextos: "Onde o acompanhamento acontece",
+    contextos: "Onde o acompanhamento pode acontecer",
   },
   contextos: [
     "Na escola, junto do professor",
@@ -375,7 +375,7 @@ export const secaoSobre = {
     "Sou professora há mais de 15 anos, quase todos com educação infantil, em escola regular e em projetos comunitários. Foi na sala de aula que aprendi a ler o que cada criança precisa antes de qualquer diagnóstico.",
     "Sou pedagoga e trabalho para o desenvolvimento integral de cada aluno, com práticas inclusivas, acolhedoras e individualizadas — atenção especial à educação especial, às dificuldades de aprendizagem e ao acompanhamento educacional.",
     "Minha formação é multidisciplinar: pedagogia, educação inclusiva, psicopedagogia, psicomotricidade e pedagogia hospitalar. É o que me permite ler cada criança por mais de um ângulo antes de decidir por onde começar.",
-    "Trabalho lado a lado com psicólogos, terapeutas ocupacionais, fonoaudiólogos e professores — o plano é da equipe, e o meu papel é fazê-lo acontecer no cotidiano.",
+    "Acompanhamento terapêutico não se faz sozinho: o plano é da equipe — psicólogos, terapeutas ocupacionais, fonoaudiólogos e professores — e o papel da AT é fazer esse plano acontecer no dia a dia da criança.",
   ],
   assinatura: "Keylla Melo",
 } as const;
