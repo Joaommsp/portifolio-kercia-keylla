@@ -72,6 +72,8 @@
      ouviu, não transição de tela. */
   --ease-toque: cubic-bezier(0.23, 1, 0.32, 1);
   --duration-toque: 140ms;
+  /* Entrada dos blocos ao rolar: desacelera até parar, sem voltar. */
+  --ease-entrada: cubic-bezier(0.16, 1, 0.3, 1);
   --tracking-titulo: -0.02em;
   --tracking-marca: 0.02em;
   --tracking-rotulo: 0.14em;
@@ -179,28 +181,25 @@
 
 @layer components {
   /*
-   * Entrada dos blocos que a página apresenta em conjunto: as frentes da
-   * Pedagogia, os pilares da AT, as famílias de competência e os cards de
-   * publicação. Onde a ordem carrega significado — a trilha da Pedagogia —, o
-   * escalonamento vem do `animation-range` inline, item a item.
+   * Entrada dos blocos que a página apresenta em conjunto. Quem marca o
+   * elemento é o `data-revelar`; quem decide a hora é o `Revelador`, com
+   * `IntersectionObserver`.
    *
-   * `animation-timeline: view()` é CSS puro: sem observer, sem JS, e onde o
-   * navegador não suporta a regra é ignorada e o conteúdo aparece normal.
+   * O seletor exige `[data-revelacao="ativa"]` no documento, atributo que só o
+   * `Revelador` põe: sem JS nada é escondido, e o conteúdo aparece inteiro.
    */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .entra-ao-rolar,
-      .frente-da-trilha {
-        animation: entrada-ao-rolar linear both;
-        animation-timeline: view();
-        animation-range: entry 8% cover 30%;
-      }
+  [data-revelacao="ativa"] [data-revelar] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 620ms var(--ease-entrada),
+      transform 620ms var(--ease-entrada);
+    transition-delay: var(--atraso-da-entrada, 0ms);
+  }
 
-      .frente-da-trilha {
-        /* O trecho de cada frente vem inline, escalonado pela posição. */
-        animation-range: unset;
-      }
-    }
+  [data-revelacao="ativa"] [data-revelar][data-revelado] {
+    opacity: 1;
+    transform: none;
   }
 
   /*
@@ -213,17 +212,6 @@
       animation-timeline: scroll();
       animation-range: 0 80px;
     }
-  }
-}
-
-@keyframes entrada-ao-rolar {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
   }
 }
 

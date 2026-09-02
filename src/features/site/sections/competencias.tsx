@@ -22,7 +22,7 @@ export function Competencias() {
 
         <div className="mt-10 grid gap-9 cartao:grid-cols-2 grade:grid-cols-4">
           {secaoCompetencias.grupos.map((grupo) => (
-            <article key={grupo.familia} className="entra-ao-rolar">
+            <article key={grupo.familia} data-revelar>
               <h3 className="border-b border-line pb-2.5 text-xs font-semibold uppercase tracking-rotulo text-brass">
                 {grupo.familia}
               </h3>
