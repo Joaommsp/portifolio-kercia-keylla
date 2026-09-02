@@ -534,9 +534,31 @@ export const linksContato = {
 
 export const secaoContato = {
   eyebrow: "Vamos conversar",
-  titulo: "Precisa de uma AT para o seu filho?",
+  titulo: "Como posso ajudar o seu filho?",
   chamada:
-    "Me conte a rotina, a idade e o que a equipe já vem trabalhando. Respondo pessoalmente.",
+    "Me conte a idade, a rotina e o que a escola ou a equipe já vem trabalhando. Respondo pessoalmente.",
+  /**
+   * As três frentes pelas quais uma família procura. Ficam à vista porque o
+   * site inteiro falava de acompanhamento terapêutico, e quem procurava uma
+   * professora ou apoio em Libras não se reconhecia na página.
+   */
+  frentes: [
+    {
+      titulo: "Apoio pedagógico",
+      descricao:
+        "Reforço e acompanhamento na alfabetização e nos primeiros anos, com quem passou 15 anos em sala de aula.",
+    },
+    {
+      titulo: "Acompanhamento terapêutico",
+      descricao:
+        "Presença junto da criança na escola, em casa ou no hospital, seguindo o plano da equipe.",
+    },
+    {
+      titulo: "Comunicação em Libras",
+      descricao:
+        "Apoio na comunicação com a criança surda e ponte com a família — formação em curso no Centro Inclusão.",
+    },
+  ],
   acao: { rotulo: "Chamar no WhatsApp", href: linksContato.whatsapp },
 } as const;
 

@@ -40,6 +40,19 @@ export function Contato() {
             {secaoContato.chamada}
           </p>
 
+          <dl className="mt-7 grid gap-4">
+            {secaoContato.frentes.map((frente) => (
+              <div key={frente.titulo} className="border-t border-on-olive/20 pt-3.5">
+                <dt className="font-display text-lg text-on-olive">
+                  {frente.titulo}
+                </dt>
+                <dd className="mt-1 max-w-chamada text-sm text-on-olive/85">
+                  {frente.descricao}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
           <ActionLink
             external
             icone={<FaWhatsapp aria-hidden className="size-4.5" />}
