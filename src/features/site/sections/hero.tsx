@@ -43,7 +43,6 @@ export function Hero() {
               comAnel
               prioridade
               foto={secaoHero.foto}
-              legenda={secaoHero.legendaFoto}
               className="bg-linear-to-b from-olive/20 to-surface-2"
             />
 

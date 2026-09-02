@@ -5,31 +5,44 @@ import { cn } from "@/lib/utils";
 export type FotoDaMoldura = {
   readonly src: string;
   readonly alt: string;
-  readonly largura: number;
-  readonly altura: number;
 };
 
 /**
- * Moldura em arco das fotos do site. Com `foto`, exibe a imagem; sem ela,
- * renderiza a legenda do espaço reservado — é assim que as seções sem foto
- * real continuam de pé.
+ * Largura que o retrato ocupa. Espelha `--breakpoint-duo` (51.25rem), onde o
+ * hero passa de uma para duas colunas; `sizes` não aceita `var()`, então o
+ * valor do token vem escrito.
  */
-export function PhotoFrame({
-  legenda,
-  foto,
-  comAnel = false,
-  prioridade = false,
-  className,
-}: {
-  legenda: string;
-  /** Retrato já recortado em 4:5, a proporção da moldura. */
-  foto?: FotoDaMoldura;
+const TAMANHOS_DO_RETRATO = "(max-width: 51.25rem) 90vw, 45vw";
+
+type PropsComuns = {
   /** Anel dourado interno, usado no retrato de abertura. */
   comAnel?: boolean;
+  className?: string;
+};
+
+type PropsComFoto = PropsComuns & {
+  /** Retrato já recortado em 4:5, a proporção da moldura. */
+  foto: FotoDaMoldura;
   /** Carrega sem esperar o scroll — só para a imagem visível na abertura. */
   prioridade?: boolean;
-  className?: string;
-}) {
+  legenda?: never;
+};
+
+type PropsSemFoto = PropsComuns & {
+  /** Legenda do espaço reservado, enquanto a foto real não chega. */
+  legenda: string;
+  foto?: never;
+  prioridade?: never;
+};
+
+/**
+ * Moldura em arco das fotos do site. São dois modos excludentes: com `foto`,
+ * exibe a imagem; com `legenda`, o espaço reservado. O tipo separa os dois
+ * para nenhum chamador precisar inventar um texto que nunca aparece.
+ */
+export function PhotoFrame(props: PropsComFoto | PropsSemFoto) {
+  const { comAnel = false, className } = props;
+
   return (
     <div
       className={cn(
@@ -37,19 +50,18 @@ export function PhotoFrame({
         className,
       )}
     >
-      {foto ? (
+      {props.foto ? (
         <Image
-          src={foto.src}
-          alt={foto.alt}
-          width={foto.largura}
-          height={foto.altura}
-          priority={prioridade}
-          sizes="(max-width: 820px) 90vw, 45vw"
-          className="size-full object-cover"
+          src={props.foto.src}
+          alt={props.foto.alt}
+          fill
+          priority={props.prioridade}
+          sizes={TAMANHOS_DO_RETRATO}
+          className="object-cover"
         />
       ) : (
         <small className="px-8 text-xs uppercase tracking-sobretitulo text-ink-soft">
-          {legenda}
+          {props.legenda}
         </small>
       )}
 
