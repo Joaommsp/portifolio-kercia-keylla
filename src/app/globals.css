@@ -92,6 +92,9 @@
   --breakpoint-menu: 60rem;
 
   --spacing-cabecalho: 4.25rem;
+  /* Onde um bloco fixo pousa: a altura do cabeçalho mais um respiro, para o
+     conteúdo não encostar na borda dele. */
+  --spacing-abaixo-do-cabecalho: 6.5rem;
 
   --container-leitura: 56ch;
   --container-chamada: 44ch;

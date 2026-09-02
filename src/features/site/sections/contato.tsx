@@ -70,11 +70,13 @@ export function Contato() {
         {/* Sobre a faixa oliva o foco dourado padrão perde contraste. */}
         {/*
           Acompanha a rolagem enquanto a faixa passa: os canais ficam à mão em
-          toda a altura da seção, em vez de sumirem no topo dela. `self-start`
-          é o que impede o grid de esticar a coluna — item esticado nunca gruda.
-          Só a partir de `duo`: em coluna única não há o que acompanhar.
+          toda a altura da seção, em vez de sumirem no topo dela. Pousa abaixo
+          do cabeçalho com respiro — colado nele, a lista parecia parte da
+          barra. `self-start` é o que impede o grid de esticar a coluna: item
+          esticado nunca gruda. Só a partir de `duo`, porque em coluna única não
+          há o que acompanhar.
         */}
-        <ul className="grid gap-3.5 text-sm duo:sticky duo:top-cabecalho duo:self-start [&_a:focus-visible]:outline-on-olive">
+        <ul className="grid gap-3.5 text-sm duo:sticky duo:top-abaixo-do-cabecalho duo:self-start [&_a:focus-visible]:outline-on-olive">
           {canaisContato.map((canal) => {
             const Icone = ICONES[canal.icone];
             const conteudo = (
