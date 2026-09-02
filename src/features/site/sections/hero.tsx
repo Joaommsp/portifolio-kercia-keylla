@@ -41,11 +41,13 @@ export function Hero() {
           <div className="relative mx-auto w-full max-w-sm duo:max-w-none">
             <PhotoFrame
               comAnel
+              prioridade
+              foto={secaoHero.foto}
               legenda={secaoHero.legendaFoto}
               className="bg-linear-to-b from-olive/20 to-surface-2"
             />
 
-            <p className="absolute right-0 bottom-14 grid size-33 place-items-center rounded-full border border-brass bg-ground px-3 text-center text-xs leading-snug uppercase tracking-rotulo text-olive duo:-right-3.5">
+            <p className="absolute right-0 bottom-10 grid size-38 place-items-center rounded-full border border-brass bg-ground px-3 text-center text-[0.625rem] leading-relaxed uppercase tracking-[0.08em] text-olive duo:-right-6">
               {perfil.selo.map((linha) => (
                 <span key={linha} className="block">
                   {linha}

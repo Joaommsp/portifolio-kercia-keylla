@@ -69,6 +69,16 @@ export const cabecalho = {
 
 export const secaoHero = {
   legendaFoto: "Foto de apresentação",
+  /**
+   * Retrato de abertura. O arquivo em `public/` já vem recortado em 4:5, a
+   * mesma proporção da moldura — assim o arco corta só o entorno, nunca o rosto.
+   */
+  foto: {
+    src: "/keylla-melo.jpg",
+    alt: `${perfil.nome}, ${perfil.papel}`,
+    largura: 1199,
+    altura: 1500,
+  },
   acoes: {
     primaria: { rotulo: "Conversar comigo", href: ancora(ancoras.contato) },
     secundaria: {
