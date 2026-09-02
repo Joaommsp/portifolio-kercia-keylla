@@ -645,5 +645,6 @@ export const painel = {
     email: { rotulo: "E-mail", obrigatorio: "Informe o e-mail." },
     senha: { rotulo: "Senha", obrigatorio: "Informe a senha." },
     acao: { rotulo: "Entrar", emAndamento: "Entrando…" },
+    voltar: "Voltar para o site",
   },
 } as const;

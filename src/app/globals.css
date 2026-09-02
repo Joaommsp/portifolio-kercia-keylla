@@ -177,6 +177,14 @@
   }
 }
 
+/* Em paisagem de celular o cabeçalho fixo comia 19% da altura útil (69px de
+   360px). Encolhe para devolver leitura, sem sumir com a marca nem com o menu. */
+@media (max-height: 420px) and (orientation: landscape) {
+  :root {
+    --spacing-cabecalho: 3.25rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
