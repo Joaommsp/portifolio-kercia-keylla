@@ -27,7 +27,7 @@ export function Contato() {
       id={ancoras.contato}
       className="scroll-mt-cabecalho bg-olive py-12 text-on-olive duo:py-20"
     >
-      <Container className="grid items-center gap-8 duo:grid-cols-2 duo:gap-16">
+      <Container className="grid items-start gap-8 duo:grid-cols-2 duo:gap-16">
         <div>
           <SectionHeading
             stacked
@@ -68,7 +68,13 @@ export function Contato() {
         </div>
 
         {/* Sobre a faixa oliva o foco dourado padrão perde contraste. */}
-        <ul className="grid gap-3.5 text-sm [&_a:focus-visible]:outline-on-olive">
+        {/*
+          Acompanha a rolagem enquanto a faixa passa: os canais ficam à mão em
+          toda a altura da seção, em vez de sumirem no topo dela. `self-start`
+          é o que impede o grid de esticar a coluna — item esticado nunca gruda.
+          Só a partir de `duo`: em coluna única não há o que acompanhar.
+        */}
+        <ul className="grid gap-3.5 text-sm duo:sticky duo:top-cabecalho duo:self-start [&_a:focus-visible]:outline-on-olive">
           {canaisContato.map((canal) => {
             const Icone = ICONES[canal.icone];
             const conteudo = (
