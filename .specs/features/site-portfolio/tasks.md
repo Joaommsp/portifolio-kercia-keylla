@@ -1190,7 +1190,7 @@ T48 → T56
 
 ---
 
-### T55: Escopo da trava de SIT-05 alinhado ao que ela cobre
+### T55: Escopo da trava de SIT-05 alinhado ao que ela cobre ✅
 
 **What**: Fechar a distância entre o que o docblock promete e o que o detector entrega — classe utilitária de cor fora da paleta e cor nomeada em `style` inline.
 **Where**: `src/test/paleta-em-tokens.test.ts`
@@ -1200,11 +1200,12 @@ T48 → T56
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] O detector acusa classe utilitária de cor da paleta padrão do Tailwind
-- [ ] O detector acusa cor nomeada do CSS em `style` inline
-- [ ] `src/components/ui/` tem exceção justificada no próprio arquivo, com os arquivos e o motivo
-- [ ] O docblock descreve o escopo real, sem promessa maior que a entrega
-- [ ] `bg-emerald-200` (B4) e `style={{ color: "white" }}` (B5) reprovam
+- [x] O detector acusa classe utilitária de cor da paleta padrão do Tailwind
+- [x] O detector acusa cor nomeada do CSS em `style` inline — a regra é por valor, então pega qualquer cor que não seja `var(--token)` nem palavra-chave neutra
+- [x] `src/components/ui/` tem exceção justificada no próprio arquivo, com os arquivos e o motivo: a tolerância é `bg-black` em `dialog.tsx` e `alert-dialog.tsx`, nomeada uma a uma, e um teste confere que ela ainda aponta para código existente
+- [x] O docblock descreve o escopo real, sem promessa maior que a entrega — inclusive o que a trava não vê (classe montada em tempo de execução, `.css` fora do `globals.css`)
+- [x] `bg-emerald-200` (B4) e `style={{ color: "white" }}` (B5) reprovam
+- [x] A exceção não abre a porta: `bg-[#8E7A32]` no `cva` de `dialog.tsx` (B2) e `bg-emerald-500` no mesmo arquivo seguem reprovando
 
 **Tests**: unit
 **Gate**: build
