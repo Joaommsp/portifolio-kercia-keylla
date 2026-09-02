@@ -47,8 +47,8 @@ Seen once or not yet corroborated. Tracked, not trusted.
 ### L-006 - Cada ID de requisito deve ter um unico sentido em toda a spec e nos comentarios do codigo.
 - signal: `spec_precision_gap` · recurrence: 1 feature(s) · scope: `spec` · harmful: 0
 - features: site-portfolio
-- evidence: SIT-06 .specs/features/site-portfolio/spec.md:59 (spec)
-- last seen: 2026-09-01T20:15:50Z
+- evidence: SIT-06 .specs/features/site-portfolio/spec.md:59 (spec) (+1 more)
+- last seen: 2026-09-02T18:52:19Z
 
 ### L-007 - Requisito que fixa uma quantidade de itens exibidos precisa de teste que conte os itens renderizados.
 - signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `secoes` · harmful: 0
@@ -71,8 +71,8 @@ Seen once or not yet corroborated. Tracked, not trusted.
 ### L-010 - Requisito de ausencia (nenhuma cor literal, nenhuma chamada nativa) fecha por check automatizado de varredura, nao por inspecao.
 - signal: `ac_gap` · recurrence: 1 feature(s) · scope: `estilo` · harmful: 0
 - features: site-portfolio
-- evidence: SIT-05 src/app/globals.css:91-98 (estilo)
-- last seen: 2026-09-01T21:04:24Z
+- evidence: SIT-05 src/app/globals.css:91-98 (estilo) (+1 more)
+- last seen: 2026-09-02T18:52:19Z
 
 ### L-011 - Licao registrada a partir de um caso deve ser varrida em todos os requisitos da mesma classe, nao so nos exemplos citados no relatorio.
 - signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `verificacao` · harmful: 0
@@ -121,6 +121,36 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - features: site-portfolio
 - evidence: L-014 .specs/lessons.json (verificacao)
 - last seen: 2026-09-02T01:59:19Z
+
+### L-019 - Ao remover um dominio, apagar do teste so as clausulas dele; caso compartilhado com outro requisito nunca sai inteiro.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `seguranca` · harmful: 0
+- features: site-portfolio
+- evidence: R1 tests/rules/firestore.rules.test.ts:145 (seguranca)
+- last seen: 2026-09-02T18:52:19Z
+
+### L-020 - Provedor e montagem que so existem no layout precisam de teste que renderize o layout; teste que monta o provedor por conta propria nao prova a fiacao.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `layout` · harmful: 0
+- features: site-portfolio
+- evidence: M26/M27 src/app/(admin)/admin/layout.tsx:16 (layout)
+- last seen: 2026-09-02T18:52:19Z
+
+### L-021 - Comportamento que migra de CSS para JS deixa de ser divida de UAT e passa a exigir teste; revisar a divida declarada quando a decisao muda de camada.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `motion` · harmful: 0
+- features: site-portfolio
+- evidence: M16 src/components/layout/revelador.tsx:23 (motion)
+- last seen: 2026-09-02T18:52:19Z
+
+### L-022 - Linha de rastreabilidade nao pode citar task inexistente: todo ID citado precisa existir em tasks.md.
+- signal: `ac_gap` · recurrence: 1 feature(s) · scope: `rastreabilidade` · harmful: 0
+- features: site-portfolio
+- evidence: SIT-08 .specs/features/site-portfolio/spec.md:196 (rastreabilidade)
+- last seen: 2026-09-02T18:52:19Z
+
+### L-023 - Aviso de sucesso precisa de assercao como o de erro: toast nao asserido deixa trocar o desfecho anunciado sem reprovar.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `painel` · harmful: 0
+- features: site-portfolio
+- evidence: M24 src/features/publicacoes/components/publicacao-editor.tsx:95 (painel)
+- last seen: 2026-09-02T18:52:19Z
 
 ## Quarantined (failed when applied - ignore)
 

@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 19,
+  "next_id": 24,
   "lessons": [
     {
       "id": "L-001",
@@ -108,10 +108,11 @@
       "recurrence": 1,
       "harmful": 0,
       "evidence": [
-        "SIT-06 .specs/features/site-portfolio/spec.md:59 (spec)"
+        "SIT-06 .specs/features/site-portfolio/spec.md:59 (spec)",
+        "FOR-03 .specs/features/site-portfolio/spec.md:57 (spec)"
       ],
       "created": "2026-09-01T20:15:50Z",
-      "last_seen": "2026-09-01T20:15:50Z"
+      "last_seen": "2026-09-02T18:52:19Z"
     },
     {
       "id": "L-007",
@@ -180,10 +181,11 @@
       "recurrence": 1,
       "harmful": 0,
       "evidence": [
-        "SIT-05 src/app/globals.css:91-98 (estilo)"
+        "SIT-05 src/app/globals.css:91-98 (estilo)",
+        "ADM-09 src/components/layout/confirmar-acao.tsx:7 (estilo)"
       ],
       "created": "2026-09-01T21:04:24Z",
-      "last_seen": "2026-09-01T21:04:24Z"
+      "last_seen": "2026-09-02T18:52:19Z"
     },
     {
       "id": "L-011",
@@ -328,6 +330,96 @@
       ],
       "created": "2026-09-02T01:59:19Z",
       "last_seen": "2026-09-02T01:59:19Z"
+    },
+    {
+      "id": "L-019",
+      "key": "surviving_mutant::ao remover um dominio apagar do teste so as clausulas dele caso compartilhado com outro requisito nunca sai inteiro",
+      "text": "Ao remover um dominio, apagar do teste so as clausulas dele; caso compartilhado com outro requisito nunca sai inteiro.",
+      "signal": "surviving_mutant",
+      "scope": "seguranca",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "R1 tests/rules/firestore.rules.test.ts:145 (seguranca)"
+      ],
+      "created": "2026-09-02T18:52:19Z",
+      "last_seen": "2026-09-02T18:52:19Z"
+    },
+    {
+      "id": "L-020",
+      "key": "surviving_mutant::provedor e montagem que so existem no layout precisam de teste que renderize o layout teste que monta o provedor por conta propria nao prova a fiacao",
+      "text": "Provedor e montagem que so existem no layout precisam de teste que renderize o layout; teste que monta o provedor por conta propria nao prova a fiacao.",
+      "signal": "surviving_mutant",
+      "scope": "layout",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "M26/M27 src/app/(admin)/admin/layout.tsx:16 (layout)"
+      ],
+      "created": "2026-09-02T18:52:19Z",
+      "last_seen": "2026-09-02T18:52:19Z"
+    },
+    {
+      "id": "L-021",
+      "key": "surviving_mutant::comportamento que migra de css para js deixa de ser divida de uat e passa a exigir teste revisar a divida declarada quando a decisao muda de camada",
+      "text": "Comportamento que migra de CSS para JS deixa de ser divida de UAT e passa a exigir teste; revisar a divida declarada quando a decisao muda de camada.",
+      "signal": "surviving_mutant",
+      "scope": "motion",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "M16 src/components/layout/revelador.tsx:23 (motion)"
+      ],
+      "created": "2026-09-02T18:52:19Z",
+      "last_seen": "2026-09-02T18:52:19Z"
+    },
+    {
+      "id": "L-022",
+      "key": "ac_gap::linha de rastreabilidade nao pode citar task inexistente todo id citado precisa existir em tasks md",
+      "text": "Linha de rastreabilidade nao pode citar task inexistente: todo ID citado precisa existir em tasks.md.",
+      "signal": "ac_gap",
+      "scope": "rastreabilidade",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "SIT-08 .specs/features/site-portfolio/spec.md:196 (rastreabilidade)"
+      ],
+      "created": "2026-09-02T18:52:19Z",
+      "last_seen": "2026-09-02T18:52:19Z"
+    },
+    {
+      "id": "L-023",
+      "key": "surviving_mutant::aviso de sucesso precisa de assercao como o de erro toast nao asserido deixa trocar o desfecho anunciado sem reprovar",
+      "text": "Aviso de sucesso precisa de assercao como o de erro: toast nao asserido deixa trocar o desfecho anunciado sem reprovar.",
+      "signal": "surviving_mutant",
+      "scope": "painel",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "M24 src/features/publicacoes/components/publicacao-editor.tsx:95 (painel)"
+      ],
+      "created": "2026-09-02T18:52:19Z",
+      "last_seen": "2026-09-02T18:52:19Z"
     }
   ]
 }
