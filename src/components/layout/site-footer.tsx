@@ -35,7 +35,7 @@ export function SiteFooter() {
                 href={perfil.href}
                 aria-label={perfil.rotulo}
                 {...propsLinkExterno(true)}
-                className="rounded-full p-1 text-base transition-colors hover:text-olive"
+                className="grid size-11 place-items-center rounded-full text-base transition-colors hover:text-olive"
               >
                 <Icone aria-hidden />
               </a>

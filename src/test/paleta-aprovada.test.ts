@@ -30,7 +30,7 @@ const PALETA_APROVADA = {
   "ink-soft": "#5B6749",
   olive: "#4C5B34",
   "olive-deep": "#3B4728",
-  brass: "#8E7A32",
+  brass: "#786418",
   line: "#D2DEC0",
   "on-olive": "#F3F8EA",
 } as const;

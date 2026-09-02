@@ -28,7 +28,7 @@ export function Atendimento() {
           {secaoAtendimento.chamada}
         </p>
 
-        <p className="mt-7 text-xs uppercase tracking-sobretitulo text-on-olive/70">
+        <p className="mt-7 text-xs uppercase tracking-sobretitulo text-on-olive/85">
           {secaoAtendimento.rotulos.especialidades}
         </p>
         <ul className="mt-3 flex flex-wrap gap-2.5">
@@ -42,7 +42,7 @@ export function Atendimento() {
           ))}
         </ul>
 
-        <p className="mt-7 text-xs uppercase tracking-sobretitulo text-on-olive/70">
+        <p className="mt-7 text-xs uppercase tracking-sobretitulo text-on-olive/85">
           {secaoAtendimento.rotulos.contextos}
         </p>
         <ul className="mt-3 flex flex-wrap gap-2.5">

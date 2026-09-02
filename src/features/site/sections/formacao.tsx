@@ -23,7 +23,7 @@ function Item({ item }: { item: ItemDeFormacao }) {
       <div>
         <h4 className="font-display text-lg text-ink">{item.titulo}</h4>
         {detalhe === "" ? null : (
-          <p className="mt-0.5 text-sm text-ink-soft">{detalhe}</p>
+          <p className="mt-0.5 max-w-leitura text-sm text-ink-soft">{detalhe}</p>
         )}
       </div>
     </li>

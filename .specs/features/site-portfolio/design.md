@@ -95,7 +95,7 @@ convertidos para OKLCH, e componente nenhum escreve cor à mão. Esta tabela é 
 | `--ink-soft` | `#5B6749` | tinta secundária | layout aprovado |
 | `--olive` | `#4C5B34` | cor de ação (primária) | SIT-05 |
 | `--olive-deep` | `#3B4728` | oliva em estado pressionado | layout aprovado |
-| `--brass` | `#8E7A32` | dourado de destaque | SIT-05 |
+| `--brass` | `#786418` | dourado de destaque | SIT-05 |
 | `--line` | `#D2DEC0` | borda e divisor | layout aprovado |
 | `--on-olive` | `#F3F8EA` | tinta sobre fundo oliva | layout aprovado |
 

@@ -68,7 +68,7 @@ export function Contato() {
                 {canal.href ? (
                   <a
                     href={canal.href}
-                    className="flex items-center gap-3 transition-opacity hover:opacity-80"
+                    className="-my-1.5 flex min-h-11 items-center gap-3 transition-opacity hover:opacity-80"
                     {...propsLinkExterno(canal.externo)}
                   >
                     {conteudo}

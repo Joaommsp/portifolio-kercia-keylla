@@ -10,7 +10,7 @@ export function SiteHeader() {
         <a
           href={`#${ancoras.topo}`}
           aria-label={perfil.nome}
-          className="font-display text-2xl tracking-marca text-olive"
+          className="-ml-2 grid size-11 place-items-center font-display text-2xl tracking-marca text-olive"
         >
           {cabecalho.marca}
         </a>
@@ -21,7 +21,7 @@ export function SiteHeader() {
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className="block py-1.5 text-xs uppercase tracking-rotulo text-ink-soft transition-colors hover:text-olive"
+                  className="block py-3 text-xs uppercase tracking-rotulo text-ink-soft transition-colors hover:text-olive"
                 >
                   {item.rotulo}
                 </a>

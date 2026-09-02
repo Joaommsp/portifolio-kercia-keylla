@@ -106,7 +106,7 @@ export const secaoHero = {
   acoes: {
     primaria: { rotulo: "Conversar comigo", href: ancora(ancoras.contato) },
     secundaria: {
-      rotulo: "Entenda o trabalho de uma AT",
+      rotulo: "Entenda o trabalho de uma\u00A0AT",
       href: ancora(ancoras.at),
     },
   },

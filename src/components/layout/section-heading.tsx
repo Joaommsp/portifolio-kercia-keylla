@@ -36,7 +36,7 @@ export function SectionHeading({
         <span
           className={cn(
             "block text-xs font-semibold uppercase tracking-sobretitulo",
-            onOlive ? "text-on-olive/70" : "text-brass",
+            onOlive ? "text-on-olive/85" : "text-brass",
           )}
         >
           {eyebrow}

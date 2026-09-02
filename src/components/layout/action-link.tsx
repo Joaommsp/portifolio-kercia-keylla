@@ -6,16 +6,23 @@ import { propsLinkExterno } from "@/lib/link";
 import { cn } from "@/lib/utils";
 
 const actionLinkVariants = cva(
-  "inline-flex items-center gap-2.5 rounded-xs border px-6 py-3.5 text-xs font-semibold uppercase tracking-rotulo transition-all focus-visible:outline-2 focus-visible:outline-offset-3",
+  [
+    "inline-flex items-center gap-2.5 rounded-xs border px-6 py-3.5 text-xs font-semibold uppercase tracking-rotulo",
+    "transition-[transform,background-color,border-color,color] duration-toque ease-toque",
+    // No celular não há hover: sem isto o toque no CTA principal não devolve
+    // nada, e o estado de hover ainda fica preso depois do tap.
+    "active:scale-[0.98]",
+    "focus-visible:outline-2 focus-visible:outline-offset-3",
+  ],
   {
     variants: {
       variant: {
         primary:
-          "border-transparent bg-olive text-on-olive hover:-translate-y-0.5 hover:bg-olive-deep focus-visible:outline-brass",
+          "border-transparent bg-olive text-on-olive focus-visible:outline-brass pointer-fino:hover:-translate-y-0.5 pointer-fino:hover:bg-olive-deep",
         ghost:
-          "border-line text-ink hover:border-olive hover:text-olive focus-visible:outline-brass",
+          "border-line text-ink focus-visible:outline-brass pointer-fino:hover:border-olive pointer-fino:hover:text-olive",
         light:
-          "border-transparent bg-on-olive text-olive-deep hover:-translate-y-0.5 hover:bg-surface focus-visible:outline-on-olive",
+          "border-transparent bg-on-olive text-olive-deep focus-visible:outline-on-olive pointer-fino:hover:-translate-y-0.5 pointer-fino:hover:bg-surface",
       },
     },
     defaultVariants: { variant: "primary" },

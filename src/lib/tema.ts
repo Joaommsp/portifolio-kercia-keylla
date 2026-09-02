@@ -13,7 +13,7 @@ export const CORES_EM_HEX = {
   ground: "#EDF3E4",
   surface: "#F7FBF1",
   olive: "#4C5B34",
-  brass: "#8E7A32",
+  brass: "#786418",
   ink: "#2B3322",
   "ink-soft": "#5B6749",
   line: "#D2DEC0",

@@ -76,7 +76,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 2. The system SHALL exibir os 6 pilares do trabalho da AT a partir de `src/content/site.ts`, sem texto duplicado em componente.
 3. WHEN o visitante clica em um item do menu THEN the system SHALL rolar até a seção correspondente da mesma página.
 4. WHEN a home é carregada em viewport de 360px de largura THEN the system SHALL exibir todo o conteúdo sem rolagem horizontal.
-5. The system SHALL aplicar a paleta aprovada (fundo `#EDF3E4`, superfície `#F7FBF1`, oliva `#4C5B34`, dourado `#8E7A32`) por tokens de tema, sem cor literal em componente.
+5. The system SHALL aplicar a paleta aprovada (fundo `#EDF3E4`, superfície `#F7FBF1`, oliva `#4C5B34`, dourado `#786418`) por tokens de tema, sem cor literal em componente.
 6. IF o visitante abre o site com `prefers-reduced-motion: reduce` THEN the system SHALL renderizar todas as seções sem animação de entrada. SIT-06 trata exclusivamente de movimento: falha de dependência externa e variável de ambiente ausente são os dois edge cases abaixo, e não têm ID de requisito.
 
 7. The system SHALL exibir as 4 frentes de formação da seção "Pedagogia" a partir de `src/content/site.ts`, numeradas na ordem em que sustentam a prática.

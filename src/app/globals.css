@@ -3,6 +3,9 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+/* Hover só onde existe ponteiro que paira: no toque, `:hover` fica grudado
+   depois do tap e o botão parece travado. */
+@custom-variant pointer-fino (@media (hover: hover) and (pointer: fine));
 
 @theme inline {
   --color-ground: var(--ground);
@@ -65,6 +68,10 @@
 /* Tokens autorais do layout aprovado: espacamento entre letras dos rotulos em
    caixa alta e os pontos de quebra das grades de duas e tres colunas. */
 @theme {
+  /* Retorno ao toque: curto de propósito — é confirmação de que a interface
+     ouviu, não transição de tela. */
+  --ease-toque: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-toque: 140ms;
   --tracking-titulo: -0.02em;
   --tracking-marca: 0.02em;
   --tracking-rotulo: 0.14em;
@@ -99,7 +106,7 @@
   --ink-soft: oklch(0.4950 0.0481 125.81); /* #5B6749 */
   --olive: oklch(0.4479 0.0624 125.96); /* #4C5B34 */
   --olive-deep: oklch(0.3785 0.0518 126.01); /* #3B4728 */
-  --brass: oklch(0.5835 0.0945 93.71); /* #8E7A32 */
+  --brass: oklch(0.5088 0.0944 93.43); /* #786418 */
   --line: oklch(0.8835 0.0422 125.04); /* #D2DEC0 */
   --on-olive: oklch(0.9716 0.0192 122.83); /* #F3F8EA */
 
