@@ -92,6 +92,11 @@ export const cabecalho = {
   marca: "K",
   rotuloNavegacao: "Seções do site",
   acao: { rotulo: "Fale comigo", href: ancora(ancoras.contato) },
+  menu: {
+    abrir: "Abrir menu",
+    fechar: "Fechar",
+    titulo: "Seções",
+  },
 } as const;
 
 export const secaoHero = {

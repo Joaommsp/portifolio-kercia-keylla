@@ -1,5 +1,6 @@
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
+import { MenuMobile } from "@/components/layout/menu-mobile";
 import { ancoras, cabecalho, navegacao, perfil } from "@/content/site";
 
 /** Cabeçalho fixo: marca, menu âncora das seções e chamada para o contato. */
@@ -30,9 +31,12 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <ActionLink href={cabecalho.acao.href} variant="ghost">
-          {cabecalho.acao.rotulo}
-        </ActionLink>
+        <div className="flex items-center gap-1">
+          <ActionLink href={cabecalho.acao.href} variant="ghost">
+            {cabecalho.acao.rotulo}
+          </ActionLink>
+          <MenuMobile />
+        </div>
       </Container>
     </header>
   );
