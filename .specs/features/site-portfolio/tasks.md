@@ -5,7 +5,7 @@
 Implement these tasks with the `tlc-spec-driven` skill: **activate it by name and follow its Execute flow and Critical Rules.** Do not search for skill files by filesystem path.
 
 **Design**: `.specs/features/site-portfolio/design.md`
-**Status**: In Progress
+**Status**: Done
 
 ---
 

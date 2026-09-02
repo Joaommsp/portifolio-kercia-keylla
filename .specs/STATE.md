@@ -14,6 +14,10 @@
 | AD-048 | `Toaster` do sonner no layout do grupo `(admin)`, não no raiz | Só o painel dá retorno de ação, e o login mora dentro do grupo — no `PainelShell` o toast de falha de entrada não existiria. Mantém `sonner` fora do bundle público |
 | AD-049 | Falha de LEITURA fica na tela (`SectionMessage`); desfecho de AÇÃO vai para toast | Erro de leitura é estado da tela — não há conteúdo e nada a fazer senão vê-lo. Erro de ação é episódico e o conteúdo continua ali |
 | AD-050 | Guarda de alterações não salvas num contexto do painel (`features/admin/pendencia.tsx`), consultado pelo cabeçalho | O diálogo no editor cobria só o próprio botão: os links do cabeçalho são navegação client-side e escapavam também do `beforeunload` |
+| AD-052 | Site publicado na Vercel como projeto `kercia-keylla`; `NEXT_PUBLIC_FIREBASE_API_KEY` cadastrada como `config` (pública), não secret | A chave web do Firebase vai no bundle do navegador de qualquer forma — ela identifica o projeto e não autoriza nada. Quem protege é o `firestore.rules`. Como secret, o build não sobe |
+| AD-053 | A página apresenta a Keylla como professora com 15+ anos ANTES da AT, e a copy descreve a função da AT em vez de relatar rotina | Ela ainda não atende como AT, e o site não pode prometer prática corrente nem confessar a ausência dela. Descrever a função é verdadeiro e é o que a seção "O que faz uma AT" se propõe a fazer |
+| AD-054 | O site não anuncia interpretação de Libras — só "comunicação em Libras" | Intérprete é função regulamentada (Lei 12.319/2010) e exige certificação própria. Uma família com criança surda contrataria contando com isso. Um teste trava a ausência da palavra |
+| AD-055 | A seção de contato fala com DUAS audiências — famílias e escolas —, com o público explícito em cada frente | A experiência docente é o ativo mais forte dela, e quem contrata professora não se reconhecia numa página que só falava de acompanhamento terapêutico |
 | AD-051 | A prévia do editor renderiza o `PublicacaoArtigo` da página pública, montado por `paraPublicacaoDePrevia` | Um cabeçalho próprio já nasceu divergente do real (data, tamanho do título, imagem de topo) e a prévia deixaria de provar o que promete |
 | AD-046 | Formação é conteúdo fixo em `src/content/site.ts`, não Firestore; o CRUD de formação saiu do painel, junto com queries, mutations, schemas e as regras da coleção | Decisão do usuário: a lista muda de tempos em tempos e não justifica CRUD. Manter o painel gravando o que a página ignora seria pior — superfície de escrita sem consumidor |
 | AD-047 | Item de formação sem ano aparece sem ano | O currículo não registra a data de 9 dos 14 cursos; data suposta é pior que ausência |
@@ -58,11 +62,25 @@
 
 ## Handoff
 
-- **Feature**: site-portfolio
-- **Fase/task**: T1–T56 concluídas (Fases 1 a 9). Trabalho de implementação encerrado.
-- **Branch**: `main` em `413d151`, árvore limpa, nada empurrado. Sem worktree órfã.
-- **Suíte**: 323 testes em 39 arquivos + 10 testes de regra (`npm run test:rules`, exige `export PATH="$(brew --prefix openjdk@21)/bin:$PATH"`). `tsc`, lint e build limpos.
-- **Próximo passo**: rodar o Verifier independente (iteração 4) sobre o diff `b48c45d..HEAD`. Ele foi iniciado e interrompido pelo usuário antes de produzir qualquer saída — nada a recuperar, basta despachar de novo.
-- **Último veredito oficial**: FAIL estreito da iteração 3 (`validation.md`, commit `b48c45d`). As 4 lacunas que o motivaram foram fechadas na Fase 9 com 11 mutantes reprovando, mas isso ainda NÃO foi verificado por um verificador independente. `validate_state.py` segue em exit 1 até essa rodada acontecer.
-- **Bloqueios do produto** (fora do código): uid da autora ainda é `COLE_AQUI_O_UID_DA_AUTORA` em `firestore.rules`; regras e índice não publicados; faltam telefone, e-mail, cidade, texto do "Sobre" escrito pela Keylla e as 2 fotos. Por isso o build renderiza a home em `permission-denied` — comportamento esperado, é PUB-05/FOR-03 funcionando.
-- **Dívida conhecida**: SIT-04 (360px) e SIT-06 (`prefers-reduced-motion`) só fecham por UAT em navegador — jsdom não avalia media query.
+- **Feature**: site-portfolio — **entregue e no ar**.
+- **Produção**: https://kercia-keylla.vercel.app (Vercel, projeto `kercia-keylla`, deploy por `vercel --prod`).
+- **Repositório**: https://github.com/Joaommsp/portifolio-kercia-keylla, branch `main` sincronizada.
+- **Suíte**: 319 testes em 46 arquivos + 10 de regra (`npm run test:rules`, exige `export PATH="$(brew --prefix openjdk@21)/bin:$PATH"`). `tsc`, lint e build limpos.
+- **Tasks**: T1–T66 concluídas, em 11 fases.
+
+### O que falta, e é do João
+
+1. **Criar a conta da Keylla** no Firebase Auth, copiar o uid e trocar `COLE_AQUI_O_UID_DA_KEYLLA` em `firestore.rules`; depois publicar as regras. Sem isso ela não entra no `/admin` — só o uid do João está na allowlist.
+2. **Primeira publicação** pelo `/admin`, para a seção sair do estado vazio.
+3. **Conferir a prévia do link** em opengraph.xyz ou colando com `?1` no WhatsApp: o crawler cacheou a versão anterior ao deploy.
+4. **Nome exato do curso de Libras** no Centro Inclúsão — hoje registrado só como "Libras", em andamento.
+
+### Dívida conhecida
+
+- `validation.md` traz o veredito FAIL da verificação de `b48c45d`, com as lacunas já corrigidas depois (teste de regra restaurado, fiação do layout travada, SIT-06 coberto, varredura de diálogo nativo). `validate_state.py` segue em exit 1 até uma verificação nova rodar. Nada disso afeta o site.
+- SIT-04 (360px) e SIT-06 (reduced-motion) têm cobertura automatizada parcial; a conferência final foi por medição no navegador.
+- A paleta é protegida por teste, mas trocar o valor de um token em `globals.css` não reprova nada além da própria transcrição.
+
+### Como o site está montado
+
+Onze seções na home, nesta ordem: topo · o que faz uma AT · pedagogia · competências · atendimento · experiência · sobre · formação · publicações · contato, mais o rodapé. Publicações é a única seção dinâmica (Firestore); formação virou conteúdo fixo em AD-046. O painel `/admin` publica textos, com prévia, guarda de alterações não salvas e avisos em toast.

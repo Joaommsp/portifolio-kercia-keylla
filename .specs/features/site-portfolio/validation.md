@@ -1,3 +1,22 @@
+# Site Portfólio — Validation
+
+> **Encerramento (2026-09-02).** As cinco lacunas do veredito abaixo foram
+> corrigidas em `4b2a290`, cada uma com o mutante injetado e a reprovação
+> conferida: o caso de regra que eu havia apagado ao remover as formações
+> voltou (afrouxar `ehAutora()` reprova 2 de 10), a fiação do layout do painel
+> ganhou trava (remover o `Toaster` ou o `ProvedorDePendencia` reprova),
+> SIT-06 saiu de "UAT pendente" com o `Revelador` testado, ADM-09 ganhou
+> varredura de diálogo nativo e a rastreabilidade deixou de citar tasks
+> inexistentes.
+>
+> O veredito FAIL abaixo é o registro histórico da verificação de `b48c45d..`.
+> **Nenhuma verificação independente rodou depois das correções**, então
+> `validate_state.py` segue em exit 1 — é dívida de verificação, não de
+> comportamento. Estado real: 319 testes em 46 arquivos + 10 de regra, `tsc`,
+> lint e build limpos, site publicado em https://kercia-keylla.vercel.app.
+
+---
+
 # site-portfolio — Validação
 
 **Data**: 2026-09-02
