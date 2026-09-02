@@ -507,19 +507,40 @@ export const paginaNaoEncontrada = {
   acao: { rotulo: secaoPublicacoes.voltar, href: CAMINHO_HOME },
 } as const;
 
+export type IconeDePerfil = "linkedin" | "github" | "instagram";
+
+export type PerfilDoDesenvolvedor = {
+  readonly icone: IconeDePerfil;
+  readonly rotulo: string;
+  readonly href: string;
+};
+
 export const rodape = {
   copyright: (ano: number) =>
     juntarMeta(`© ${ano} ${perfil.nome}`, perfil.papel),
   assinatura: "Feito por Dev. João M.",
-  /** Perfis do desenvolvedor, na ordem em que aparecem no rodapé. */
+  /**
+   * Perfis do desenvolvedor, na ordem em que aparecem no rodapé. O `icone` é a
+   * chave do mapa no componente — marca não é dado editorial, e o conteúdo não
+   * importa componente de ícone.
+   */
   desenvolvedor: [
     {
+      icone: "linkedin",
       rotulo: "LinkedIn",
       href: "https://www.linkedin.com/in/joaomarcos10oficial/",
     },
-    { rotulo: "GitHub", href: "https://github.com/Joaommsp" },
-    { rotulo: "Instagram", href: "https://instagram.com/joao.mmsp" },
-  ],
+    {
+      icone: "github",
+      rotulo: "GitHub",
+      href: "https://github.com/Joaommsp",
+    },
+    {
+      icone: "instagram",
+      rotulo: "Instagram",
+      href: "https://instagram.com/joao.mmsp",
+    },
+  ] satisfies readonly PerfilDoDesenvolvedor[],
 } as const;
 
 /**

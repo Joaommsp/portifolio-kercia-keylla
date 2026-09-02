@@ -12,6 +12,16 @@ describe("SiteFooter", () => {
     expect(screen.getByText(/Feito por Dev\. João M\./)).toBeInTheDocument();
   });
 
+  it("dá nome acessível a cada perfil, que agora aparece só como ícone", () => {
+    render(<SiteFooter />);
+
+    for (const perfil of rodape.desenvolvedor) {
+      expect(
+        screen.getByRole("link", { name: perfil.rotulo }),
+      ).toHaveAccessibleName(perfil.rotulo);
+    }
+  });
+
   it("leva aos perfis do desenvolvedor, em nova aba e sem passar referrer", () => {
     render(<SiteFooter />);
 
