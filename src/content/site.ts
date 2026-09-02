@@ -38,7 +38,8 @@ export const perfil = {
   saudacao: "Olá, eu sou a",
   apresentacao:
     "Acompanho crianças e adolescentes na escola e no dia a dia, criando vínculo, mediando atividades e sustentando a autonomia de cada um — sempre junto da família e da equipe terapêutica.",
-  selo: ["Presença que", "constrói", "autonomia"],
+  /** Frase da placa ancorada à esquerda do retrato. */
+  selo: "Presença que constrói autonomia",
 } as const;
 
 /**

@@ -26,13 +26,18 @@ export function Hero() {
               {perfil.papel}
             </p>
 
-            <p className="mt-5 max-w-leitura text-ink-soft">{perfil.apresentacao}</p>
+            <p className="mt-5 max-w-leitura text-ink-soft">
+              {perfil.apresentacao}
+            </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
               <ActionLink href={secaoHero.acoes.primaria.href} withArrow>
                 {secaoHero.acoes.primaria.rotulo}
               </ActionLink>
-              <ActionLink href={secaoHero.acoes.secundaria.href} variant="ghost">
+              <ActionLink
+                href={secaoHero.acoes.secundaria.href}
+                variant="ghost"
+              >
                 {secaoHero.acoes.secundaria.rotulo}
               </ActionLink>
             </div>
@@ -46,12 +51,8 @@ export function Hero() {
               className="bg-linear-to-b from-olive/20 to-surface-2"
             />
 
-            <p className="absolute right-0 bottom-10 grid size-38 place-items-center rounded-full border border-brass bg-ground px-3 text-center text-xs leading-relaxed uppercase tracking-selo text-olive duo:-right-6">
-              {perfil.selo.map((linha) => (
-                <span key={linha} className="block">
-                  {linha}
-                </span>
-              ))}
+            <p className="absolute bottom-16 left-0 max-w-52 border border-line border-l-3 border-l-brass bg-surface px-4 py-3 font-display text-base leading-snug text-olive shadow-cartao duo:-left-14">
+              {perfil.selo}
             </p>
           </div>
         </div>
