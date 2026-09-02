@@ -7,10 +7,7 @@
  */
 
 import { formatarTelefoneBR, juntarMeta } from "@/lib/format";
-import {
-  CAMINHO_HOME,
-  CAMINHO_PAINEL,
-} from "@/lib/rotas";
+import { CAMINHO_HOME, CAMINHO_PAINEL } from "@/lib/rotas";
 
 export const PENDENTE = "PENDENTE" as const;
 
@@ -513,7 +510,16 @@ export const paginaNaoEncontrada = {
 export const rodape = {
   copyright: (ano: number) =>
     juntarMeta(`© ${ano} ${perfil.nome}`, perfil.papel),
-  assinatura: "Feito com carinho pelo filho",
+  assinatura: "Feito por Dev. João M.",
+  /** Perfis do desenvolvedor, na ordem em que aparecem no rodapé. */
+  desenvolvedor: [
+    {
+      rotulo: "LinkedIn",
+      href: "https://www.linkedin.com/in/joaomarcos10oficial/",
+    },
+    { rotulo: "GitHub", href: "https://github.com/Joaommsp" },
+    { rotulo: "Instagram", href: "https://instagram.com/joao.mmsp" },
+  ],
 } as const;
 
 /**
@@ -572,7 +578,8 @@ export const painel = {
     },
     ajuda: {
       slug: "É o fim do link do texto. Sugerido pelo título; dá para mudar.",
-      imagemUrl: "Opcional. Cole o endereço de uma imagem já publicada na internet.",
+      imagemUrl:
+        "Opcional. Cole o endereço de uma imagem já publicada na internet.",
     },
     acoes: {
       publicar: "Publicar",
