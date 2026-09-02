@@ -1212,7 +1212,7 @@ T48 → T56
 
 ---
 
-### T56: Descrições dos pilares sob teste
+### T56: Descrições dos pilares sob teste ✅
 
 **What**: Estender a asserção de SIT-02 às descrições dos pilares, fechando a metade "sem texto duplicado em componente".
 **Where**: `src/features/site/sections/o-que-faz-uma-at.test.tsx`
@@ -1222,8 +1222,8 @@ T48 → T56
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] As descrições renderizadas são comparadas com as do conteúdo, na ordem
-- [ ] Fixar a descrição de um pilar no componente (C6) reprova
+- [x] As descrições renderizadas são comparadas com as do conteúdo, na ordem
+- [x] Fixar a descrição de um pilar no componente (C6) reprova
 
 **Tests**: unit
 **Gate**: quick

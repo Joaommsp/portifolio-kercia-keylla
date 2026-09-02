@@ -11,6 +11,14 @@ import { OQueFazUmaAt } from "@/features/site/sections/o-que-faz-uma-at";
  */
 const PILARES_DA_SPEC = 6;
 
+/**
+ * Localiza a descrição dentro do card: é o parágrafo, o único texto do cartão
+ * que não é o título nem o rótulo do ícone. Buscar por papel evita amarrar o
+ * teste à classe do elemento.
+ */
+const DESCRICAO_DE_PILAR = (_conteudo: string, elemento: Element | null) =>
+  elemento?.tagName === "P";
+
 describe("OQueFazUmaAt (SIT-02)", () => {
   it("mantém no conteúdo os seis pilares que a spec fixa", () => {
     expect(secaoAt.pilares).toHaveLength(PILARES_DA_SPEC);
@@ -22,13 +30,19 @@ describe("OQueFazUmaAt (SIT-02)", () => {
     expect(screen.getAllByRole("article")).toHaveLength(PILARES_DA_SPEC);
   });
 
-  it("tira os títulos dos cards do conteúdo do site, na ordem", () => {
+  it("tira título e descrição dos cards do conteúdo do site, na ordem", () => {
     render(<OQueFazUmaAt />);
 
-    const titulos = screen
-      .getAllByRole("article")
-      .map((card) => within(card).getByRole("heading").textContent);
+    const cards = screen.getAllByRole("article").map((card) => ({
+      titulo: within(card).getByRole("heading").textContent,
+      descricao: within(card).getByText(DESCRICAO_DE_PILAR).textContent,
+    }));
 
-    expect(titulos).toEqual(secaoAt.pilares.map((pilar) => pilar.titulo));
+    expect(cards).toEqual(
+      secaoAt.pilares.map((pilar) => ({
+        titulo: pilar.titulo,
+        descricao: pilar.descricao,
+      })),
+    );
   });
 });
