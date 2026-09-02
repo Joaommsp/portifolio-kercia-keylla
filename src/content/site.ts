@@ -22,6 +22,7 @@ export const PENDENTE = "PENDENTE" as const;
 export const ancoras = {
   topo: "topo",
   at: "at",
+  pedagogia: "pedagogia",
   sobre: "sobre",
   formacao: "formacao",
   publicacoes: "publicacoes",
@@ -55,6 +56,7 @@ export const metadadosDoSite = {
 
 export const navegacao = [
   { rotulo: "O que é uma AT", href: ancora(ancoras.at) },
+  { rotulo: "Pedagogia", href: ancora(ancoras.pedagogia) },
   { rotulo: "Sobre", href: ancora(ancoras.sobre) },
   { rotulo: "Formação", href: ancora(ancoras.formacao) },
   { rotulo: "Publicações", href: ancora(ancoras.publicacoes) },
@@ -142,6 +144,45 @@ export const secaoAt = {
         "Orientação e devolutiva constantes, para que a rotina de casa siga a mesma direção do trabalho terapêutico.",
     },
   ] satisfies readonly Pilar[],
+} as const;
+
+export type FrenteDeFormacao = {
+  readonly titulo: string;
+  readonly descricao: string;
+};
+
+/**
+ * As quatro frentes que sustentam o atendimento. A ordem é o argumento da
+ * seção — a formação em educação vem antes do acompanhamento, não depois —,
+ * por isso a numeração sai daqui e não de um contador do componente.
+ */
+export const secaoPedagogia = {
+  eyebrow: "Formação que sustenta a prática",
+  titulo: "Pedagogia",
+  chamada:
+    "Quatro frentes que se somam no mesmo atendimento — cada uma responde por uma parte do que a criança precisa.",
+  frentes: [
+    {
+      titulo: "Pedagogia",
+      descricao:
+        "A base de tudo: como a criança aprende, o que a trava e como o professor pode ser aliado. É daqui que vem a leitura de sala de aula que um acompanhamento sem formação em educação não alcança.",
+    },
+    {
+      titulo: "Pedagogia hospitalar",
+      descricao:
+        "Acompanhamento de crianças em tratamento e internação, para que o afastamento da escola não vire perda de vínculo nem de aprendizagem.",
+    },
+    {
+      titulo: "Educação e inclusão",
+      descricao:
+        "Adaptação de material, rotina e avaliação junto da escola — a parte que transforma a matrícula em participação real.",
+    },
+    {
+      titulo: "Acompanhamento terapêutico",
+      descricao:
+        "O trabalho de AT no dia a dia, sustentado pelas três frentes acima e conduzido junto da família e da equipe terapêutica.",
+    },
+  ] satisfies readonly FrenteDeFormacao[],
 } as const;
 
 export const secaoSobre = {
