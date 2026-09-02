@@ -171,12 +171,12 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | Requirement ID | Story | Tasks | Status |
 | -------------- | ----- | ----- | ------ |
 | SIT-01 | P1: Visitante entende a AT | T5,T8,T9,T26 (teste em T41,T50) | Implementing |
-| SIT-02 | P1: Visitante entende a AT | T6,T11 (teste em T48) | Implementing |
+| SIT-02 | P1: Visitante entende a AT | T6,T11 (teste em T48,T56) | Implementing |
 | SIT-03 | P1: Visitante entende a AT | T8 (teste em T41) | Implementing |
 | SIT-04 | P1: Visitante entende a AT | T10 | Implementing |
-| SIT-05 | P1: Visitante entende a AT | T4 (trava em T51) | Implementing |
+| SIT-05 | P1: Visitante entende a AT | T4 (trava em T51,T52,T55; paleta em T54) | Implementing |
 | SIT-06 | P1: Visitante entende a AT | T14 | Implementing |
-| PUB-01 | P1: Visitante lê publicações | T19,T24,T37 | Implementing |
+| PUB-01 | P1: Visitante lê publicações | T19,T24,T37 (teto em T53) | Implementing |
 | PUB-02 | P1: Visitante lê publicações | T27,T47 | Implementing |
 | PUB-03 | P1: Visitante lê publicações | T24 (teste em T49) | Implementing |
 | PUB-04 | P1: Visitante lê publicações | T27,T40,T45 | Implementing |
@@ -186,7 +186,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | ADM-01 | P1: Keylla publica | T28,T29 | Implementing |
 | ADM-02 | P1: Keylla publica | T30 | Implementing |
 | ADM-03 | P1: Keylla publica | T16,T30 | Implementing |
-| ADM-04 | P1: Keylla publica | T17,T32 | Implementing |
+| ADM-04 | P1: Keylla publica | T17,T32 (limites em T53) | Implementing |
 | ADM-05 | P1: Keylla publica | T31,T32,T34 | Implementing |
 | ADM-06 | P1: Keylla publica | T33 | Implementing |
 | ADM-07 | P1: Keylla publica | T31,T32 | Implementing |
