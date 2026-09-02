@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -88,11 +88,9 @@ export function MenuMobile() {
         aria-expanded={aberto}
         aria-controls={idDaFolha}
         onClick={() => setAberto(true)}
-        className="-mr-2 grid size-11 place-items-center gap-1 menu:hidden"
+        className="-mr-2 grid size-11 place-items-center rounded-full text-ink transition-colors menu:hidden pointer-fino:hover:text-olive"
       >
-        {[0, 1, 2].map((traco) => (
-          <span key={traco} aria-hidden className="block h-px w-4.5 bg-ink" />
-        ))}
+        <Menu aria-hidden className="size-5.5" />
       </button>
 
       {aberto && montado

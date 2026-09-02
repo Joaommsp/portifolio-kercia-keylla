@@ -177,6 +177,58 @@
   }
 }
 
+@layer components {
+  /*
+   * Entrada em sequência das frentes da Pedagogia. A ordem é o argumento da
+   * seção — uma frente sustenta a próxima —, e a entrada escalonada mostra isso
+   * em vez de só afirmar no texto.
+   *
+   * `animation-timeline: view()` é CSS puro: sem observer, sem JS, e onde o
+   * navegador não suporta a regra é ignorada e o conteúdo aparece normal.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .frente-da-trilha {
+        animation: entrada-da-frente linear both;
+        animation-timeline: view();
+        /* O trecho de cada frente vem inline, escalonado pela posição. */
+      }
+    }
+  }
+
+  /*
+   * Borda do cabeçalho só depois que a página sai do topo: indica que há
+   * conteúdo acima, sem desenhar uma linha sobre a abertura.
+   */
+  @supports (animation-timeline: scroll()) {
+    .cabecalho-do-site {
+      animation: borda-do-cabecalho linear both;
+      animation-timeline: scroll();
+      animation-range: 0 80px;
+    }
+  }
+}
+
+@keyframes entrada-da-frente {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes borda-do-cabecalho {
+  from {
+    border-bottom-color: transparent;
+  }
+  to {
+    border-bottom-color: var(--line);
+  }
+}
+
 /* Em paisagem de celular o cabeçalho fixo comia 19% da altura útil (69px de
    360px). Encolhe para devolver leitura, sem sumir com a marca nem com o menu. */
 @media (max-height: 420px) and (orientation: landscape) {

@@ -6,7 +6,7 @@ import { ancoras, cabecalho, navegacao, perfil } from "@/content/site";
 /** Cabeçalho fixo: marca, menu âncora das seções e chamada para o contato. */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur-md">
+    <header className="cabecalho-do-site sticky top-0 z-20 border-b border-line bg-ground/90 backdrop-blur-md">
       <Container className="flex h-cabecalho items-center justify-between gap-6">
         <a
           href={`#${ancoras.topo}`}
