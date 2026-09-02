@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 11,
+  "next_id": 16,
   "lessons": [
     {
       "id": "L-001",
@@ -184,6 +184,96 @@
       ],
       "created": "2026-09-01T21:04:24Z",
       "last_seen": "2026-09-01T21:04:24Z"
+    },
+    {
+      "id": "L-011",
+      "key": "surviving_mutant::licao registrada a partir de um caso deve ser varrida em todos os requisitos da mesma classe nao so nos exemplos citados no relatorio",
+      "text": "Licao registrada a partir de um caso deve ser varrida em todos os requisitos da mesma classe, nao so nos exemplos citados no relatorio.",
+      "signal": "surviving_mutant",
+      "scope": "verificacao",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "C1 src/features/publicacoes/queries.test.ts:86 (verificacao)"
+      ],
+      "created": "2026-09-02T00:17:02Z",
+      "last_seen": "2026-09-02T00:17:02Z"
+    },
+    {
+      "id": "L-012",
+      "key": "surviving_mutant::requisito que fixa valores e proibe o antipadrao precisa de evidencia para as duas metades check de ausencia nao prova que o valor certo foi aplicado",
+      "text": "Requisito que fixa valores e proibe o antipadrao precisa de evidencia para as duas metades: check de ausencia nao prova que o valor certo foi aplicado.",
+      "signal": "surviving_mutant",
+      "scope": "estilo",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "B6 src/app/globals.css:96 (estilo)"
+      ],
+      "created": "2026-09-02T00:17:02Z",
+      "last_seen": "2026-09-02T00:17:02Z"
+    },
+    {
+      "id": "L-013",
+      "key": "surviving_mutant::check de varredura precisa de mutante de burla numa forma alternativa do mesmo antipadrao nao so de casos positivos e negativos do detector",
+      "text": "Check de varredura precisa de mutante de burla numa forma alternativa do mesmo antipadrao, nao so de casos positivos e negativos do detector.",
+      "signal": "surviving_mutant",
+      "scope": "verificacao",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "B4/B5 src/test/paleta-em-tokens.test.ts:65 (verificacao)"
+      ],
+      "created": "2026-09-02T00:17:02Z",
+      "last_seen": "2026-09-02T00:17:02Z"
+    },
+    {
+      "id": "L-014",
+      "key": "surviving_mutant::requisito com duas clausulas ligadas por e precisa de uma task e de uma evidencia por clausula",
+      "text": "Requisito com duas clausulas ligadas por 'e' precisa de uma task e de uma evidencia por clausula.",
+      "signal": "surviving_mutant",
+      "scope": "rastreabilidade",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "C6 src/features/site/sections/o-que-faz-uma-at.tsx:45 (rastreabilidade)"
+      ],
+      "created": "2026-09-02T00:17:02Z",
+      "last_seen": "2026-09-02T00:17:02Z"
+    },
+    {
+      "id": "L-015",
+      "key": "surviving_mutant::valor definido por extenso na spec deve ser asserido como literal no teste nunca pela constante que o codigo usa para produzi lo",
+      "text": "Valor definido por extenso na spec deve ser asserido como literal no teste, nunca pela constante que o codigo usa para produzi-lo.",
+      "signal": "surviving_mutant",
+      "scope": "conteudo",
+      "status": "candidate",
+      "features": [
+        "site-portfolio"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "C1 src/features/publicacoes/schemas.ts:17 (conteudo)"
+      ],
+      "created": "2026-09-02T00:17:02Z",
+      "last_seen": "2026-09-02T00:17:02Z"
     }
   ]
 }

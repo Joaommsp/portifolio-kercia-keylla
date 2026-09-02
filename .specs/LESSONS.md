@@ -74,6 +74,36 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: SIT-05 src/app/globals.css:91-98 (estilo)
 - last seen: 2026-09-01T21:04:24Z
 
+### L-011 - Licao registrada a partir de um caso deve ser varrida em todos os requisitos da mesma classe, nao so nos exemplos citados no relatorio.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `verificacao` · harmful: 0
+- features: site-portfolio
+- evidence: C1 src/features/publicacoes/queries.test.ts:86 (verificacao)
+- last seen: 2026-09-02T00:17:02Z
+
+### L-012 - Requisito que fixa valores e proibe o antipadrao precisa de evidencia para as duas metades: check de ausencia nao prova que o valor certo foi aplicado.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `estilo` · harmful: 0
+- features: site-portfolio
+- evidence: B6 src/app/globals.css:96 (estilo)
+- last seen: 2026-09-02T00:17:02Z
+
+### L-013 - Check de varredura precisa de mutante de burla numa forma alternativa do mesmo antipadrao, nao so de casos positivos e negativos do detector.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `verificacao` · harmful: 0
+- features: site-portfolio
+- evidence: B4/B5 src/test/paleta-em-tokens.test.ts:65 (verificacao)
+- last seen: 2026-09-02T00:17:02Z
+
+### L-014 - Requisito com duas clausulas ligadas por 'e' precisa de uma task e de uma evidencia por clausula.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `rastreabilidade` · harmful: 0
+- features: site-portfolio
+- evidence: C6 src/features/site/sections/o-que-faz-uma-at.tsx:45 (rastreabilidade)
+- last seen: 2026-09-02T00:17:02Z
+
+### L-015 - Valor definido por extenso na spec deve ser asserido como literal no teste, nunca pela constante que o codigo usa para produzi-lo.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `conteudo` · harmful: 0
+- features: site-portfolio
+- evidence: C1 src/features/publicacoes/schemas.ts:17 (conteudo)
+- last seen: 2026-09-02T00:17:02Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.
