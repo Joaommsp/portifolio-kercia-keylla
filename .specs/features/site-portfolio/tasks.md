@@ -137,6 +137,16 @@ T4 → T51
 T51 → T52
 ```
 
+### Phase 9: Lacunas da verificação final
+
+```
+T19 → T53
+T24 → T53
+T52 → T54
+T52 → T55
+T48 → T56
+```
+
 ---
 
 ## Task Breakdown
@@ -1125,3 +1135,94 @@ T51 → T52
 
 **Tests**: unit
 **Gate**: build
+
+---
+
+## Phase 9: Lacunas da verificação final
+
+> Quatro tasks abertas pela verificação independente (iteração 3, `validation.md` de 2026-09-01), que reprovou com dois sobreviventes materiais e dois menores. Todas são de teste que não discrimina — nenhum defeito de produção. Numeração continua de T52.
+
+### T53: Teto de seis publicações ancorado no literal da spec ✅
+
+**What**: Ancorar o teto de PUB-01 no literal `6` que a spec escreve, em vez de na constante que o próprio código usa para cortar, e varrer a classe inteira: todo teste cujo valor asserido a spec fixa por extenso.
+**Where**: `src/features/publicacoes/queries.test.ts`, `src/features/publicacoes/components/publicacoes-section.test.tsx`, `src/features/publicacoes/schemas.test.ts`, `src/features/publicacoes/components/publicacao-form.test.tsx`
+**Depends on**: T19, T24
+**Requirement**: PUB-01, ADM-04
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] `LIMITE_PUBLICACOES_HOME` é conferido contra um literal `6` derivado da spec
+- [x] O corte da seção da home é asserido contra esse mesmo literal, não contra a constante
+- [x] Os tetos de título (120) e resumo (220), que a spec escreve por extenso, deixam de ser lidos da constante
+- [x] A varredura da classe fica registrada aqui, dizendo quais asserções ficam ancoradas na constante e por quê
+- [x] `LIMITE_PUBLICACOES_HOME` 6 → 5 (C1) reprova
+
+**Varredura da classe** (L-011 — todo teste cujo valor asserido a spec fixa): os literais passam a viver em `src/test/valores-da-spec.ts`, arquivo que nenhum código de produção lê.
+
+- **Corrigidos aqui**: PUB-01, teto de 6 (`queries.test.ts`, `publicacoes-section.test.tsx`); ADM-04, título 120 e resumo 220 (`schemas.test.ts`, `publicacao-form.test.tsx`). O corpo de 20.000 já era literal e mudou só de endereço.
+- **Já ancorados antes desta task**: SIT-02, 6 pilares (`PILARES_DA_SPEC`); PUB-03, frase do vazio; FOR-02, rótulos "Em andamento"/"Concluído"; o contador `6/120` e `120/120` do edge case do título.
+- **Seguem lendo a constante do código, de propósito** — a spec não fixa esses números, então a constante *é* o contrato: `LIMITE_PUBLICACOES_PAINEL` (200) e `LIMITE_PUBLICACOES_SITEMAP` (1000), que são trava de tráfego; `LIMITES_PUBLICACAO.slug`, `.tag` e `.imagemUrl`; e todo `LIMITES_FORMACAO` mais `ORDEM_MAXIMA_FORMACAO` (999), já que FOR-05 diz "as mesmas regras da P1" sem escrever número nenhum.
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T54: Paleta aprovada com asserção positiva
+
+**What**: Fechar a metade positiva de SIT-05 — os tokens de tema precisam carregar o valor da paleta aprovada, não só evitar cor literal em componente.
+**Where**: `src/test/paleta-em-tokens.test.ts`
+**Depends on**: T52
+**Requirement**: SIT-05
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] Cada token da paleta aprovada é lido de `globals.css` e comparado com o hex de origem
+- [ ] A comparação hex→OKLCH é feita no próprio teste, com tolerância declarada
+- [ ] Os quatro hex que a spec nomeia por extenso aparecem como literais da spec no teste
+- [ ] Token ausente ou renomeado reprova, em vez de passar vazio
+- [ ] Trocar `--olive` para vermelho (B6) reprova
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T55: Escopo da trava de SIT-05 alinhado ao que ela cobre
+
+**What**: Fechar a distância entre o que o docblock promete e o que o detector entrega — classe utilitária de cor fora da paleta e cor nomeada em `style` inline.
+**Where**: `src/test/paleta-em-tokens.test.ts`
+**Depends on**: T52
+**Requirement**: SIT-05
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] O detector acusa classe utilitária de cor da paleta padrão do Tailwind
+- [ ] O detector acusa cor nomeada do CSS em `style` inline
+- [ ] `src/components/ui/` tem exceção justificada no próprio arquivo, com os arquivos e o motivo
+- [ ] O docblock descreve o escopo real, sem promessa maior que a entrega
+- [ ] `bg-emerald-200` (B4) e `style={{ color: "white" }}` (B5) reprovam
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T56: Descrições dos pilares sob teste
+
+**What**: Estender a asserção de SIT-02 às descrições dos pilares, fechando a metade "sem texto duplicado em componente".
+**Where**: `src/features/site/sections/o-que-faz-uma-at.test.tsx`
+**Depends on**: T48
+**Requirement**: SIT-02
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [ ] As descrições renderizadas são comparadas com as do conteúdo, na ordem
+- [ ] Fixar a descrição de um pilar no componente (C6) reprova
+
+**Tests**: unit
+**Gate**: quick

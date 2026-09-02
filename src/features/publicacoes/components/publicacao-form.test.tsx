@@ -4,10 +4,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { painel } from "@/content/site";
 import { PublicacaoForm } from "@/features/publicacoes/components/publicacao-form";
-import {
-  LIMITES_PUBLICACAO,
-  type PublicacaoFormulario,
-} from "@/features/publicacoes/schemas";
+import { type PublicacaoFormulario } from "@/features/publicacoes/schemas";
+import { LIMITES_DE_CAMPO_DA_SPEC } from "@/test/valores-da-spec";
 import type { Resultado } from "@/lib/resultado";
 
 const { publicacao: textos } = painel;
@@ -90,7 +88,7 @@ describe("PublicacaoForm", () => {
   });
 
   it("aceita o título no limite e mostra o contador em 120/120", async () => {
-    const noLimite = "t".repeat(LIMITES_PUBLICACAO.titulo);
+    const noLimite = "t".repeat(LIMITES_DE_CAMPO_DA_SPEC.titulo);
     render(<PublicacaoForm aoSalvar={aoSalvar} />);
 
     preencher({ titulo: noLimite });
@@ -100,7 +98,9 @@ describe("PublicacaoForm", () => {
     });
 
     expect(
-      screen.getByText(`${LIMITES_PUBLICACAO.titulo}/${LIMITES_PUBLICACAO.titulo}`),
+      screen.getByText(
+        `${LIMITES_DE_CAMPO_DA_SPEC.titulo}/${LIMITES_DE_CAMPO_DA_SPEC.titulo}`,
+      ),
     ).toBeInTheDocument();
 
     await userEvent.click(botao(textos.acoes.publicar));
@@ -133,12 +133,12 @@ describe("PublicacaoForm", () => {
   it("bloqueia o envio e aponta o campo quando o título passa do limite", async () => {
     render(<PublicacaoForm aoSalvar={aoSalvar} />);
 
-    preencher({ titulo: "t".repeat(LIMITES_PUBLICACAO.titulo + 1) });
+    preencher({ titulo: "t".repeat(LIMITES_DE_CAMPO_DA_SPEC.titulo + 1) });
     await userEvent.click(botao(textos.acoes.publicar));
 
     expect(
       await screen.findByText(
-        `O título deve ter no máximo ${LIMITES_PUBLICACAO.titulo} caracteres.`,
+        `O título deve ter no máximo ${LIMITES_DE_CAMPO_DA_SPEC.titulo} caracteres.`,
       ),
     ).toBeInTheDocument();
     expect(aoSalvar).not.toHaveBeenCalled();
@@ -148,12 +148,12 @@ describe("PublicacaoForm", () => {
   it("bloqueia o envio quando o corpo passa do limite", async () => {
     render(<PublicacaoForm aoSalvar={aoSalvar} />);
 
-    preencher({ corpo: "c".repeat(LIMITES_PUBLICACAO.corpo + 1) });
+    preencher({ corpo: "c".repeat(LIMITES_DE_CAMPO_DA_SPEC.corpo + 1) });
     await userEvent.click(botao(textos.acoes.publicar));
 
     expect(
       await screen.findByText(
-        `O corpo do texto deve ter no máximo ${LIMITES_PUBLICACAO.corpo} caracteres.`,
+        `O corpo do texto deve ter no máximo ${LIMITES_DE_CAMPO_DA_SPEC.corpo} caracteres.`,
       ),
     ).toBeInTheDocument();
     expect(aoSalvar).not.toHaveBeenCalled();
