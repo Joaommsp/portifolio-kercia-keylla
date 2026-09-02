@@ -27,15 +27,15 @@ Todas são lidas em `src/lib/firebase/config.ts` (menos a última, lida em
 `src/content/site.ts`). Os valores saem do Firebase Console → Project settings →
 General → Your apps → app Web → SDK setup and configuration.
 
-| Variável | Obrigatória | O que é |
-| -------- | ----------- | ------- |
-| `NEXT_PUBLIC_FIREBASE_API_KEY` | sim | Chave pública do app Web |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | sim | Domínio do Auth (`<projeto>.firebaseapp.com`) |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | sim | Id do projeto |
-| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | sim | Bucket do projeto |
-| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | sim | Id do remetente |
-| `NEXT_PUBLIC_FIREBASE_APP_ID` | sim | Id do app Web |
-| `NEXT_PUBLIC_SITE_URL` | não | Endereço público do site, usado no canonical, no Open Graph, no sitemap e no robots. Padrão: `https://keyllamelo.com.br` |
+| Variável                                   | Obrigatória | O que é                                                                                                                  |
+| ------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_FIREBASE_API_KEY`             | sim         | Chave pública do app Web                                                                                                 |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`         | sim         | Domínio do Auth (`<projeto>.firebaseapp.com`)                                                                            |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID`          | sim         | Id do projeto                                                                                                            |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`      | sim         | Bucket do projeto                                                                                                        |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | sim         | Id do remetente                                                                                                          |
+| `NEXT_PUBLIC_FIREBASE_APP_ID`              | sim         | Id do app Web                                                                                                            |
+| `NEXT_PUBLIC_SITE_URL`                     | não         | Endereço público do site, usado no canonical, no Open Graph, no sitemap e no robots. Padrão: `https://keyllamelo.com.br` |
 
 As chaves do Firebase Web são públicas por natureza — elas identificam o
 projeto, não autorizam nada. A proteção real está nas regras do Firestore.
@@ -97,7 +97,7 @@ pelo uid real não quebra a suíte.
 Fica fora de `npm test` de propósito, por depender de duas coisas externas:
 
 - **Java 11 ou superior** no `PATH` — é o emulador do Firestore que exige.
-  Instalado pelo Homebrew, o OpenJDK é *keg-only* e não entra no `PATH`
+  Instalado pelo Homebrew, o OpenJDK é _keg-only_ e não entra no `PATH`
   sozinho:
 
   ```bash
@@ -112,10 +112,10 @@ regra não quebra teste nenhum.
 
 ## Coleções
 
-| Coleção | Campos |
-| ------- | ------ |
+| Coleção       | Campos                                                                                                         |
+| ------------- | -------------------------------------------------------------------------------------------------------------- |
 | `publicacoes` | `titulo`, `slug`, `resumo`, `corpo` (markdown), `imagemUrl`, `tag`, `publicado`, `publicadoEm`, `atualizadoEm` |
-| `formacoes` | `titulo`, `instituicao`, `descricao`, `ano`, `status` (`concluido` \| `em_andamento`), `ordem` |
+| `formacoes`   | `titulo`, `instituicao`, `descricao`, `ano`, `status` (`concluido` \| `em_andamento`), `ordem`                 |
 
 Nenhuma das duas precisa ser criada à mão: o painel cria o documento na
 primeira gravação. Os limites de cada campo vivem nos `schemas.ts` de cada
@@ -133,15 +133,15 @@ Imagem não é hospedada aqui — entra por URL, e só de um host da allowlist e
 
 ## Scripts
 
-| Script | O que faz |
-| ------ | --------- |
-| `npm run dev` | Servidor de desenvolvimento |
-| `npm run build` | Build de produção |
-| `npm start` | Sobe o build |
-| `npm run lint` | ESLint |
-| `npm test` | Vitest em modo observador (`npm test -- --run` para uma passada) |
-| `npm run test:rules` | Regras do Firestore no emulador (exige Java no `PATH`) |
-| `npm run typecheck` | `tsc --noEmit` |
+| Script               | O que faz                                                        |
+| -------------------- | ---------------------------------------------------------------- |
+| `npm run dev`        | Servidor de desenvolvimento                                      |
+| `npm run build`      | Build de produção                                                |
+| `npm start`          | Sobe o build                                                     |
+| `npm run lint`       | ESLint                                                           |
+| `npm test`           | Vitest em modo observador (`npm test -- --run` para uma passada) |
+| `npm run test:rules` | Regras do Firestore no emulador (exige Java no `PATH`)           |
+| `npm run typecheck`  | `tsc --noEmit`                                                   |
 
 Antes de entregar qualquer alteração:
 

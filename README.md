@@ -12,20 +12,20 @@ publica esses textos sozinha, sem depender de ninguém.
 
 Uma rota só, nesta ordem:
 
-| Seção | O que mostra |
-| ----- | ------------ |
-| Abertura | Nome, papel, retrato e os dois caminhos: falar com ela ou entender o trabalho |
+| Seção            | O que mostra                                                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Abertura         | Nome, papel, retrato e os dois caminhos: falar com ela ou entender o trabalho                                       |
 | O que faz uma AT | Os seis pilares do acompanhamento — acolhimento, observação, mediação, autonomia, inclusão e parceria com a família |
-| Pedagogia | As quatro frentes de formação que sustentam a prática, na ordem em que se somam |
-| Sobre | Quem ela é, em primeira pessoa |
-| Certificações | Diplomas e cursos, com instituição, ano e situação — inclusive os em andamento |
-| Publicações | Os textos dela, cada um com página própria e link compartilhável |
-| Contato | WhatsApp, e-mail e Instagram, sem formulário no meio do caminho |
+| Pedagogia        | As quatro frentes de formação que sustentam a prática, na ordem em que se somam                                     |
+| Sobre            | Quem ela é, em primeira pessoa                                                                                      |
+| Certificações    | Diplomas e cursos, com instituição, ano e situação — inclusive os em andamento                                      |
+| Publicações      | Os textos dela, cada um com página própria e link compartilhável                                                    |
+| Contato          | WhatsApp, e-mail e Instagram, sem formulário no meio do caminho                                                     |
 
 **Certificações** e **Publicações** vêm do banco: ela cria, edita e publica pelo
 painel em `/admin`, protegido por login. As duas seções que falam de formação
-têm papéis distintos — *Pedagogia* é o argumento (o que cada frente faz no
-atendimento), *Certificações* é o registro (o que está no papel).
+têm papéis distintos — _Pedagogia_ é o argumento (o que cada frente faz no
+atendimento), _Certificações_ é o registro (o que está no papel).
 
 Cada publicação também responde em `/publicacoes/[slug]`, com metadados
 próprios: o link cai bem quando ela compartilha no Instagram ou no WhatsApp.
