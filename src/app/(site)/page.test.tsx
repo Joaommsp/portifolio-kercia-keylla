@@ -87,7 +87,7 @@ describe("seções da home (SIT-01, SIT-03)", () => {
   it("apresenta os sete blocos na ordem da spec", async () => {
     // A seção de formação some quando não há nada cadastrado (FOR-04); a de
     // publicações fica de pé nos três estados (AD-018). Então basta uma
-    // formação para a home mostrar os sete blocos.
+    // formação para a home mostrar os oito blocos.
     listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
 
     const { container } = await renderizarPaginaCompleta();
@@ -95,6 +95,7 @@ describe("seções da home (SIT-01, SIT-03)", () => {
     expect(blocosNaOrdem(container)).toEqual([
       ancoras.topo,
       ancoras.at,
+      ancoras.pedagogia,
       ancoras.sobre,
       ancoras.formacao,
       ancoras.publicacoes,

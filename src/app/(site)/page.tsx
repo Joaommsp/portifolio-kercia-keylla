@@ -17,6 +17,7 @@ import { listarPublicadas } from "@/features/publicacoes/queries";
 import { Contato } from "@/features/site/sections/contato";
 import { Hero } from "@/features/site/sections/hero";
 import { OQueFazUmaAt } from "@/features/site/sections/o-que-faz-uma-at";
+import { Pedagogia } from "@/features/site/sections/pedagogia";
 import { Sobre } from "@/features/site/sections/sobre";
 import { jsonLdDaAutora, metadadosDaHome } from "@/features/site/seo";
 
@@ -42,6 +43,7 @@ export default async function Home() {
 
       <Hero />
       <OQueFazUmaAt />
+      <Pedagogia />
       <Sobre />
       <FormacoesSection resultado={formacoes} />
       <PublicacoesSection resultado={publicacoes} />
