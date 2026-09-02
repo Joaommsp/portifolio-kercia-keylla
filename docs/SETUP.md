@@ -35,7 +35,7 @@ General → Your apps → app Web → SDK setup and configuration.
 | `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`      | sim         | Bucket do projeto                                                                                                        |
 | `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | sim         | Id do remetente                                                                                                          |
 | `NEXT_PUBLIC_FIREBASE_APP_ID`              | sim         | Id do app Web                                                                                                            |
-| `NEXT_PUBLIC_SITE_URL`                     | não         | Endereço público do site, usado no canonical, no Open Graph, no sitemap e no robots. Padrão: `https://keyllamelo.com.br` |
+| `NEXT_PUBLIC_SITE_URL`                     | não         | Endereço público do site, usado no canonical, no Open Graph, no sitemap e no robots. Padrão: `https://kercia-keylla.vercel.app` |
 
 As chaves do Firebase Web são públicas por natureza — elas identificam o
 projeto, não autorizam nada. A proteção real está nas regras do Firestore.

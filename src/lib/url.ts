@@ -7,7 +7,7 @@
  */
 
 /** Endereço usado quando o ambiente não informa outro. */
-export const URL_PADRAO_DO_SITE = "https://keyllamelo.com.br";
+export const URL_PADRAO_DO_SITE = "https://kercia-keylla.vercel.app";
 
 /**
  * Endereço público do site.
