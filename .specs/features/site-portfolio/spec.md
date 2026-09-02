@@ -170,36 +170,36 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 
 | Requirement ID | Story | Tasks | Status |
 | -------------- | ----- | ----- | ------ |
-| SIT-01 | P1: Visitante entende a AT | T5,T8,T9,T26 (teste em T41,T50) | Implementing |
-| SIT-02 | P1: Visitante entende a AT | T6,T11 (teste em T48,T56) | Implementing |
-| SIT-03 | P1: Visitante entende a AT | T8 (teste em T41) | Implementing |
+| SIT-01 | P1: Visitante entende a AT | T5,T8,T9,T26 (teste em T41,T50) | Verified |
+| SIT-02 | P1: Visitante entende a AT | T6,T11 (teste em T48,T56) | Verified |
+| SIT-03 | P1: Visitante entende a AT | T8 (teste em T41) | Verified |
 | SIT-04 | P1: Visitante entende a AT | T10 | Implementing |
-| SIT-05 | P1: Visitante entende a AT | T4 (trava em T51,T52,T55; paleta em T54) | Implementing |
-| SIT-06 | P1: Visitante entende a AT | T14 | Implementing |
-| PUB-01 | P1: Visitante lê publicações | T19,T24,T37 (teto em T53) | Implementing |
-| PUB-02 | P1: Visitante lê publicações | T27,T47 | Implementing |
-| PUB-03 | P1: Visitante lê publicações | T24 (teste em T49) | Implementing |
-| PUB-04 | P1: Visitante lê publicações | T27,T40,T45 | Implementing |
-| PUB-05 | P1: Visitante lê publicações | T19,T24 | Implementing |
-| PUB-06 | P1: Visitante lê publicações | T23 | Implementing |
-| PUB-07 | P1: Visitante lê publicações | T27,T44 | Implementing |
-| ADM-01 | P1: Keylla publica | T28,T29 | Implementing |
-| ADM-02 | P1: Keylla publica | T30 | Implementing |
-| ADM-03 | P1: Keylla publica | T16,T30 | Implementing |
-| ADM-04 | P1: Keylla publica | T17,T32 (limites em T53) | Implementing |
-| ADM-05 | P1: Keylla publica | T31,T32,T34 | Implementing |
-| ADM-06 | P1: Keylla publica | T33 | Implementing |
-| ADM-07 | P1: Keylla publica | T31,T32 | Implementing |
-| ADM-08 | P1: Keylla publica | T31,T33 | Implementing |
-| ADM-09 | P1: Keylla publica | T33 | Implementing |
-| FOR-01 | P2: Formação | T22,T25 | Implementing |
-| FOR-02 | P2: Formação | T25 | Implementing |
-| FOR-03 | P2: Formação | T22,T25 | Implementing |
-| FOR-04 | P2: Formação | T25 | Implementing |
-| FOR-05 | P2: Formação | T20,T35 | Implementing |
-| SEO-01 | P3: Encontrabilidade | T38 | Implementing |
-| SEO-02 | P3: Encontrabilidade | T41 | Implementing |
-| SEC-01 | P1: Keylla publica | T36,T46 | Implementing |
+| SIT-05 | P1: Visitante entende a AT | T4 (trava em T51,T52,T55; paleta em T54) | Verified |
+| SIT-06 | P1: Visitante entende a AT | T4 | Verified (UAT pendente) |
+| PUB-01 | P1: Visitante lê publicações | T19,T24,T37 (teto em T53) | Verified |
+| PUB-02 | P1: Visitante lê publicações | T27,T47 | Verified |
+| PUB-03 | P1: Visitante lê publicações | T24 (teste em T49) | Verified |
+| PUB-04 | P1: Visitante lê publicações | T27,T40,T45 | Verified |
+| PUB-05 | P1: Visitante lê publicações | T19,T24 | Verified |
+| PUB-06 | P1: Visitante lê publicações | T23 | Verified |
+| PUB-07 | P1: Visitante lê publicações | T27,T44 | Verified |
+| ADM-01 | P1: Keylla publica | T28,T29 | Verified |
+| ADM-02 | P1: Keylla publica | T30 | Verified |
+| ADM-03 | P1: Keylla publica | T16,T30 | Verified |
+| ADM-04 | P1: Keylla publica | T17,T32 (limites em T53) | Verified |
+| ADM-05 | P1: Keylla publica | T31,T32,T34 | Verified |
+| ADM-06 | P1: Keylla publica | T33 | Verified |
+| ADM-07 | P1: Keylla publica | T31,T32 | Verified |
+| ADM-08 | P1: Keylla publica | T31,T33 | Verified |
+| ADM-09 | P1: Keylla publica | T33 | Verified |
+| FOR-01 | P2: Formação | T22,T25 | Verified |
+| FOR-02 | P2: Formação | T25 | Verified |
+| FOR-03 | P2: Formação | T22,T25 | Verified |
+| FOR-04 | P2: Formação | T25 | Verified |
+| FOR-05 | P2: Formação | T20,T35 | Verified |
+| SEO-01 | P3: Encontrabilidade | T38 | Verified |
+| SEO-02 | P3: Encontrabilidade | T41 | Verified |
+| SEC-01 | P1: Keylla publica | T36,T46 | Verified |
 
 **Coverage:** 30 total, 30 mapped to tasks, 0 unmapped
 
