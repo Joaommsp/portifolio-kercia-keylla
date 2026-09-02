@@ -71,7 +71,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 
 **Acceptance Criteria**:
 
-1. The system SHALL render a home em `/` com as seções hero, "O que faz uma AT", "Pedagogia", "Sobre", "Formação", "Publicações", contato e rodapé, nesta ordem.
+1. The system SHALL render a home em `/` com as seções hero, "O que faz uma AT", "Pedagogia", "Competências", "Atendimento", "Sobre", "Certificações", "Publicações", contato e rodapé, nesta ordem.
 2. The system SHALL exibir os 6 pilares do trabalho da AT a partir de `src/content/site.ts`, sem texto duplicado em componente.
 3. WHEN o visitante clica em um item do menu THEN the system SHALL rolar até a seção correspondente da mesma página.
 4. WHEN a home é carregada em viewport de 360px de largura THEN the system SHALL exibir todo o conteúdo sem rolagem horizontal.
@@ -79,6 +79,8 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 6. IF o visitante abre o site com `prefers-reduced-motion: reduce` THEN the system SHALL renderizar todas as seções sem animação de entrada. SIT-06 trata exclusivamente de movimento: falha de dependência externa e variável de ambiente ausente são os dois edge cases abaixo, e não têm ID de requisito.
 
 7. The system SHALL exibir as 4 frentes de formação da seção "Pedagogia" a partir de `src/content/site.ts`, numeradas na ordem em que sustentam a prática.
+8. The system SHALL agrupar as 10 competências da seção "Competências" em 4 famílias — Inclusão, Comunicação, Aprendizagem e Contextos —, cada competência com a descrição do que resolve.
+9. The system SHALL repetir as 10 competências como etiquetas na faixa "Atendimento", ao lado dos 4 contextos em que o acompanhamento acontece.
 
 **Independent Test**: Abrir `/` sem Firebase configurado e ver a página estática completa, com as seções dinâmicas em estado vazio.
 
@@ -179,6 +181,8 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | SIT-05 | P1: Visitante entende a AT | T4 (trava em T51,T52,T55; paleta em T54) | Verified |
 | SIT-06 | P1: Visitante entende a AT | T4 | Verified (UAT pendente) |
 | SIT-07 | P1: Visitante entende a AT | T57,T58,T59 | Verified |
+| SIT-08 | P1: Visitante entende a AT | T61,T62 | Pending |
+| SIT-09 | P1: Visitante entende a AT | T61,T63 | Pending |
 | PUB-01 | P1: Visitante lê publicações | T19,T24,T37 (teto em T53) | Verified |
 | PUB-02 | P1: Visitante lê publicações | T27,T47 | Verified |
 | PUB-03 | P1: Visitante lê publicações | T24 (teste em T49) | Verified |
@@ -204,7 +208,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | SEO-02 | P3: Encontrabilidade | T41 | Verified |
 | SEC-01 | P1: Keylla publica | T36,T46 | Verified |
 
-**Coverage:** 31 total, 31 mapped to tasks, 0 unmapped
+**Coverage:** 33 total, 33 mapped to tasks, 0 unmapped
 
 ---
 

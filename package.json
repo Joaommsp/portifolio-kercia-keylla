@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest",
     "test:rules": "firebase emulators:exec --only firestore --project demo-portfolio-keylla \"vitest run --config vitest.rules.config.ts\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed:formacoes": "node scripts/seed-formacoes.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

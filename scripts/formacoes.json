@@ -1,0 +1,117 @@
+{
+  "_leia": "Formações extraídas do currículo. O currículo não traz o ano de vários cursos: onde ficou null, preencha antes de rodar a carga — o script recusa rodar com ano faltando, em vez de inventar data.",
+  "formacoes": [
+    {
+      "titulo": "Pós-graduação em Pedagogia Hospitalar",
+      "instituicao": "Faculdade Venda Nova do Imigrante — FAVENI",
+      "descricao": "720 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 1
+    },
+    {
+      "titulo": "Licenciatura em Pedagogia",
+      "instituicao": "Centro Universitário Leonardo da Vinci — UNIASSELVI",
+      "descricao": "Semipresencial · 2018–2022",
+      "ano": 2022,
+      "status": "concluido",
+      "ordem": 2
+    },
+    {
+      "titulo": "Psicomotricidade e Aprendizagem",
+      "instituicao": "FAVENI",
+      "descricao": "240 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 3
+    },
+    {
+      "titulo": "Formação de Assistentes Terapêuticos",
+      "instituicao": "Edu Ciranda",
+      "descricao": "120 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 4
+    },
+    {
+      "titulo": "Educação Escolar e Inclusão Escolar",
+      "instituicao": "FAVENI",
+      "descricao": "80 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 5
+    },
+    {
+      "titulo": "Práticas Inclusivas para Formação de Professores",
+      "instituicao": "UNIASSELVI",
+      "descricao": "40 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 6
+    },
+    {
+      "titulo": "Dificuldade de Aprendizagem",
+      "instituicao": "UEMA — Cursos Abertos",
+      "descricao": "45 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 7
+    },
+    {
+      "titulo": "Psicopedagogia",
+      "instituicao": "Centro Educacional Sete de Setembro",
+      "descricao": "40 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 8
+    },
+    {
+      "titulo": "Comunicação Alternativa na Escola",
+      "instituicao": "CAA — Comunicação Alternativa",
+      "descricao": "4 horas",
+      "ano": 2026,
+      "status": "concluido",
+      "ordem": 9
+    },
+    {
+      "titulo": "Nivelamento em Libras I e II",
+      "instituicao": "UNIASSELVI",
+      "descricao": "40 horas cada",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 10
+    },
+    {
+      "titulo": "Seminário Nacional de Autismo",
+      "instituicao": "UNIASSELVI",
+      "descricao": "3 horas",
+      "ano": null,
+      "status": "concluido",
+      "ordem": 11
+    },
+    {
+      "titulo": "Curso Médio em Teologia",
+      "instituicao": "Instituto Bíblico e Missionário Macedônia",
+      "descricao": "Presencial · 1998–2000",
+      "ano": 2000,
+      "status": "concluido",
+      "ordem": 12
+    },
+    {
+      "titulo": "Formação de Missionários Transculturais",
+      "instituicao": "Instituto Missionário Shekinah",
+      "descricao": "Presencial · 2001–2002",
+      "ano": 2002,
+      "status": "concluido",
+      "ordem": 13
+    },
+    {
+      "titulo": "Curso Sócio-Cultural e Linguístico",
+      "instituicao": "Instituto Linguístico Ebenézer",
+      "descricao": "Presencial · 2º semestre",
+      "ano": 2002,
+      "status": "concluido",
+      "ordem": 14
+    }
+  ]
+}

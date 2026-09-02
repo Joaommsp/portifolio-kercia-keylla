@@ -33,7 +33,7 @@ const formacao = (): Formacao => ({
 });
 
 /**
- * Rótulo do oitavo bloco de SIT-01. O rodapé não é uma `<section id>` — vem da
+ * Rótulo do décimo bloco de SIT-01. O rodapé não é uma `<section id>` — vem da
  * moldura das páginas públicas —, então entra na lista de ordem por este nome.
  */
 const RODAPE = "rodapé";
@@ -84,10 +84,10 @@ describe("home", () => {
 });
 
 describe("seções da home (SIT-01, SIT-03)", () => {
-  it("apresenta os oito blocos na ordem da spec", async () => {
+  it("apresenta os dez blocos na ordem da spec", async () => {
     // A seção de formação some quando não há nada cadastrado (FOR-04); a de
     // publicações fica de pé nos três estados (AD-018). Então basta uma
-    // formação para a home mostrar os oito blocos.
+    // formação para a home mostrar os dez blocos.
     listarFormacoesFalso.mockResolvedValue({ dados: [formacao()] });
 
     const { container } = await renderizarPaginaCompleta();
@@ -96,6 +96,8 @@ describe("seções da home (SIT-01, SIT-03)", () => {
       ancoras.topo,
       ancoras.at,
       ancoras.pedagogia,
+      ancoras.competencias,
+      ancoras.atendimento,
       ancoras.sobre,
       ancoras.formacao,
       ancoras.publicacoes,

@@ -38,8 +38,14 @@ export function OQueFazUmaAt() {
                 key={pilar.titulo}
                 className="flex min-h-48 flex-col gap-2.5 bg-surface px-6 py-7 transition-colors hover:bg-surface-2"
               >
-                <Icone aria-hidden className="size-9 text-brass" strokeWidth={1.2} />
-                <h3 className="font-display text-lg text-ink">{pilar.titulo}</h3>
+                <Icone
+                  aria-hidden
+                  className="size-9 text-brass"
+                  strokeWidth={1.2}
+                />
+                <h3 className="font-display text-lg text-ink">
+                  {pilar.titulo}
+                </h3>
                 <p className="text-sm text-ink-soft">{pilar.descricao}</p>
               </article>
             );

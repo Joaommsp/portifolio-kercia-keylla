@@ -23,6 +23,8 @@ export const ancoras = {
   topo: "topo",
   at: "at",
   pedagogia: "pedagogia",
+  competencias: "competencias",
+  atendimento: "atendimento",
   sobre: "sobre",
   formacao: "formacao",
   publicacoes: "publicacoes",
@@ -186,12 +188,121 @@ export const secaoPedagogia = {
   ] satisfies readonly FrenteDeFormacao[],
 } as const;
 
+export type Competencia = {
+  readonly titulo: string;
+  readonly descricao: string;
+};
+
+export type FamiliaDeCompetencia = {
+  readonly familia: string;
+  readonly competencias: readonly Competencia[];
+};
+
+/**
+ * Competências do currículo, agrupadas pelo que resolvem — não pela ordem em
+ * que aparecem no diploma. Ficaram de fora "metodologia de pesquisa" e
+ * "redação e produção textual": são acadêmicas e não respondem nada a quem
+ * procura acompanhamento para o filho.
+ */
+export const secaoCompetencias = {
+  eyebrow: "Áreas de atuação",
+  titulo: "Competências",
+  grupos: [
+    {
+      familia: "Inclusão",
+      competencias: [
+        {
+          titulo: "Educação inclusiva",
+          descricao:
+            "Adaptar material, rotina e avaliação para a criança participar de verdade.",
+        },
+        {
+          titulo: "Educação especial",
+          descricao:
+            "Atendimento individualizado a quem precisa de suporte contínuo.",
+        },
+        {
+          titulo: "Autismo e práticas inclusivas",
+          descricao:
+            "Formação específica em TEA, com foco no que funciona em sala.",
+        },
+      ],
+    },
+    {
+      familia: "Comunicação",
+      competencias: [
+        {
+          titulo: "Comunicação Alternativa (CAA)",
+          descricao:
+            "Pranchas, símbolos e recursos para quem não se comunica pela fala.",
+        },
+        {
+          titulo: "Libras — básico",
+          descricao: "Comunicação com a criança surda e ponte com a família.",
+        },
+      ],
+    },
+    {
+      familia: "Aprendizagem",
+      competencias: [
+        {
+          titulo: "Dificuldades de aprendizagem",
+          descricao: "Identificar o que trava e desenhar o caminho possível.",
+        },
+        {
+          titulo: "Psicopedagogia",
+          descricao: "Leitura do processo de aprender, para além do conteúdo.",
+        },
+        {
+          titulo: "Psicomotricidade",
+          descricao:
+            "Corpo e movimento como base do aprender — 240 horas de formação.",
+        },
+      ],
+    },
+    {
+      familia: "Contextos",
+      competencias: [
+        {
+          titulo: "Pedagogia hospitalar",
+          descricao: "Continuidade escolar durante tratamento e internação.",
+        },
+        {
+          titulo: "Acompanhamento terapêutico",
+          descricao: "A prática no dia a dia, junto da família e da equipe.",
+        },
+      ],
+    },
+  ] satisfies readonly FamiliaDeCompetencia[],
+} as const;
+
+/**
+ * Faixa que fecha as competências: as mesmas etiquetas, agora escaneáveis, mais
+ * os contextos em que o atendimento acontece — a pergunta que a família faz
+ * antes de qualquer outra ("ela vai até a escola?").
+ */
+export const secaoAtendimento = {
+  eyebrow: "Atendimento",
+  titulo: "Especialidades e onde atendo",
+  chamada: "O acompanhamento vai até a criança — não o contrário.",
+  rotulos: {
+    especialidades: "Especialidades",
+    contextos: "Onde o acompanhamento acontece",
+  },
+  contextos: [
+    "Na escola, junto do professor",
+    "Em casa, na rotina da família",
+    "Em ambiente hospitalar, durante o tratamento",
+    "Paulo Afonso e região",
+  ],
+} as const;
+
 export const secaoSobre = {
   eyebrow: "Sobre mim",
   titulo: "Educação como ponto de partida",
   paragrafos: [
-    // PENDENTE: substituir pelo texto escrito pela Keylla.
-    "Sou educadora de formação e Assistente Terapêutica por escolha. Comecei na sala de aula e, ao acompanhar de perto alunos com deficiência e transtornos do desenvolvimento, encontrei no acompanhamento terapêutico o lugar onde consigo apoiar cada criança individualmente.",
+    "Sou pedagoga e trabalho para o desenvolvimento integral de cada aluno, com práticas inclusivas, acolhedoras e individualizadas — atenção especial à educação especial, às dificuldades de aprendizagem e ao acompanhamento educacional.",
+    "Minha formação é multidisciplinar: pedagogia, educação inclusiva, psicopedagogia, psicomotricidade e pedagogia hospitalar. É o que me permite ler cada criança por mais de um ângulo antes de decidir por onde começar.",
     "Trabalho lado a lado com psicólogos, terapeutas ocupacionais, fonoaudiólogos e professores — o plano é da equipe, e o meu papel é fazê-lo acontecer no cotidiano.",
   ],
   assinatura: "Keylla Melo",
@@ -222,15 +333,15 @@ export const secaoPublicacoes = {
   voltar: "Voltar para a página inicial",
 } as const;
 
-/** PENDENTE: telefone, e-mail, perfil e cidade reais. */
 export const contato = {
   whatsapp: {
-    numero: "5500000000000",
+    /** (75) 99177-7430, no formato que o wa.me exige: DDI + DDD + número. */
+    numero: "5575991777430",
     mensagem: "Olá, Keylla! Vim pelo seu site e gostaria de conversar.",
   },
-  email: "contato@exemplo.com.br",
+  email: "kerciamelo77@gmail.com",
   instagram: "keylla_melo",
-  regiao: "Cidade / atendimento a domicílio e em escolas",
+  regiao: "Paulo Afonso e região — BA",
 } as const;
 
 export const linksContato = {

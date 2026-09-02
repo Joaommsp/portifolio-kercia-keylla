@@ -34,7 +34,9 @@ export function Contato() {
             titulo={secaoContato.titulo}
           />
 
-          <p className="max-w-chamada text-on-olive/85">{secaoContato.chamada}</p>
+          <p className="max-w-chamada text-on-olive/85">
+            {secaoContato.chamada}
+          </p>
 
           <ActionLink
             external

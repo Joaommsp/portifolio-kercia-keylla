@@ -27,13 +27,15 @@ describe("OQueFazUmaAt (SIT-02)", () => {
 
     const cards = screen.getAllByRole("article");
 
-    expect(cards.map((card) => within(card).getByRole("heading").textContent)).toEqual(
-      secaoAt.pilares.map((pilar) => pilar.titulo),
-    );
+    expect(
+      cards.map((card) => within(card).getByRole("heading").textContent),
+    ).toEqual(secaoAt.pilares.map((pilar) => pilar.titulo));
     // A descrição é buscada pelo texto do conteúdo dentro do próprio card:
     // fixar qualquer uma delas no componente deixa de encontrar o par.
     secaoAt.pilares.forEach((pilar, indice) => {
-      expect(within(cards[indice]).getByText(pilar.descricao)).toBeInTheDocument();
+      expect(
+        within(cards[indice]).getByText(pilar.descricao),
+      ).toBeInTheDocument();
     });
   });
 });
