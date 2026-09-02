@@ -43,7 +43,10 @@ export function Contato() {
           <dl className="mt-7 grid gap-4">
             {secaoContato.frentes.map((frente) => (
               <div key={frente.titulo} className="border-t border-on-olive/20 pt-3.5">
-                <dt className="font-display text-lg text-on-olive">
+                <p className="text-2xs font-semibold uppercase tracking-rotulo text-on-olive/70">
+                  {frente.publico}
+                </p>
+                <dt className="mt-1 font-display text-lg text-on-olive">
                   {frente.titulo}
                 </dt>
                 <dd className="mt-1 max-w-chamada text-sm text-on-olive/85">

@@ -74,6 +74,9 @@
   --duration-toque: 140ms;
   /* Entrada dos blocos ao rolar: desacelera até parar, sem voltar. */
   --ease-entrada: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Um passo abaixo do `xs`, para o rótulo de público não competir com o
+     título da frente. */
+  --text-2xs: 0.6875rem;
   --tracking-titulo: -0.02em;
   --tracking-marca: 0.02em;
   --tracking-rotulo: 0.14em;

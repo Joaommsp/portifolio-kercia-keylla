@@ -10,13 +10,14 @@ import { Contato } from "./contato";
  * professora — ou apoio em Libras — não se reconhecia na página.
  */
 const FRENTES_DA_SPEC = [
-  "Apoio pedagógico",
-  "Acompanhamento terapêutico",
+  "Docência em educação infantil",
+  "Apoio à inclusão em sala",
+  "Apoio pedagógico e acompanhamento",
   "Comunicação em Libras",
 ];
 
 describe("Contato", () => {
-  it("chama pelas três frentes, não só pela AT", () => {
+  it("chama pelas quatro frentes, não só pela AT", () => {
     render(<Contato />);
 
     expect(secaoContato.frentes.map((frente) => frente.titulo)).toEqual(
@@ -51,5 +52,16 @@ describe("Contato", () => {
     expect(screen.getByText(contato.email)).toBeInTheDocument();
     expect(screen.getByText(contato.regiao)).toBeInTheDocument();
     expect(screen.getByText(`@${contato.instagram}`)).toBeInTheDocument();
+  });
+
+  it("fala com escola, e não só com família", () => {
+    // A experiência de sala de aula é o ativo mais forte dela; sem isto, quem
+    // contrata professora não se reconhece na página.
+    render(<Contato />);
+
+    expect(screen.getAllByText(/Escolas/)).not.toHaveLength(0);
+    expect(
+      screen.getByRole("heading", { name: /Para famílias e para escolas/ }),
+    ).toBeInTheDocument();
   });
 });

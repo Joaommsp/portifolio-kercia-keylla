@@ -113,7 +113,7 @@ export const secaoHero = {
     alt: `${perfil.nome}, ${perfil.papel}`,
   },
   acoes: {
-    primaria: { rotulo: "Falar sobre o seu filho", href: ancora(ancoras.contato) },
+    primaria: { rotulo: "Falar comigo", href: ancora(ancoras.contato) },
     secundaria: {
       rotulo: "Entenda o trabalho de uma\u00A0AT",
       href: ancora(ancoras.at),
@@ -534,26 +534,36 @@ export const linksContato = {
 
 export const secaoContato = {
   eyebrow: "Vamos conversar",
-  titulo: "Como posso ajudar o seu filho?",
+  titulo: "Para famílias e para escolas",
   chamada:
-    "Me conte a idade, a rotina e o que a escola ou a equipe já vem trabalhando. Respondo pessoalmente.",
+    "Seja para apoiar uma criança ou para compor a equipe da sua escola, me escreva contando o que você precisa. Respondo pessoalmente.",
   /**
-   * As três frentes pelas quais uma família procura. Ficam à vista porque o
-   * site inteiro falava de acompanhamento terapêutico, e quem procurava uma
-   * professora ou apoio em Libras não se reconhecia na página.
+   * As quatro frentes, e são duas audiências: a família que procura apoio para
+   * o filho e a escola que procura uma professora. O site inteiro falava só de
+   * acompanhamento terapêutico — quem contrata para sala de aula não se
+   * reconhecia na página.
    */
   frentes: [
     {
-      titulo: "Apoio pedagógico",
+      publico: "Escolas",
+      titulo: "Docência em educação infantil",
       descricao:
-        "Reforço e acompanhamento na alfabetização e nos primeiros anos, com quem passou 15 anos em sala de aula.",
+        "Mais de 15 anos em sala de aula, com alfabetização, rotina e turmas dos primeiros anos — e com o repertório de inclusão que a sala de hoje pede.",
     },
     {
-      titulo: "Acompanhamento terapêutico",
+      publico: "Escolas e famílias",
+      titulo: "Apoio à inclusão em sala",
       descricao:
-        "Presença junto da criança na escola, em casa ou no hospital, seguindo o plano da equipe.",
+        "Adaptação de material, rotina e avaliação junto do professor, para a criança com deficiência participar de verdade.",
     },
     {
+      publico: "Famílias",
+      titulo: "Apoio pedagógico e acompanhamento",
+      descricao:
+        "Reforço na alfabetização e acompanhamento terapêutico na escola, em casa ou no hospital, seguindo o plano da equipe.",
+    },
+    {
+      publico: "Escolas e famílias",
       titulo: "Comunicação em Libras",
       descricao:
         "Apoio na comunicação com a criança surda e ponte com a família — formação em curso no Centro Inclusão.",
