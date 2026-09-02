@@ -202,6 +202,18 @@
     transform: none;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .pulso-do-atalho {
+      animation: pulso-do-atalho 2600ms var(--ease-entrada) infinite;
+    }
+
+    /* O segundo atalho pulsa fora de compasso com o primeiro: dois anéis no
+       mesmo ritmo viram um piscar só, que é o que cansa a vista. */
+    .pulso-do-atalho:nth-child(2) {
+      animation-delay: 1300ms;
+    }
+  }
+
   /*
    * Borda do cabeçalho só depois que a página sai do topo: indica que há
    * conteúdo acima, sem desenhar uma linha sobre a abertura.
@@ -212,6 +224,23 @@
       animation-timeline: scroll();
       animation-range: 0 80px;
     }
+  }
+}
+
+/*
+ * Pulso dos atalhos flutuantes: um anel que nasce na borda do botão e se
+ * dissolve. Fica no anel, e não no botão, para o alvo de toque não mudar de
+ * tamanho debaixo do dedo de quem já está mirando nele.
+ */
+@keyframes pulso-do-atalho {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
   }
 }
 

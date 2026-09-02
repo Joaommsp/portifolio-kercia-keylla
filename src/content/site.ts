@@ -597,6 +597,28 @@ export type PerfilDoDesenvolvedor = {
   readonly href: string;
 };
 
+/**
+ * Atalhos que acompanham a rolagem. Só os dois canais que a família usa de
+ * verdade: WhatsApp para falar agora, Instagram para conhecer antes.
+ */
+export const atalhosFlutuantes = {
+  rotulo: "Atalhos de contato",
+  itens: [
+    {
+      icone: "whatsapp",
+      rotulo: "Falar no WhatsApp",
+      href: linksContato.whatsapp,
+    },
+    {
+      icone: "instagram",
+      rotulo: "Ver o Instagram",
+      href: linksContato.instagram,
+    },
+  ],
+} as const;
+
+export type IconeDeAtalho = (typeof atalhosFlutuantes.itens)[number]["icone"];
+
 export const rodape = {
   copyright: (ano: number) =>
     juntarMeta(`© ${ano} ${perfil.nome}`, perfil.papel),
