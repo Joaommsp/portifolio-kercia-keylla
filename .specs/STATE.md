@@ -51,19 +51,12 @@
 
 
 ## Handoff
+
 - **Feature**: site-portfolio
-- **Fase/task**: Fase 9 concluída (T53–T56). T1–T56 marcadas em `tasks.md`.
-- **Concluído nesta fase**: as quatro lacunas da verificação final (iteração 3), todas de teste que não discriminava — nenhum arquivo de produção mudou. T53 tirou o teto de 6 e os limites 120/220 da constante que o código usa para cortar e os pôs em `src/test/valores-da-spec.ts` (AD-040), com a varredura da classe inteira registrada na task; T54 fechou a metade positiva de SIT-05 em `src/test/paleta-aprovada.test.ts`, convertendo hex→OKLCH no teste (AD-041/042); T55 ampliou o detector para classe do Tailwind e cor em `style` inline, com a exceção do `bg-black/10` do shadcn nomeada por arquivo, classe e quantidade (AD-043); T56 estendeu SIT-02 às descrições dos pilares.
-- **Varredura da classe (T53)**: corrigidos PUB-01 (teto 6) e ADM-04 (título 120, resumo 220). Já ancorados antes: SIT-02 (6 pilares), PUB-03 (frase do vazio), FOR-02 (rótulos), contador 120/120. Seguem lendo a constante de propósito, porque a spec não fixa o número: `LIMITE_PUBLICACOES_PAINEL` (200), `LIMITE_PUBLICACOES_SITEMAP` (1000), `LIMITES_PUBLICACAO.slug/tag/imagemUrl`, todo `LIMITES_FORMACAO` e `ORDEM_MAXIMA_FORMACAO` (999) — FOR-05 diz "as mesmas regras da P1" sem escrever número.
-- **Números**: 323 testes em 39 arquivos (`npm test -- --run`) + 10 de regra (`npm run test:rules`, emulador com openjdk 21, exit 0). `tsc`, lint e build limpos. Antes da fase: 304 em 38.
-- **Mutantes desta fase**: 11 injetados, todos reprovados e revertidos, árvore conferida por `git status --porcelain` depois de cada um — C1 (`LIMITE_PUBLICACOES_HOME` 6→5), ADM-04 (título 120→100 e resumo 220→200), B6 (`--olive` vermelho), B6b (`--surface` perde 1/3 do croma, o que a folga antiga deixava passar), B1 (`bg-[#EDF3E4]`), B2 (`bg-[#8E7A32]` no `cva` de `dialog.tsx`, dentro do arquivo com exceção), B4 (`bg-emerald-200`), B4b (`bg-black` extra no arquivo com exceção), B5 (`style` com cor nomeada), B7 (`RAIZ` na pasta errada) e C6 (descrição fixada no componente).
-- **Próximo passo**: nova rodada do verificador independente sobre `b48c45d..HEAD`. O `validation.md` ainda traz o FAIL da iteração 3 e só muda com re-verificação — `validate_state.py` segue vermelho até lá. Continua devendo o UAT em navegador de SIT-04 (360px) e SIT-06 (`prefers-reduced-motion`), que jsdom não avalia.
-- **Revisores da Fase 9**: 0 bloqueantes nos dois. Aplicado o que muda discriminação ou fecha promessa de docblock (detalhe no fim de `tasks.md`): folga da cor apertada de ~100× para a ordem do arredondamento, exceção de terceiro com quantidade, `src/test/` fora da varredura, metade positiva separada em arquivo próprio, `no-restricted-imports` para `@/test/*`, paleta registrada em `design.md`, renomes e a asserção constante-contra-constante removida de `queries.test.ts`.
-- **Pontos deixados em aberto pelos revisores** (nenhum bloqueante):
-  - `PILARES_DA_SPEC` ficou local em `o-que-faz-uma-at.test.tsx` — não há constante de produção espelhando o 6 dos pilares, e é esse cruzamento que define o módulo (AD-040).
-  - `RAIZ` da trava usa `process.cwd()`; `import.meta.url` deixaria a varredura independente de onde o vitest for disparado.
-  - `src/app/(site)/layout.tsx` segue sem suíte própria: o contrato `main` → `footer` está asserido de dentro de `page.test.tsx`.
-  - O README ainda descreve `src/test/` como só setup e dublês; a pasta hoje tem duas suítes e a transcrição da spec.
-  - Seguem valendo os pontos da Fase 7: fábrica de `Publicacao`/`Formacao` duplicada por arquivo de teste, ausência de imagem de compartilhamento, `ActionLink` com `<a>` cru, 404 fora do grupo `(site)` (AD-031) e `revalidate = 300` literal em três arquivos.
-- **Bloqueios**: nenhum no código. Fora dele: regras não publicadas, dados reais ainda placeholder e domínio real ausente em `NEXT_PUBLIC_SITE_URL`.
-- **Branch**: main · árvore limpa.
+- **Fase/task**: T1–T56 concluídas (Fases 1 a 9). Trabalho de implementação encerrado.
+- **Branch**: `main` em `413d151`, árvore limpa, nada empurrado. Sem worktree órfã.
+- **Suíte**: 323 testes em 39 arquivos + 10 testes de regra (`npm run test:rules`, exige `export PATH="$(brew --prefix openjdk@21)/bin:$PATH"`). `tsc`, lint e build limpos.
+- **Próximo passo**: rodar o Verifier independente (iteração 4) sobre o diff `b48c45d..HEAD`. Ele foi iniciado e interrompido pelo usuário antes de produzir qualquer saída — nada a recuperar, basta despachar de novo.
+- **Último veredito oficial**: FAIL estreito da iteração 3 (`validation.md`, commit `b48c45d`). As 4 lacunas que o motivaram foram fechadas na Fase 9 com 11 mutantes reprovando, mas isso ainda NÃO foi verificado por um verificador independente. `validate_state.py` segue em exit 1 até essa rodada acontecer.
+- **Bloqueios do produto** (fora do código): uid da autora ainda é `COLE_AQUI_O_UID_DA_AUTORA` em `firestore.rules`; regras e índice não publicados; faltam telefone, e-mail, cidade, texto do "Sobre" escrito pela Keylla e as 2 fotos. Por isso o build renderiza a home em `permission-denied` — comportamento esperado, é PUB-05/FOR-03 funcionando.
+- **Dívida conhecida**: SIT-04 (360px) e SIT-06 (`prefers-reduced-motion`) só fecham por UAT em navegador — jsdom não avalia media query.
