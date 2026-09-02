@@ -293,6 +293,7 @@ export const secaoAtendimento = {
     "Na escola, junto do professor",
     "Em casa, na rotina da família",
     "Em ambiente hospitalar, durante o tratamento",
+    "Em clínica, junto da equipe terapêutica",
     "Paulo Afonso e região",
   ],
 } as const;

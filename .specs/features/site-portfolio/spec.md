@@ -80,7 +80,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 
 7. The system SHALL exibir as 4 frentes de formação da seção "Pedagogia" a partir de `src/content/site.ts`, numeradas na ordem em que sustentam a prática.
 8. The system SHALL agrupar as 10 competências da seção "Competências" em 4 famílias — Inclusão, Comunicação, Aprendizagem e Contextos —, cada competência com a descrição do que resolve.
-9. The system SHALL repetir as 10 competências como etiquetas na faixa "Atendimento", ao lado dos 4 contextos em que o acompanhamento acontece.
+9. The system SHALL repetir as 10 competências como etiquetas na faixa "Atendimento", ao lado dos 5 contextos em que o acompanhamento acontece.
 
 **Independent Test**: Abrir `/` sem Firebase configurado e ver a página estática completa, com as seções dinâmicas em estado vazio.
 

@@ -7,7 +7,7 @@ import { Atendimento } from "./atendimento";
 
 /** SIT-09: as 10 especialidades ao lado dos 4 contextos de atendimento. */
 const ESPECIALIDADES_DA_SPEC = 10;
-const CONTEXTOS_DA_SPEC = 4;
+const CONTEXTOS_DA_SPEC = 5;
 
 describe("Atendimento", () => {
   it("repete as especialidades da seção de competências, sem lista própria", () => {
