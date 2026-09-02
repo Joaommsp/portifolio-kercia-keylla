@@ -1,5 +1,7 @@
 import { AtSign, type LucideIcon, Mail, MapPin, Phone } from "lucide-react";
 
+import { FaWhatsapp } from "react-icons/fa6";
+
 import { ActionLink } from "@/components/layout/action-link";
 import { Container } from "@/components/layout/container";
 import { SectionHeading } from "@/components/layout/section-heading";
@@ -40,7 +42,7 @@ export function Contato() {
 
           <ActionLink
             external
-            withArrow
+            icone={<FaWhatsapp aria-hidden className="size-4.5" />}
             variant="light"
             href={secaoContato.acao.href}
             className="mt-6"

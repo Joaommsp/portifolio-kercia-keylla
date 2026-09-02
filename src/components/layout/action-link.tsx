@@ -36,6 +36,8 @@ type ActionLinkProps = VariantProps<typeof actionLinkVariants> & {
   external?: boolean;
   /** Acrescenta a seta decorativa à direita do rótulo. */
   withArrow?: boolean;
+  /** Ícone à esquerda do rótulo, quando o destino tem cara própria. */
+  icone?: ReactNode;
   className?: string;
 };
 
@@ -46,6 +48,7 @@ export function ActionLink({
   variant,
   external = false,
   withArrow = false,
+  icone,
   className,
 }: ActionLinkProps) {
   return (
@@ -54,6 +57,7 @@ export function ActionLink({
       className={cn(actionLinkVariants({ variant }), className)}
       {...propsLinkExterno(external)}
     >
+      {icone}
       {children}
       {withArrow ? <ArrowRight aria-hidden className="size-4" /> : null}
     </a>
