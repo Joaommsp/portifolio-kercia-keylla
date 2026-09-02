@@ -15,7 +15,7 @@ vi.mock("@/features/publicacoes/queries", () => ({
 const listarPublicadasFalso = listarPublicadas as unknown as Mock;
 
 /**
- * Rótulo do décimo bloco de SIT-01. O rodapé não é uma `<section id>` — vem da
+ * Rótulo do décimo primeiro bloco de SIT-01. O rodapé não é uma `<section id>` — vem da
  * moldura das páginas públicas —, então entra na lista de ordem por este nome.
  */
 const RODAPE = "rodapé";
@@ -65,7 +65,7 @@ describe("home", () => {
 });
 
 describe("seções da home (SIT-01, SIT-03)", () => {
-  it("apresenta os dez blocos na ordem da spec", async () => {
+  it("apresenta os onze blocos na ordem da spec", async () => {
     // Formação virou conteúdo fixo (AD-046): a seção está sempre lá. A de
     // publicações fica de pé nos três estados (AD-018).
 
@@ -77,6 +77,7 @@ describe("seções da home (SIT-01, SIT-03)", () => {
       ancoras.pedagogia,
       ancoras.competencias,
       ancoras.atendimento,
+      ancoras.experiencia,
       ancoras.sobre,
       ancoras.formacao,
       ancoras.publicacoes,

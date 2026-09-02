@@ -17,7 +17,7 @@ function Item({ item }: { item: ItemDeFormacao }) {
   return (
     <li className="grid gap-1.5 border-b border-line px-1 py-5 sm:grid-cols-[6rem_1fr] sm:items-baseline sm:gap-5">
       <span className="font-display text-sm tabular-nums tracking-marca text-brass">
-        {item.ano}
+        {item.emAndamento ? secaoFormacao.rotuloEmAndamento : item.ano}
       </span>
 
       <div>

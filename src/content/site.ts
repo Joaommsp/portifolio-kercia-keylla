@@ -21,6 +21,7 @@ export const ancoras = {
   pedagogia: "pedagogia",
   competencias: "competencias",
   atendimento: "atendimento",
+  experiencia: "experiencia",
   sobre: "sobre",
   formacao: "formacao",
   publicacoes: "publicacoes",
@@ -32,10 +33,10 @@ const ancora = (id: string) => `#${id}`;
 export const perfil = {
   nome: "Keylla Melo",
   nomeEmLinhas: ["Keylla", "Melo"],
-  papel: "Assistente Terapêutica",
+  papel: "Professora e Assistente Terapêutica",
   saudacao: "Olá, eu sou a",
   apresentacao:
-    "Acompanho crianças e adolescentes na escola e no dia a dia, criando vínculo, mediando atividades e sustentando a autonomia de cada um — sempre junto da família e da equipe terapêutica.",
+    "São mais de 15 anos em sala de aula com educação infantil. Hoje acompanho crianças e adolescentes como Assistente Terapêutica, criando vínculo, mediando atividades e sustentando a autonomia de cada um — sempre junto da família e da equipe.",
   /** Frase da placa ancorada à esquerda do retrato. */
   selo: "Presença que constrói autonomia",
 } as const;
@@ -50,12 +51,14 @@ export const metadadosDoSite = {
   /** `%s` é o título da página; o Next completa o resto. */
   gabaritoDeTitulo: `%s · ${perfil.nome}`,
   descricao:
-    "Pedagoga e Assistente Terapêutica em Paulo Afonso e região. Acompanhamento de crianças e adolescentes na escola, em casa e em ambiente hospitalar — educação inclusiva, autismo, Comunicação Alternativa (CAA) e dificuldades de aprendizagem.",
+    "Professora com mais de 15 anos em educação infantil, pedagoga e Assistente Terapêutica em Paulo Afonso e região. Acompanhamento de crianças e adolescentes na escola, em casa e em ambiente hospitalar — educação inclusiva, autismo, Libras, Comunicação Alternativa (CAA) e dificuldades de aprendizagem.",
   /**
    * Termos que a família digita no buscador. Peso pequeno hoje, mas custa nada
    * e nomeia o que a página realmente cobre.
    */
   palavrasChave: [
+    "professora",
+    "professora de educação infantil",
     "assistente terapêutica",
     "AT",
     "acompanhante terapêutico",
@@ -82,6 +85,7 @@ export const metadadosDoSite = {
 export const navegacao = [
   { rotulo: "O que é uma AT", href: ancora(ancoras.at) },
   { rotulo: "Pedagogia", href: ancora(ancoras.pedagogia) },
+  { rotulo: "Experiência", href: ancora(ancoras.experiencia) },
   { rotulo: "Sobre", href: ancora(ancoras.sobre) },
   { rotulo: "Formação", href: ancora(ancoras.formacao) },
   { rotulo: "Publicações", href: ancora(ancoras.publicacoes) },
@@ -264,8 +268,9 @@ export const secaoCompetencias = {
             "Pranchas, símbolos e recursos para quem não se comunica pela fala.",
         },
         {
-          titulo: "Libras — básico",
-          descricao: "Comunicação com a criança surda e ponte com a família.",
+          titulo: "Libras",
+          descricao:
+            "Comunicação com a criança surda e ponte com a família. Formação em curso no Centro Inclusão.",
         },
       ],
     },
@@ -325,10 +330,49 @@ export const secaoAtendimento = {
   ],
 } as const;
 
+export type FrenteDeExperiencia = {
+  readonly titulo: string;
+  readonly descricao: string;
+};
+
+/**
+ * Os 15 anos de sala de aula. É a informação que sustenta tudo o que vem
+ * depois: acompanhar uma criança na escola é diferente quando quem acompanha
+ * já esteve do outro lado, dando aula.
+ */
+export const secaoExperiencia = {
+  eyebrow: "Experiência",
+  titulo: "Quinze anos em sala de aula",
+  chamada:
+    "A prática veio antes da especialização — e é ela que faz a diferença no acompanhamento.",
+  destaque: {
+    numero: "15+",
+    rotulo: "anos em educação infantil",
+  },
+  frentes: [
+    {
+      titulo: "Educação infantil",
+      descricao:
+        "Alfabetização, rotina e desenvolvimento dos primeiros anos, com turmas inteiras e com crianças que precisavam de atenção individual.",
+    },
+    {
+      titulo: "Escolas e projetos comunitários",
+      descricao:
+        "Sala de aula em escola regular e em projetos comunitários de educação infantil, onde o improviso e o vínculo contam tanto quanto o plano de aula.",
+    },
+    {
+      titulo: "Foco atual",
+      descricao:
+        "Acompanhamento terapêutico e Libras — a formação em Libras está em curso no Centro Inclusão.",
+    },
+  ] satisfies readonly FrenteDeExperiencia[],
+} as const;
+
 export const secaoSobre = {
   eyebrow: "Sobre mim",
-  titulo: "Educação como ponto de partida",
+  titulo: "Da sala de aula ao acompanhamento",
   paragrafos: [
+    "Sou professora há mais de 15 anos, quase todos com educação infantil, em escola regular e em projetos comunitários. Foi na sala de aula que aprendi a ler o que cada criança precisa antes de qualquer diagnóstico.",
     "Sou pedagoga e trabalho para o desenvolvimento integral de cada aluno, com práticas inclusivas, acolhedoras e individualizadas — atenção especial à educação especial, às dificuldades de aprendizagem e ao acompanhamento educacional.",
     "Minha formação é multidisciplinar: pedagogia, educação inclusiva, psicopedagogia, psicomotricidade e pedagogia hospitalar. É o que me permite ler cada criança por mais de um ângulo antes de decidir por onde começar.",
     "Trabalho lado a lado com psicólogos, terapeutas ocupacionais, fonoaudiólogos e professores — o plano é da equipe, e o meu papel é fazê-lo acontecer no cotidiano.",
@@ -343,6 +387,8 @@ export type ItemDeFormacao = {
   readonly detalhe?: string;
   /** Ano de conclusão. Ausente quando o currículo não registra a data. */
   readonly ano?: number;
+  /** Curso ainda em andamento — aparece com rótulo em vez de ano. */
+  readonly emAndamento?: boolean;
 };
 
 /**
@@ -355,6 +401,7 @@ export type ItemDeFormacao = {
 export const secaoFormacao = {
   eyebrow: "Trajetória",
   titulo: "Formação",
+  rotuloEmAndamento: "Em andamento",
   grupos: [
     {
       titulo: "Formação acadêmica",
@@ -393,6 +440,11 @@ export const secaoFormacao = {
     {
       titulo: "Aperfeiçoamento e capacitação",
       itens: [
+        {
+          titulo: "Libras",
+          instituicao: "Centro Inclusão",
+          emAndamento: true,
+        },
         {
           titulo: "Psicomotricidade e Aprendizagem",
           instituicao: "FAVENI",

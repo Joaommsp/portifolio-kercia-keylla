@@ -17,6 +17,7 @@ import { Hero } from "@/features/site/sections/hero";
 import { OQueFazUmaAt } from "@/features/site/sections/o-que-faz-uma-at";
 import { Atendimento } from "@/features/site/sections/atendimento";
 import { Competencias } from "@/features/site/sections/competencias";
+import { Experiencia } from "@/features/site/sections/experiencia";
 import { Formacao } from "@/features/site/sections/formacao";
 import { Pedagogia } from "@/features/site/sections/pedagogia";
 import { Sobre } from "@/features/site/sections/sobre";
@@ -44,6 +45,7 @@ export default async function Home() {
       <Pedagogia />
       <Competencias />
       <Atendimento />
+      <Experiencia />
       <Sobre />
       <Formacao />
       <PublicacoesSection resultado={publicacoes} />

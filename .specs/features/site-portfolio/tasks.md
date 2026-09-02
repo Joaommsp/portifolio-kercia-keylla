@@ -135,6 +135,7 @@ T61 → T62
 T6 → T63
 T30 → T64
 T4 → T65
+T6 → T66
 ```
 
 ### Phase 10: Seção Pedagogia
@@ -1441,6 +1442,26 @@ as competências que a família procura (Libras, CAA, autismo) e sem a formaçã
 - [x] Funciona fora do Chrome — `animation-timeline` só existe lá
 - [x] Quem pede menos movimento não tem nada escondido (SIT-06 virou testável)
 - [x] Sem JS o conteúdo aparece inteiro, em vez de ficar preso invisível
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T66: A professora na frente da AT ✅
+
+**What**: Seção de experiência com os 15+ anos de sala de aula, e o papel do hero passando a "Professora e Assistente Terapêutica".
+**Where**: `src/features/site/sections/experiencia.tsx`
+**Depends on**: T6
+**Requirement**: SIT-10
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Destaque dos anos e três frentes: educação infantil, escolas e projetos comunitários, foco atual
+- [x] Escolas bíblicas descritas como projetos comunitários, sem marcar a página
+- [x] Libras em curso no Centro Inclusão aparece na experiência e nas certificações
+- [x] Descrição, palavras-chave e `Person` deixam de dizer só "Assistente Terapêutica"
 
 **Tests**: unit
 **Gate**: build
