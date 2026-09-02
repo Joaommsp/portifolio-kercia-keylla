@@ -68,6 +68,9 @@
   --tracking-titulo: -0.02em;
   --tracking-marca: 0.02em;
   --tracking-rotulo: 0.14em;
+  /* Selo circular do hero: o texto corre em arco curto e precisa de menos
+     espaçamento que o rótulo para caber dentro do círculo. */
+  --tracking-selo: 0.08em;
   --tracking-sobretitulo: 0.22em;
   --tracking-papel: 0.34em;
 
