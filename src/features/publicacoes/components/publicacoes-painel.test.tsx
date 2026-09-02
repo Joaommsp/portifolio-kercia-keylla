@@ -2,8 +2,16 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
+import { toast } from "sonner";
+
 import { painel } from "@/content/site";
 import { PublicacoesPainel } from "@/features/publicacoes/components/publicacoes-painel";
+// Os avisos de ação viram toast; o `Toaster` mora no layout do painel, então o
+// teste observa a chamada em vez de procurar a mensagem no componente.
+vi.mock("sonner", () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+
+const toastDeErro = toast.error as unknown as Mock;
+
 import {
   alternarPublicado,
   excluirPublicacao,
@@ -70,7 +78,11 @@ describe("PublicacoesPainel", () => {
     listar.mockResolvedValue({
       dados: [
         criarPublicacao({ id: "p1", publicado: true }),
-        criarPublicacao({ id: "p2", titulo: "Rascunho novo", publicado: false }),
+        criarPublicacao({
+          id: "p2",
+          titulo: "Rascunho novo",
+          publicado: false,
+        }),
       ],
     });
 
@@ -107,9 +119,11 @@ describe("PublicacoesPainel", () => {
 
     render(<PublicacoesPainel />);
 
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.acoes.despublicar,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.acoes.despublicar,
+      }),
+    );
 
     await waitFor(() => expect(alternar).toHaveBeenCalledWith(publicacao));
     await waitFor(() => expect(listar).toHaveBeenCalledTimes(2));
@@ -118,14 +132,18 @@ describe("PublicacoesPainel", () => {
   it("exclui a publicação só depois da confirmação e recarrega a lista", async () => {
     render(<PublicacoesPainel />);
 
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.acoes.excluir,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.acoes.excluir,
+      }),
+    );
     expect(excluir).not.toHaveBeenCalled();
 
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.exclusao.confirmar,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.exclusao.confirmar,
+      }),
+    );
 
     await waitFor(() => expect(excluir).toHaveBeenCalledWith("p1"));
     await waitFor(() => expect(listar).toHaveBeenCalledTimes(2));
@@ -136,12 +154,17 @@ describe("PublicacoesPainel", () => {
 
     render(<PublicacoesPainel />);
 
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.acoes.despublicar,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.acoes.despublicar,
+      }),
+    );
 
     await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent(ERRO_DO_FIREBASE),
+      expect(toastDeErro).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ description: ERRO_DO_FIREBASE }),
+      ),
     );
     expect(screen.getByText("A AT não é babá")).toBeInTheDocument();
     expect(listar).toHaveBeenCalledTimes(1);
@@ -158,13 +181,13 @@ describe("PublicacoesPainel", () => {
 
     render(<PublicacoesPainel />);
 
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.acoes.despublicar,
-    }));
-
-    await waitFor(() =>
-      expect(botao(textos.acoes.emAndamento)).toBeDisabled(),
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.acoes.despublicar,
+      }),
     );
+
+    await waitFor(() => expect(botao(textos.acoes.emAndamento)).toBeDisabled());
     expect(botao(textos.acoes.excluir)).toBeDisabled();
 
     concluir({ dados: false });

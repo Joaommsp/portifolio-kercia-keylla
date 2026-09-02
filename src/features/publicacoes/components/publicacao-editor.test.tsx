@@ -3,8 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
+import { toast } from "sonner";
+
 import { painel } from "@/content/site";
 import { PublicacaoEditor } from "@/features/publicacoes/components/publicacao-editor";
+
+// A falha de gravação virou toast; a falha de LEITURA continua na tela, porque
+// ali não há o que a autora possa corrigir sem a mensagem à vista.
+vi.mock("sonner", () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+
+const toastDeErro = toast.error as unknown as Mock;
 import {
   atualizarPublicacao,
   criarPublicacao,
@@ -84,7 +92,9 @@ describe("PublicacaoEditor", () => {
   });
 
   it("mostra a mensagem do Firebase quando a leitura falha", async () => {
-    obter.mockResolvedValue({ erro: "Você não tem permissão para esta operação." });
+    obter.mockResolvedValue({
+      erro: "Você não tem permissão para esta operação.",
+    });
 
     render(<PublicacaoEditor id="p1" />);
 
@@ -136,7 +146,9 @@ describe("PublicacaoEditor", () => {
   });
 
   it("não sai da tela quando a gravação falha", async () => {
-    criar.mockResolvedValue({ erro: "Você não tem permissão para esta operação." });
+    criar.mockResolvedValue({
+      erro: "Você não tem permissão para esta operação.",
+    });
 
     render(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
 
@@ -155,11 +167,45 @@ describe("PublicacaoEditor", () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent(
-        "Você não tem permissão para esta operação.",
+      expect(toastDeErro).toHaveBeenCalledWith(
+        painel.avisos.naoSalvou,
+        expect.objectContaining({
+          description: "Você não tem permissão para esta operação.",
+        }),
       ),
     );
     expect(empurrar).not.toHaveBeenCalled();
     expect(campo(textos.campos.titulo)).toHaveValue("Texto novo");
+  });
+
+  it("pergunta antes de sair com alteração pendente", async () => {
+    obter.mockResolvedValue({ dados: publicacao });
+    render(<PublicacaoEditor id="p1" />);
+    await screen.findByLabelText(textos.campos.titulo);
+
+    fireEvent.change(campo(textos.campos.titulo), {
+      target: { value: "Título mudado" },
+    });
+
+    await userEvent.click(
+      screen.getByRole("button", { name: textos.acoes.voltar }),
+    );
+
+    expect(
+      screen.getByRole("alertdialog", { name: painel.semSalvar.titulo }),
+    ).toBeInTheDocument();
+    expect(empurrar).not.toHaveBeenCalled();
+  });
+
+  it("volta direto quando não há nada pendente", async () => {
+    obter.mockResolvedValue({ dados: publicacao });
+    render(<PublicacaoEditor id="p1" />);
+    await screen.findByLabelText(textos.campos.titulo);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: textos.acoes.voltar }),
+    );
+
+    expect(empurrar).toHaveBeenCalledWith(CAMINHO_PAINEL);
   });
 });

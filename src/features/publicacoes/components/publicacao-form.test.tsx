@@ -1,9 +1,17 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
+
+import { toast } from "sonner";
 
 import { painel } from "@/content/site";
 import { PublicacaoForm } from "@/features/publicacoes/components/publicacao-form";
+// Os avisos de ação viram toast; o `Toaster` mora no layout do painel, então o
+// teste observa a chamada em vez de procurar a mensagem no componente.
+vi.mock("sonner", () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+
+const toastDeErro = toast.error as unknown as Mock;
+
 import { type PublicacaoFormulario } from "@/features/publicacoes/schemas";
 import { LIMITES_DE_PUBLICACAO_DA_SPEC } from "@/test/valores-da-spec";
 import type { Resultado } from "@/lib/resultado";
@@ -13,9 +21,8 @@ const { publicacao: textos } = painel;
 /** Mensagem tal como o Firebase a devolve, já traduzida pela camada de erros. */
 const ERRO_DO_FIREBASE = "Você não tem permissão para esta operação.";
 
-const aoSalvar = vi.fn<
-  (formulario: PublicacaoFormulario) => Promise<Resultado<string>>
->();
+const aoSalvar =
+  vi.fn<(formulario: PublicacaoFormulario) => Promise<Resultado<string>>>();
 
 const campo = (rotulo: string) => screen.getByLabelText(rotulo);
 
@@ -119,7 +126,9 @@ describe("PublicacaoForm", () => {
     fireEvent.change(campo(textos.campos.slug), {
       target: { value: "slug-escrito-a-mao" },
     });
-    fireEvent.change(campo(textos.campos.titulo), { target: { value: "Rotina" } });
+    fireEvent.change(campo(textos.campos.titulo), {
+      target: { value: "Rotina" },
+    });
 
     expect(screen.getByText("6/120")).toBeInTheDocument();
 
@@ -232,10 +241,50 @@ describe("PublicacaoForm", () => {
     await userEvent.click(botao(textos.acoes.publicar));
 
     await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent(ERRO_DO_FIREBASE),
+      expect(toastDeErro).toHaveBeenCalledWith(
+        painel.avisos.naoSalvou,
+        expect.objectContaining({ description: ERRO_DO_FIREBASE }),
+      ),
     );
     expect(campo(textos.campos.titulo)).toHaveValue("A AT não é babá");
     expect(campo(textos.campos.corpo)).toHaveValue("Corpo do texto.");
     expect(campo(textos.campos.titulo)).toBeEnabled();
+  });
+
+  it("alterna para a pré-visualização sem perder o que foi digitado", async () => {
+    const usuario = userEvent.setup();
+    render(<PublicacaoForm aoSalvar={vi.fn()} />);
+
+    fireEvent.change(campo(textos.campos.titulo), {
+      target: { value: "Quando a criança diz não" },
+    });
+
+    await usuario.click(screen.getByRole("tab", { name: textos.abas.previa }));
+    expect(
+      screen.getByRole("heading", { name: "Quando a criança diz não" }),
+    ).toBeInTheDocument();
+
+    await usuario.click(
+      screen.getByRole("tab", { name: textos.abas.escrever }),
+    );
+    expect(campo(textos.campos.titulo)).toHaveValue("Quando a criança diz não");
+  });
+
+  it("avisa quem envolve o formulário assim que há alteração pendente", async () => {
+    const aoMudarPendencia = vi.fn();
+    render(
+      <PublicacaoForm aoSalvar={vi.fn()} aoMudarPendencia={aoMudarPendencia} />,
+    );
+
+    // Nasce limpo: sem isto o diálogo de "sair sem salvar" apareceria sempre.
+    expect(aoMudarPendencia).toHaveBeenLastCalledWith(false);
+
+    fireEvent.change(campo(textos.campos.titulo), {
+      target: { value: "Texto" },
+    });
+
+    await vi.waitFor(() =>
+      expect(aoMudarPendencia).toHaveBeenLastCalledWith(true),
+    );
   });
 });

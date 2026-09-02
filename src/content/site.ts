@@ -602,6 +602,7 @@ export const painel = {
       editar: "Editar",
       publicar: "Publicar",
       despublicar: "Tirar do ar",
+      verNoSite: "Ver no site",
       excluir: "Excluir",
       emAndamento: "Aguarde…",
     },
@@ -637,7 +638,52 @@ export const painel = {
       rascunho: "Salvar rascunho",
       emAndamento: "Salvando…",
       voltar: "Voltar para a lista",
+      cancelar: "Cancelar",
     },
+    abas: {
+      escrever: "Escrever",
+      previa: "Pré-visualizar",
+      rotulo: "Modo do editor",
+    },
+    previa: {
+      semTitulo: "Sem título ainda",
+      semTexto: "O texto aparece aqui conforme você escreve.",
+      rodape: "É assim que a publicação vai aparecer no site.",
+    },
+    estado: {
+      rascunho: "Rascunho",
+      noAr: "No ar",
+    },
+    endereco: {
+      noAr: "No ar em",
+      ficara: "Vai ficar em",
+    },
+  },
+  saida: {
+    titulo: "Sair do painel?",
+    descricao:
+      "Você vai precisar entrar de novo com e-mail e senha para voltar a publicar.",
+    confirmar: "Sair",
+    cancelar: "Continuar no painel",
+  },
+  semSalvar: {
+    titulo: "Sair sem salvar?",
+    descricao:
+      "Você fez alterações que ainda não foram salvas. Se sair agora, elas se perdem.",
+    confirmar: "Sair sem salvar",
+    cancelar: "Continuar escrevendo",
+  },
+  avisos: {
+    publicada: "Publicação no ar",
+    publicadaDetalhe: "Já aparece no site.",
+    rascunhoSalvo: "Rascunho salvo",
+    rascunhoDetalhe: "Só você vê, até publicar.",
+    verNoSite: "Ver no site",
+    naoSalvou: "Não deu para salvar",
+    naoExcluiu: "Não deu para excluir",
+    naoAlternou: "Não deu para mudar o estado",
+    excluida: "Publicação excluída",
+    entrouFalhou: "Não deu para entrar",
   },
   login: {
     titulo: "Entrar no painel",
@@ -646,5 +692,6 @@ export const painel = {
     senha: { rotulo: "Senha", obrigatorio: "Informe a senha." },
     acao: { rotulo: "Entrar", emAndamento: "Entrando…" },
     voltar: "Voltar para o site",
+    senhaVisivel: { mostrar: "Mostrar senha", ocultar: "Ocultar senha" },
   },
 } as const;

@@ -16,7 +16,10 @@ const ERRO_DO_FIREBASE = "Você não tem permissão para esta operação.";
  */
 const MENSAGEM_DE_VAZIO_DA_SPEC = "Nenhuma publicação por aqui ainda.";
 
-function criarPublicacao(indice: number, ajustes: Partial<Publicacao> = {}): Publicacao {
+function criarPublicacao(
+  indice: number,
+  ajustes: Partial<Publicacao> = {},
+): Publicacao {
   return {
     id: `p${indice}`,
     titulo: `Publicação ${indice}`,
@@ -33,7 +36,9 @@ function criarPublicacao(indice: number, ajustes: Partial<Publicacao> = {}): Pub
 }
 
 const criarLista = (quantidade: number) =>
-  Array.from({ length: quantidade }, (_, indice) => criarPublicacao(indice + 1));
+  Array.from({ length: quantidade }, (_, indice) =>
+    criarPublicacao(indice + 1),
+  );
 
 describe("PublicacoesSection", () => {
   it("lista as publicações recebidas", () => {
@@ -45,15 +50,15 @@ describe("PublicacoesSection", () => {
     expect(
       screen.getByRole("heading", { name: "Publicação 3" }),
     ).toBeInTheDocument();
-    expect(screen.queryByText(MENSAGEM_DE_VAZIO_DA_SPEC)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(MENSAGEM_DE_VAZIO_DA_SPEC),
+    ).not.toBeInTheDocument();
   });
 
   it("mostra no máximo seis cards, mesmo recebendo mais", () => {
     render(<PublicacoesSection resultado={{ dados: criarLista(8) }} />);
 
-    expect(screen.getAllByRole("article")).toHaveLength(
-      TETO_DA_HOME_NA_SPEC,
-    );
+    expect(screen.getAllByRole("article")).toHaveLength(TETO_DA_HOME_NA_SPEC);
     expect(
       screen.queryByRole("heading", {
         name: `Publicação ${TETO_DA_HOME_NA_SPEC + 1}`,
@@ -76,7 +81,9 @@ describe("PublicacoesSection", () => {
     render(<PublicacoesSection resultado={{ erro: ERRO_DO_FIREBASE }} />);
 
     expect(screen.getByRole("alert")).toHaveTextContent(ERRO_DO_FIREBASE);
-    expect(screen.queryByText(MENSAGEM_DE_VAZIO_DA_SPEC)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(MENSAGEM_DE_VAZIO_DA_SPEC),
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole("article")).not.toBeInTheDocument();
   });
 

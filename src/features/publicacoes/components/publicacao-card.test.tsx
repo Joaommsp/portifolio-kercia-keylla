@@ -11,7 +11,8 @@ const PUBLICADO_EM = new Date("2026-08-22T03:00:00.000Z");
 const IMAGEM_PERMITIDA = "https://images.unsplash.com/foto.jpg";
 
 /** Host ausente da allowlist — `next/image` não pode servir de proxy para ele. */
-const IMAGEM_DE_HOST_NAO_PERMITIDO = "https://cdn.exemplo-qualquer.com/foto.jpg";
+const IMAGEM_DE_HOST_NAO_PERMITIDO =
+  "https://cdn.exemplo-qualquer.com/foto.jpg";
 
 function criarPublicacao(ajustes: Partial<Publicacao> = {}): Publicacao {
   return {

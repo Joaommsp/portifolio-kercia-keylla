@@ -3,6 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
+import { toast } from "sonner";
+
 import { painel } from "@/content/site";
 import { entrar } from "@/features/admin/auth";
 import { LoginForm } from "@/features/admin/components/login-form";
@@ -11,9 +13,14 @@ import { CAMINHO_PAINEL } from "@/lib/rotas";
 
 vi.mock("@/features/admin/auth", () => ({ entrar: vi.fn() }));
 
+// O aviso de falha virou toast: o `Toaster` mora no layout do painel, então o
+// teste observa a chamada em vez de procurar a mensagem neste componente.
+vi.mock("sonner", () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
+
 vi.mock("next/navigation", () => ({ useRouter: vi.fn() }));
 
 const entrarFalso = entrar as unknown as Mock;
+const toastDeErro = toast.error as unknown as Mock;
 const useRouterFalso = useRouter as unknown as Mock;
 const substituir = vi.fn();
 
@@ -68,7 +75,10 @@ describe("LoginForm", () => {
     await preencherEEnviar();
 
     await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent(CREDENCIAL_RECUSADA),
+      expect(toastDeErro).toHaveBeenCalledWith(
+        painel.avisos.entrouFalhou,
+        expect.objectContaining({ description: CREDENCIAL_RECUSADA }),
+      ),
     );
     expect(substituir).not.toHaveBeenCalled();
   });
@@ -79,7 +89,7 @@ describe("LoginForm", () => {
     render(<LoginForm />);
     await preencherEEnviar();
 
-    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
+    await waitFor(() => expect(toastDeErro).toHaveBeenCalled());
     expect(campoEmail()).toHaveValue("keylla@exemplo.com.br");
     expect(campoSenha()).toHaveValue("senha-secreta");
   });
@@ -110,7 +120,9 @@ describe("LoginForm", () => {
 
     await userEvent.click(botaoEntrar());
 
-    expect(await screen.findByText(login.email.obrigatorio)).toBeInTheDocument();
+    expect(
+      await screen.findByText(login.email.obrigatorio),
+    ).toBeInTheDocument();
     expect(screen.getByText(login.senha.obrigatorio)).toBeInTheDocument();
     expect(entrarFalso).not.toHaveBeenCalled();
     expect(campoEmail()).toHaveAttribute("aria-invalid", "true");

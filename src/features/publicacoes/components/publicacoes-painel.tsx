@@ -11,6 +11,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { toast } from "sonner";
+
 import { SectionMessage } from "@/components/layout/section-message";
 import { buttonVariants } from "@/components/ui/button";
 import { painel } from "@/content/site";
@@ -30,21 +32,26 @@ const { listaDePublicacoes: textos } = painel;
 export function PublicacoesPainel() {
   const { resultado, recarregar } = useCarga(listarNoPainel);
   const [idOcupado, setIdOcupado] = useState<string | null>(null);
-  const [erroDaAcao, setErroDaAcao] = useState<string | null>(null);
 
-  /** Roda a ação da linha e recarrega a lista quando ela dá certo. */
+
+  /**
+   * Roda a ação da linha e recarrega a lista quando ela dá certo. Cada desfecho
+   * avisa: sem retorno, alternar o estado de uma publicação é uma ação que não
+   * dá sinal nenhum de ter acontecido.
+   */
   async function executar(
     publicacao: Publicacao,
     acao: () => Promise<Resultado<unknown>>,
+    aviso: { titulo: string; sucesso: string },
   ) {
     setIdOcupado(publicacao.id);
-    setErroDaAcao(null);
 
     const efeito = await acao();
 
     if ("erro" in efeito) {
-      setErroDaAcao(efeito.erro);
+      toast.error(aviso.titulo, { description: efeito.erro });
     } else {
+      toast.success(aviso.sucesso, { description: publicacao.titulo });
       await recarregar();
     }
 
@@ -64,9 +71,6 @@ export function PublicacoesPainel() {
         </Link>
       </div>
 
-      {erroDaAcao === null ? null : (
-        <SectionMessage tom="erro">{erroDaAcao}</SectionMessage>
-      )}
 
       {resultado === null ? (
         <div role="status">
@@ -81,10 +85,26 @@ export function PublicacoesPainel() {
           publicacoes={resultado.dados}
           idOcupado={idOcupado}
           aoAlternar={(publicacao) =>
-            void executar(publicacao, () => alternarPublicado(publicacao))
+            void executar(
+              publicacao,
+              () => alternarPublicado(publicacao),
+              {
+                titulo: painel.avisos.naoAlternou,
+                sucesso: publicacao.publicado
+                  ? painel.avisos.rascunhoSalvo
+                  : painel.avisos.publicada,
+              },
+            )
           }
           aoExcluir={(publicacao) =>
-            void executar(publicacao, () => excluirPublicacao(publicacao.id))
+            void executar(
+              publicacao,
+              () => excluirPublicacao(publicacao.id),
+              {
+                titulo: painel.avisos.naoExcluiu,
+                sucesso: painel.avisos.excluida,
+              },
+            )
           }
         />
       )}

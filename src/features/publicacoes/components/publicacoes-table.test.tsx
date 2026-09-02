@@ -80,9 +80,11 @@ describe("PublicacoesTable", () => {
     renderizar([publicacao]);
 
     await userEvent.click(botao(textos.acoes.excluir));
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.exclusao.confirmar,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.exclusao.confirmar,
+      }),
+    );
 
     await waitFor(() => expect(aoExcluir).toHaveBeenCalledTimes(1));
     expect(aoExcluir).toHaveBeenCalledWith(publicacao);
@@ -92,9 +94,11 @@ describe("PublicacoesTable", () => {
     renderizar();
 
     await userEvent.click(botao(textos.acoes.excluir));
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.exclusao.cancelar,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.exclusao.cancelar,
+      }),
+    );
 
     await waitFor(() =>
       expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument(),
@@ -107,9 +111,11 @@ describe("PublicacoesTable", () => {
     renderizar();
 
     await userEvent.click(botao(textos.acoes.excluir));
-    await userEvent.click(await screen.findByRole("button", {
-      name: textos.exclusao.confirmar,
-    }));
+    await userEvent.click(
+      await screen.findByRole("button", {
+        name: textos.exclusao.confirmar,
+      }),
+    );
 
     expect(confirmNativo).not.toHaveBeenCalled();
     confirmNativo.mockRestore();

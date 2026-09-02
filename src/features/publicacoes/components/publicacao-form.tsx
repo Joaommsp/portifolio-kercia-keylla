@@ -12,11 +12,11 @@
  */
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Campo } from "@/components/form/campo";
-import { SectionMessage } from "@/components/layout/section-message";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,19 +27,28 @@ import {
   publicacaoSchema,
   type PublicacaoFormulario,
 } from "@/features/publicacoes/schemas";
+import { PublicacaoPrevia } from "@/features/publicacoes/components/publicacao-previa";
 import { slugify } from "@/lib/format";
 import type { Resultado } from "@/lib/resultado";
+import { cn } from "@/lib/utils";
 
 const { publicacao: textos } = painel;
 
 export function PublicacaoForm({
   valoresIniciais = PUBLICACAO_EM_BRANCO,
+  publicadoEm = null,
   aoSalvar,
+  aoMudarPendencia,
 }: {
   valoresIniciais?: PublicacaoFormulario;
+  /** Data já gravada, para a prévia não inventar a data de publicação. */
+  publicadoEm?: Date | null;
   aoSalvar: (formulario: PublicacaoFormulario) => Promise<Resultado<string>>;
+  /** Avisa quem envolve o formulário que há alteração não salva. */
+  aoMudarPendencia?: (pendente: boolean) => void;
 }) {
-  const [erro, setErro] = useState<string | null>(null);
+  const [previa, setPrevia] = useState(false);
+  const idDasAbas = useId();
   // Slug já preenchido é escolha de alguém: o título não passa por cima dele.
   const [slugManual, setSlugManual] = useState(valoresIniciais.slug !== "");
 
@@ -48,7 +57,7 @@ export function PublicacaoForm({
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<PublicacaoFormulario>({
     resolver: zodResolver(publicacaoSchema),
     defaultValues: valoresIniciais,
@@ -65,15 +74,18 @@ export function PublicacaoForm({
   const registroTitulo = register("titulo");
   const registroSlug = register("slug");
 
+  useEffect(() => {
+    aoMudarPendencia?.(isDirty);
+  }, [isDirty, aoMudarPendencia]);
+
   const salvarComo = (publicado: boolean) =>
     handleSubmit(async (valores) => {
-      setErro(null);
-
       const resultado = await aoSalvar({ ...valores, publicado });
 
       if ("erro" in resultado) {
-        // Nada é limpo nem resetado: a autora corrige e tenta de novo.
-        setErro(resultado.erro);
+        // Nada é limpo nem resetado: a autora corrige e tenta de novo. A
+        // mensagem do Firebase segue fiel, agora em toast.
+        toast.error(painel.avisos.naoSalvou, { description: resultado.erro });
       }
     });
 
@@ -83,7 +95,61 @@ export function PublicacaoForm({
       onSubmit={salvarComo(valoresIniciais.publicado)}
       className="flex flex-col gap-6"
     >
-      <fieldset disabled={isSubmitting} className="flex flex-col gap-6">
+      {/*
+        A prévia é uma aba, não uma segunda tela: a autora alterna sem perder o
+        que já digitou, porque o formulário continua montado embaixo.
+      */}
+      <div
+        role="tablist"
+        aria-label={textos.abas.rotulo}
+        className="flex gap-1 border-b border-line"
+      >
+        {[
+          { chave: "escrever", rotulo: textos.abas.escrever, ativa: !previa },
+          { chave: "previa", rotulo: textos.abas.previa, ativa: previa },
+        ].map((aba) => (
+          <button
+            key={aba.chave}
+            type="button"
+            role="tab"
+            id={`${idDasAbas}-${aba.chave}`}
+            aria-selected={aba.ativa}
+            onClick={() => setPrevia(aba.chave === "previa")}
+            className={cn(
+              "min-h-11 border-b-2 px-4 text-xs font-semibold uppercase tracking-rotulo transition-colors",
+              aba.ativa
+                ? "border-olive text-olive"
+                : "border-transparent text-ink-soft pointer-fino:hover:text-olive",
+            )}
+          >
+            {aba.rotulo}
+          </button>
+        ))}
+      </div>
+
+      {previa ? (
+        <div role="tabpanel" aria-labelledby={`${idDasAbas}-previa`}>
+          <PublicacaoPrevia
+            formulario={{
+              titulo,
+              slug,
+              resumo,
+              corpo,
+              tag,
+              imagemUrl: "",
+              publicado: valoresIniciais.publicado,
+            }}
+            publicadoEm={publicadoEm}
+          />
+        </div>
+      ) : null}
+
+      <fieldset
+        disabled={isSubmitting}
+        role="tabpanel"
+        aria-labelledby={`${idDasAbas}-escrever`}
+        className={cn("flex flex-col gap-6", previa && "hidden")}
+      >
         <Campo
           id="publicacao-titulo"
           rotulo={textos.campos.titulo}
@@ -185,11 +251,7 @@ export function PublicacaoForm({
         </Campo>
 
         <div className="flex flex-wrap gap-3">
-          <Button
-            type="button"
-            size="lg"
-            onClick={salvarComo(true)}
-          >
+          <Button type="button" size="lg" onClick={salvarComo(true)}>
             {isSubmitting ? textos.acoes.emAndamento : textos.acoes.publicar}
           </Button>
 
@@ -203,10 +265,6 @@ export function PublicacaoForm({
           </Button>
         </div>
       </fieldset>
-
-      {erro === null ? null : (
-        <SectionMessage tom="erro">{erro}</SectionMessage>
-      )}
     </form>
   );
 }

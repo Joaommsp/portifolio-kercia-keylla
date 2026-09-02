@@ -21,16 +21,12 @@ import { cabecalho, navegacao } from "@/content/site";
  * ancorar nele em vez da viewport — a folha subia para o topo da tela.
  */
 export function MenuMobile() {
+  // Só o clique abre a folha, e clique é cliente: o portal nunca é montado no
+  // HTML do servidor, então não é preciso guardar "já montou" em estado.
   const [aberto, setAberto] = useState(false);
-  // O portal só existe no cliente; no HTML do servidor a folha não é impressa.
-  const [montado, setMontado] = useState(false);
   const botaoRef = useRef<HTMLButtonElement>(null);
   const folhaRef = useRef<HTMLDivElement>(null);
   const idDaFolha = useId();
-
-  useEffect(() => {
-    setMontado(true);
-  }, []);
 
   const fechar = useCallback(() => {
     setAberto(false);
@@ -93,7 +89,7 @@ export function MenuMobile() {
         <Menu aria-hidden className="size-5.5" />
       </button>
 
-      {aberto && montado
+      {aberto
         ? createPortal(
             <>
               <button

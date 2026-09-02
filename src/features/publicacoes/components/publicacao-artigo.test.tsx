@@ -11,7 +11,8 @@ const PUBLICADO_EM = new Date("2026-08-22T03:00:00.000Z");
 const IMAGEM_PERMITIDA = "https://images.unsplash.com/foto.jpg";
 
 /** Host ausente da allowlist. */
-const IMAGEM_DE_HOST_NAO_PERMITIDO = "https://cdn.exemplo-qualquer.com/foto.jpg";
+const IMAGEM_DE_HOST_NAO_PERMITIDO =
+  "https://cdn.exemplo-qualquer.com/foto.jpg";
 
 function criarPublicacao(ajustes: Partial<Publicacao> = {}): Publicacao {
   return {
@@ -34,7 +35,10 @@ describe("PublicacaoArtigo", () => {
     render(<PublicacaoArtigo publicacao={criarPublicacao()} />);
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Quando a criança diz não" }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Quando a criança diz não",
+      }),
     ).toBeInTheDocument();
     expect(screen.getByText("A recusa raramente é birra.")).toBeInTheDocument();
     expect(
@@ -66,20 +70,23 @@ describe("PublicacaoArtigo", () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByText("·")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 1, name: "Quando a criança diz não" }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Quando a criança diz não",
+      }),
     ).toBeInTheDocument();
   });
 
   it("mostra só a data quando a publicação não tem tag, sem separador solto", () => {
     render(<PublicacaoArtigo publicacao={criarPublicacao({ tag: null })} />);
 
-    expect(
-      screen.getByText(formatDateBR(PUBLICADO_EM)),
-    ).toBeInTheDocument();
+    expect(screen.getByText(formatDateBR(PUBLICADO_EM))).toBeInTheDocument();
   });
 
   it("renderiza sem imagem quando a publicação não tem imagem", () => {
-    render(<PublicacaoArtigo publicacao={criarPublicacao({ imagemUrl: null })} />);
+    render(
+      <PublicacaoArtigo publicacao={criarPublicacao({ imagemUrl: null })} />,
+    );
 
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
@@ -87,7 +94,9 @@ describe("PublicacaoArtigo", () => {
   it("ignora a imagem de host fora da allowlist", () => {
     render(
       <PublicacaoArtigo
-        publicacao={criarPublicacao({ imagemUrl: IMAGEM_DE_HOST_NAO_PERMITIDO })}
+        publicacao={criarPublicacao({
+          imagemUrl: IMAGEM_DE_HOST_NAO_PERMITIDO,
+        })}
       />,
     );
 

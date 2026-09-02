@@ -6,12 +6,12 @@ import { CorpoMarkdown } from "@/features/publicacoes/components/corpo-markdown"
 describe("CorpoMarkdown", () => {
   it("formata o markdown que a autora escreve", () => {
     render(
-      <CorpoMarkdown corpo={"## Rotina\n\nTexto com **ênfase**.\n\n- um\n- dois"} />,
+      <CorpoMarkdown
+        corpo={"## Rotina\n\nTexto com **ênfase**.\n\n- um\n- dois"}
+      />,
     );
 
-    expect(
-      screen.getByRole("heading", { name: "Rotina" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Rotina" })).toBeInTheDocument();
     expect(screen.getByText("ênfase")).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
@@ -57,9 +57,9 @@ describe("CorpoMarkdown", () => {
       "rel",
       "noopener noreferrer",
     );
-    expect(
-      screen.getByRole("link", { name: "dentro" }),
-    ).not.toHaveAttribute("target");
+    expect(screen.getByRole("link", { name: "dentro" })).not.toHaveAttribute(
+      "target",
+    );
   });
 
   it("só exibe imagem do markdown que esteja na allowlist de hosts", () => {

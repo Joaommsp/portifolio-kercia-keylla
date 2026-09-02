@@ -3,7 +3,7 @@
 /**
  * Tabela de publicações do painel.
  *
- * Exclusão passa pelo `ConfirmarExclusao` — nunca por `window.confirm`, que
+ * Exclusão passa pelo `ConfirmarAcao` — nunca por `window.confirm`, que
  * não combina com o resto da interface e não pode ser estilizado (ADM-09). A
  * publicação escolhida fica guardada aqui e só depois da confirmação a
  * exclusão é pedida a quem chamou (ADM-06).
@@ -15,7 +15,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { ConfirmarExclusao } from "@/components/layout/confirmar-exclusao";
+import { ConfirmarAcao } from "@/components/layout/confirmar-acao";
 import {
   AcoesDaTabela,
   CelulaDaTabela,
@@ -28,7 +28,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { painel } from "@/content/site";
 import type { Publicacao } from "@/features/publicacoes/schemas";
 import { formatDateBROuNulo } from "@/lib/format";
-import { caminhoDaEdicao } from "@/lib/rotas";
+import { caminhoDaEdicao, caminhoDaPublicacao } from "@/lib/rotas";
 
 const { listaDePublicacoes: textos } = painel;
 
@@ -118,6 +118,17 @@ export function PublicacoesTable({
                       : textos.acoes.publicar}
                 </Button>
 
+                {publicacao.publicado ? (
+                  <Link
+                    href={caminhoDaPublicacao(publicacao.slug)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonVariants({ variant: "ghost", size: "sm" })}
+                  >
+                    {textos.acoes.verNoSite}
+                  </Link>
+                ) : null}
+
                 <Button
                   type="button"
                   variant="destructive"
@@ -133,7 +144,8 @@ export function PublicacoesTable({
         })}
       </TabelaPainel>
 
-      <ConfirmarExclusao
+      <ConfirmarAcao
+        destrutiva
         aberto={aExcluir !== null}
         titulo={textos.exclusao.titulo}
         descricao={textos.exclusao.mensagem(aExcluir?.titulo ?? "")}

@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+
+/** A partir de quanto do limite o contador começa a avisar. */
+const FRACAO_DE_ALERTA = 0.9;
 
 /**
  * Um campo do painel: rótulo, controle, ajuda, erro e — onde há limite — o
@@ -8,6 +12,8 @@ import { Label } from "@/components/ui/label";
  *
  * O contador vive aqui para não ser reescrito em cada formulário, e mostra
  * sempre o mesmo par `usados/limite`, com o limite vindo do schema (ADM-04).
+ * Ele muda de cor nos últimos 10% e fica vermelho ao estourar — o aviso chega
+ * antes de o texto ser recusado, não depois.
  * O rótulo não leva ícone: ícone é da opção, não do nome do campo.
  */
 export function Campo({
@@ -34,7 +40,16 @@ export function Campo({
       <div className="flex items-baseline justify-between gap-3">
         <Label htmlFor={id}>{rotulo}</Label>
         {limite === undefined ? null : (
-          <span className="text-xs tabular-nums text-ink-soft">
+          <span
+            className={cn(
+              "text-xs tabular-nums",
+              (valor ?? "").length > limite
+                ? "font-semibold text-destructive"
+                : (valor ?? "").length >= limite * FRACAO_DE_ALERTA
+                  ? "font-semibold text-brass"
+                  : "text-ink-soft",
+            )}
+          >
             {`${(valor ?? "").length}/${limite}`}
           </span>
         )}
