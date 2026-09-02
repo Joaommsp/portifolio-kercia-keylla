@@ -51,13 +51,13 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | Dimension | Resolution |
 | --------- | ---------- |
 | Input validation & bounds | ADM-04: título ≤ 120, resumo ≤ 220, corpo ≤ 20.000, URL de imagem válida e https |
-| Failure / partial-failure states | PUB-05, FOR-03, ADM-07: erro de leitura e de escrita fiéis à mensagem do Firebase |
+| Failure / partial-failure states | PUB-05, ADM-07: erro de leitura e de escrita fiéis à mensagem do Firebase. Formação não lê do Firestore desde AD-046 |
 | Idempotency / retry / duplicate handling | ADM-05: salvar é idempotente por id do documento; duplo clique bloqueado pelo estado `salvando` |
 | Auth boundaries & rate limits | ADM-01, ADM-02, SEC-01: `/admin` exige sessão; escrita restrita ao uid da allowlist nas rules. Rate limit: N/A porque a superfície de escrita é de usuária única e a autenticação é do Firebase |
 | Concurrency / ordering | N/A because a base tem uma única autora; não há escrita concorrente no mesmo documento |
 | Data lifecycle / expiry | ADM-06: exclusão definitiva sob confirmação. TTL/arquivamento: N/A porque publicação não expira |
 | Observability | N/A because o projeto é estático em Vercel com uma autora; logs da plataforma bastam para o MVP |
-| External-dependency failure | PUB-05, FOR-03 e o edge case "Firestore fora do ar": a página fica de pé e as seções dinâmicas degradam para estado de erro; imagem externa quebrada cai em placeholder |
+| External-dependency failure | PUB-05 e o edge case "Firestore fora do ar": a página fica de pé e a seção de publicações degrada para estado de erro; imagem externa quebrada cai em placeholder |
 | State-transition integrity | ADM-08: rascunho ↔ publicado é a única transição; documento com `publicado: false` nunca aparece em rota pública |
 
 ---
@@ -165,7 +165,7 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 - IF o corpo em markdown contém HTML bruto THEN the system SHALL renderizá-lo como texto, sem executar.
 - IF duas publicações têm o mesmo slug THEN the system SHALL bloquear a gravação da segunda com mensagem de slug já em uso.
 - WHEN o título tem 120 caracteres THEN the system SHALL aceitar (limite inclusivo) e o contador SHALL indicar 120/120.
-- IF o Firestore está fora do ar ou recusa a leitura THEN the system SHALL manter a página de pé, com a seção afetada em estado de erro e o restante utilizável (desfecho detalhado em PUB-05 e FOR-03).
+- IF o Firestore está fora do ar ou recusa a leitura THEN the system SHALL manter a página de pé, com a seção afetada em estado de erro e o restante utilizável (desfecho detalhado em PUB-05).
 - IF as variáveis de ambiente do Firebase estão ausentes THEN the system SHALL falhar na inicialização com mensagem nomeando a variável faltante, em vez de erro genérico de SDK.
 
 ---
@@ -179,10 +179,10 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | SIT-03 | P1: Visitante entende a AT | T8 (teste em T41) | Verified |
 | SIT-04 | P1: Visitante entende a AT | T10 | Verified (UAT pendente) |
 | SIT-05 | P1: Visitante entende a AT | T4 (trava em T51,T52,T55; paleta em T54) | Verified |
-| SIT-06 | P1: Visitante entende a AT | T4 | Verified (UAT pendente) |
+| SIT-06 | P1: Visitante entende a AT | T4,T65 | Verified |
 | SIT-07 | P1: Visitante entende a AT | T57,T58,T59 | Verified |
-| SIT-08 | P1: Visitante entende a AT | T61,T62 | Pending |
-| SIT-09 | P1: Visitante entende a AT | T61,T63 | Pending |
+| SIT-08 | P1: Visitante entende a AT | T61 | Verified |
+| SIT-09 | P1: Visitante entende a AT | T62 | Verified |
 | PUB-01 | P1: Visitante lê publicações | T19,T24,T37 (teto em T53) | Verified |
 | PUB-02 | P1: Visitante lê publicações | T27,T47 | Verified |
 | PUB-03 | P1: Visitante lê publicações | T24 (teste em T49) | Verified |
@@ -199,10 +199,10 @@ Keylla Melo trabalha como Assistente Terapêutica e hoje só é encontrada por i
 | ADM-07 | P1: Keylla publica | T31,T32 | Verified |
 | ADM-08 | P1: Keylla publica | T31,T33 | Verified |
 | ADM-09 | P1: Keylla publica | T33 | Verified |
-| FOR-01 | P2: Formação | T64 | Pending |
-| FOR-02 | P2: Formação | T64 | Pending |
-| FOR-03 | P2: Formação | T64 | Pending |
-| FOR-04 | P2: Formação | T64 | Pending |
+| FOR-01 | P2: Formação | T63 | Verified |
+| FOR-02 | P2: Formação | T63 | Verified |
+| FOR-03 | P2: Formação | T63 | Verified |
+| FOR-04 | P2: Formação | T63 | Verified |
 | FOR-05 | P2: Formação | — | Removido (AD-046) |
 | SEO-01 | P3: Encontrabilidade | T38 | Verified |
 | SEO-02 | P3: Encontrabilidade | T41 | Verified |

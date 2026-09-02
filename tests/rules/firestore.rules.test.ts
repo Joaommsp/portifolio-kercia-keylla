@@ -143,6 +143,22 @@ describe("autora da allowlist", () => {
 });
 
 describe("uid fora da allowlist", () => {
+  it("não escreve publicação", async () => {
+    // Estar autenticado não basta: a allowlist é o que separa a autora de
+    // qualquer conta do Firebase. Sem este caso, afrouxar `ehAutora()` para
+    // `request.auth != null` passa com a suíte inteira verde.
+    const db = ambiente.authenticatedContext(UID_DE_FORA).firestore();
+
+    await assertFails(setDoc(doc(db, "publicacoes", "nova"), publicacao(true)));
+    await assertFails(deleteDoc(doc(db, "publicacoes", PUBLICADA)));
+  });
+
+  it("não alcança coleção que as regras não declaram", async () => {
+    // O `match /{document=**}` final nega tudo o que não foi liberado.
+    const db = ambiente.authenticatedContext(UID_DE_FORA).firestore();
+
+    await assertFails(getDoc(doc(db, "coisa-que-nao-existe", "x")));
+  });
 
   it("não lê rascunho", async () => {
     const db = ambiente.authenticatedContext(UID_DE_FORA).firestore();

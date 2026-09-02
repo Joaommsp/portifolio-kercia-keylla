@@ -127,6 +127,16 @@ T36 → T46
 T27 → T47
 ```
 
+### Phase 11: Currículo na página
+
+```
+T6 → T61
+T61 → T62
+T6 → T63
+T30 → T64
+T4 → T65
+```
+
 ### Phase 10: Seção Pedagogia
 
 ```
@@ -1335,4 +1345,102 @@ frentes).
 - [x] `--tracking-selo`, criado só para o círculo, removido junto
 
 **Tests**: none (posição depende de layout, que jsdom não avalia — verificação por medição no navegador)
+**Gate**: build
+
+---
+
+## Phase 11: Currículo na página
+
+Entrou depois de o currículo da Keylla chegar: o site apresentava só a AT, sem
+as competências que a família procura (Libras, CAA, autismo) e sem a formação.
+
+### T61: Seção de competências ✅
+
+**What**: Dez competências em quatro famílias, cada uma com o que resolve.
+**Where**: `src/features/site/sections/competencias.tsx`
+**Depends on**: T6
+**Requirement**: SIT-08
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Quatro famílias e dez competências, asserido por literal da spec
+- [x] Cada competência com a descrição do que resolve
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T62: Faixa de atendimento ✅
+
+**What**: Especialidades em etiquetas e os contextos onde o acompanhamento acontece.
+**Where**: `src/features/site/sections/atendimento.tsx`
+**Depends on**: T61
+**Requirement**: SIT-09
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] As etiquetas derivam da seção de competências, sem segunda lista
+- [x] Cinco contextos, incluindo a região de atendimento
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T63: Formação como conteúdo da página ✅
+
+**What**: Formação em dois grupos, lida de `content/site.ts`, sem Firestore (AD-046).
+**Where**: `src/features/site/sections/formacao.tsx`
+**Depends on**: T6
+**Requirement**: FOR-01, FOR-02, FOR-03, FOR-04
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Dois grupos: formação acadêmica e aperfeiçoamento
+- [x] Item sem ano no currículo aparece sem ano, nunca com data suposta
+- [x] O CRUD de formação sai do painel, junto das regras da coleção
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T64: Rede de proteção do painel ✅
+
+**What**: Toasts, prévia, guarda de alterações, confirmação de saída e ver senha.
+**Where**: `src/features/admin/pendencia.tsx`
+**Depends on**: T30
+**Requirement**: ADM-05, ADM-07, ADM-09
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] `Toaster` montado no layout do painel, com prova de ponta a ponta
+- [x] A guarda cobre o editor e os links do cabeçalho
+- [x] A prévia renderiza o artigo da página pública, não uma cópia dele
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T65: Entrada ao rolar em qualquer navegador ✅
+
+**What**: `Revelador` com `IntersectionObserver` no lugar de `animation-timeline`.
+**Where**: `src/components/layout/revelador.tsx`
+**Depends on**: T4
+**Requirement**: SIT-06
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Funciona fora do Chrome — `animation-timeline` só existe lá
+- [x] Quem pede menos movimento não tem nada escondido (SIT-06 virou testável)
+- [x] Sem JS o conteúdo aparece inteiro, em vez de ficar preso invisível
+
+**Tests**: unit
 **Gate**: build
