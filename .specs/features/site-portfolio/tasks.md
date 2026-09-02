@@ -1169,7 +1169,7 @@ T48 → T56
 
 ---
 
-### T54: Paleta aprovada com asserção positiva
+### T54: Paleta aprovada com asserção positiva ✅
 
 **What**: Fechar a metade positiva de SIT-05 — os tokens de tema precisam carregar o valor da paleta aprovada, não só evitar cor literal em componente.
 **Where**: `src/test/paleta-em-tokens.test.ts`
@@ -1179,11 +1179,11 @@ T48 → T56
 **Tools**: MCP: NONE · Skill: NONE
 
 **Done when**:
-- [ ] Cada token da paleta aprovada é lido de `globals.css` e comparado com o hex de origem
-- [ ] A comparação hex→OKLCH é feita no próprio teste, com tolerância declarada
-- [ ] Os quatro hex que a spec nomeia por extenso aparecem como literais da spec no teste
-- [ ] Token ausente ou renomeado reprova, em vez de passar vazio
-- [ ] Trocar `--olive` para vermelho (B6) reprova
+- [x] Cada token da paleta aprovada é lido de `globals.css` e comparado com o hex de origem
+- [x] A comparação hex→OKLCH é feita no próprio teste, com tolerância declarada
+- [x] Os quatro hex que a spec nomeia por extenso aparecem como literais da spec no teste
+- [x] Token ausente ou renomeado reprova, em vez de passar vazio (`--brass` renomeado reprova com "token --brass não está declarado")
+- [x] Trocar `--olive` para vermelho (B6) reprova
 
 **Tests**: unit
 **Gate**: quick
