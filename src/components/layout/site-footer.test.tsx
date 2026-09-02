@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { rodape } from "@/content/site";
 
@@ -38,4 +38,19 @@ describe("SiteFooter", () => {
 
     expect(screen.getByText(/© \d{4} Keylla Melo/)).toBeInTheDocument();
   });
+
+  it("tira o ano do relógio, não de um literal", () => {
+    // Sem isto, trocar `new Date().getFullYear()` por "2026" passaria batido
+    // até a virada do ano.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2031-03-14T12:00:00Z"));
+
+    render(<SiteFooter />);
+
+    expect(screen.getByText(/© 2031 Keylla Melo/)).toBeInTheDocument();
+  });
+});
+
+afterEach(() => {
+  vi.useRealTimers();
 });
