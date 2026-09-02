@@ -1,7 +1,11 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
+import { renderizarNoPainel } from "@/test/painel";
 import userEvent from "@testing-library/user-event";
 import { toast } from "sonner";
 import { describe, expect, it, type Mock, vi } from "vitest";
+
+// O shell navega pela guarda de alterações, então precisa do router.
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 // A falha de saída virou toast; o `Toaster` mora no layout do painel.
 vi.mock("sonner", () => ({ toast: { error: vi.fn(), success: vi.fn() } }));
@@ -34,7 +38,7 @@ async function acionarSaida(usuario: ReturnType<typeof userEvent.setup>) {
 
 describe("PainelShell", () => {
   it("mostra o conteúdo e mantém o botão de sair visível", () => {
-    render(
+    renderizarNoPainel(
       <PainelShell aoSair={vi.fn(async () => ({ dados: null }))}>
         {CONTEUDO}
       </PainelShell>,
@@ -49,7 +53,7 @@ describe("PainelShell", () => {
 
   it("pergunta antes de encerrar a sessão", async () => {
     const aoSair = vi.fn(async () => ({ dados: null }) as Resultado<null>);
-    render(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
+    renderizarNoPainel(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
 
     await userEvent.click(botaoSair());
 
@@ -62,7 +66,7 @@ describe("PainelShell", () => {
 
   it("encerra a sessão só depois da confirmação", async () => {
     const aoSair = vi.fn(async () => ({ dados: null }) as Resultado<null>);
-    render(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
+    renderizarNoPainel(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
 
     await acionarSaida(userEvent.setup());
 
@@ -71,7 +75,7 @@ describe("PainelShell", () => {
 
   it("desiste da saída ao cancelar", async () => {
     const aoSair = vi.fn(async () => ({ dados: null }) as Resultado<null>);
-    render(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
+    renderizarNoPainel(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
 
     const usuario = userEvent.setup();
     await usuario.click(botaoSair());
@@ -91,7 +95,7 @@ describe("PainelShell", () => {
         }),
     );
 
-    render(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
+    renderizarNoPainel(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
 
     await acionarSaida(userEvent.setup());
 
@@ -108,13 +112,13 @@ describe("PainelShell", () => {
       async () => ({ erro: ERRO_DO_FIREBASE }) as Resultado<null>,
     );
 
-    render(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
+    renderizarNoPainel(<PainelShell aoSair={aoSair}>{CONTEUDO}</PainelShell>);
 
     await acionarSaida(userEvent.setup());
 
     await waitFor(() =>
       expect(toastDeErro).toHaveBeenCalledWith(
-        painel.saida.titulo,
+        painel.avisos.naoSaiu,
         expect.objectContaining({ description: ERRO_DO_FIREBASE }),
       ),
     );

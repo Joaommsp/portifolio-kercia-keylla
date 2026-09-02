@@ -44,7 +44,13 @@ export function PublicacaoForm({
   /** Data já gravada, para a prévia não inventar a data de publicação. */
   publicadoEm?: Date | null;
   aoSalvar: (formulario: PublicacaoFormulario) => Promise<Resultado<string>>;
-  /** Avisa quem envolve o formulário que há alteração não salva. */
+  /**
+   * Avisa quem envolve o formulário que há alteração não salva.
+   *
+   * A referência precisa ser estável — vai na dependência de um efeito. Uma
+   * arrow inline fecharia o laço efeito → estado no pai → nova arrow → efeito,
+   * que é o "Maximum update depth" que este projeto já pagou uma vez.
+   */
   aoMudarPendencia?: (pendente: boolean) => void;
 }) {
   const [previa, setPrevia] = useState(false);
@@ -70,6 +76,20 @@ export function PublicacaoForm({
   const resumo = useWatch({ control, name: "resumo" });
   const corpo = useWatch({ control, name: "corpo" });
   const tag = useWatch({ control, name: "tag" });
+
+  const imagemUrl = useWatch({ control, name: "imagemUrl" });
+
+  // Espelha o formulário inteiro para a prévia: montar o objeto no JSX levaria
+  // a inventar campo, que foi o que aconteceu no primeiro corte deste código.
+  const valoresDaPrevia: PublicacaoFormulario = {
+    titulo,
+    slug,
+    resumo,
+    corpo,
+    imagemUrl,
+    tag,
+    publicado: valoresIniciais.publicado,
+  };
 
   const registroTitulo = register("titulo");
   const registroSlug = register("slug");
@@ -114,6 +134,8 @@ export function PublicacaoForm({
             role="tab"
             id={`${idDasAbas}-${aba.chave}`}
             aria-selected={aba.ativa}
+            aria-controls={`${idDasAbas}-painel-${aba.chave}`}
+            tabIndex={aba.ativa ? 0 : -1}
             onClick={() => setPrevia(aba.chave === "previa")}
             className={cn(
               "min-h-11 border-b-2 px-4 text-xs font-semibold uppercase tracking-rotulo transition-colors",
@@ -128,17 +150,13 @@ export function PublicacaoForm({
       </div>
 
       {previa ? (
-        <div role="tabpanel" aria-labelledby={`${idDasAbas}-previa`}>
+        <div
+          role="tabpanel"
+          id={`${idDasAbas}-painel-previa`}
+          aria-labelledby={`${idDasAbas}-previa`}
+        >
           <PublicacaoPrevia
-            formulario={{
-              titulo,
-              slug,
-              resumo,
-              corpo,
-              tag,
-              imagemUrl: "",
-              publicado: valoresIniciais.publicado,
-            }}
+            formulario={valoresDaPrevia}
             publicadoEm={publicadoEm}
           />
         </div>
@@ -147,6 +165,7 @@ export function PublicacaoForm({
       <fieldset
         disabled={isSubmitting}
         role="tabpanel"
+        id={`${idDasAbas}-painel-escrever`}
         aria-labelledby={`${idDasAbas}-escrever`}
         className={cn("flex flex-col gap-6", previa && "hidden")}
       >

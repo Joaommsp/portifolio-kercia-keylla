@@ -35,6 +35,10 @@ export function Campo({
   valor?: string;
   children: ReactNode;
 }) {
+  const usados = (valor ?? "").length;
+  const estourou = limite !== undefined && usados > limite;
+  const perto = limite !== undefined && usados >= limite * FRACAO_DE_ALERTA;
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline justify-between gap-3">
@@ -43,14 +47,12 @@ export function Campo({
           <span
             className={cn(
               "text-xs tabular-nums",
-              (valor ?? "").length > limite
-                ? "font-semibold text-destructive"
-                : (valor ?? "").length >= limite * FRACAO_DE_ALERTA
-                  ? "font-semibold text-brass"
-                  : "text-ink-soft",
+              estourou && "font-semibold text-destructive",
+              perto && !estourou && "font-semibold text-brass",
+              !perto && "text-ink-soft",
             )}
           >
-            {`${(valor ?? "").length}/${limite}`}
+            {`${usados}/${limite}`}
           </span>
         )}
       </div>

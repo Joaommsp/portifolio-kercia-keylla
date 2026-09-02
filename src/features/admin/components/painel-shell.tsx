@@ -11,6 +11,7 @@
  */
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +19,7 @@ import { ConfirmarAcao } from "@/components/layout/confirmar-acao";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { painel } from "@/content/site";
+import { usePendencia } from "@/features/admin/pendencia";
 import type { Resultado } from "@/lib/resultado";
 import { CAMINHO_HOME } from "@/lib/rotas";
 
@@ -28,8 +30,15 @@ export function PainelShell({
   aoSair: () => Promise<Resultado<null>>;
   children: ReactNode;
 }) {
+  const router = useRouter();
   const [saindo, setSaindo] = useState(false);
   const [confirmandoSaida, setConfirmandoSaida] = useState(false);
+  const pendencia = usePendencia();
+
+  /** Navega, ou pergunta primeiro se houver texto não salvo. */
+  function irPara(href: string) {
+    pendencia.tentarSair(() => router.push(href));
+  }
 
   async function sair() {
     setConfirmandoSaida(false);
@@ -38,7 +47,7 @@ export function PainelShell({
     const resultado = await aoSair();
 
     if ("erro" in resultado) {
-      toast.error(painel.saida.titulo, { description: resultado.erro });
+      toast.error(painel.avisos.naoSaiu, { description: resultado.erro });
       setSaindo(false);
     }
   }
@@ -59,7 +68,11 @@ export function PainelShell({
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-xs uppercase tracking-rotulo text-ink-soft transition-colors hover:text-olive"
+                onClick={(evento) => {
+                  evento.preventDefault();
+                  irPara(item.href);
+                }}
+                className="text-xs uppercase tracking-rotulo text-ink-soft transition-colors pointer-fino:hover:text-olive"
               >
                 {item.rotulo}
               </Link>
@@ -69,7 +82,11 @@ export function PainelShell({
           <div className="ml-auto flex items-center gap-4">
             <Link
               href={CAMINHO_HOME}
-              className="text-xs uppercase tracking-rotulo text-ink-soft transition-colors hover:text-olive"
+              onClick={(evento) => {
+                evento.preventDefault();
+                irPara(CAMINHO_HOME);
+              }}
+              className="text-xs uppercase tracking-rotulo text-ink-soft transition-colors pointer-fino:hover:text-olive"
             >
               {painel.verSite}
             </Link>
@@ -77,7 +94,9 @@ export function PainelShell({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setConfirmandoSaida(true)}
+              onClick={() =>
+                pendencia.tentarSair(() => setConfirmandoSaida(true))
+              }
               disabled={saindo}
             >
               {saindo ? painel.sair.emAndamento : painel.sair.rotulo}
@@ -89,6 +108,18 @@ export function PainelShell({
       <main className="flex-1 py-10">
         <Container>{children}</Container>
       </main>
+
+      {/* A pergunta de alteração não salva vive aqui, e não no editor: quem
+          dispara a saída pode ser o cabeçalho. */}
+      <ConfirmarAcao
+        aberto={pendencia.perguntando}
+        titulo={painel.semSalvar.titulo}
+        descricao={painel.semSalvar.descricao}
+        rotuloConfirmar={painel.semSalvar.confirmar}
+        rotuloCancelar={painel.semSalvar.cancelar}
+        aoConfirmar={pendencia.confirmarSaida}
+        aoFechar={pendencia.cancelarSaida}
+      />
 
       <ConfirmarAcao
         aberto={confirmandoSaida}

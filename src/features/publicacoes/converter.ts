@@ -104,6 +104,35 @@ export function paraFormularioDePublicacao(
 }
 
 /**
+ * Monta a publicação que a prévia do painel renderiza, a partir do que está no
+ * formulário. Caminho inverso de `paraFormularioDePublicacao`.
+ *
+ * Existe para a prévia usar o MESMO componente da página pública: sem isto ela
+ * seria uma segunda versão do artigo, e divergiria dele no primeiro ajuste —
+ * deixando de servir para conferir como o texto vai sair.
+ *
+ * O `id` é de mentira porque nada o lê na apresentação, e a data pode ser nula:
+ * rascunho ainda não tem data, e o artigo já sabe omiti-la.
+ */
+export function paraPublicacaoDePrevia(
+  formulario: PublicacaoFormulario,
+  publicadoEm: Date | null,
+): Publicacao {
+  return {
+    id: "previa",
+    titulo: formulario.titulo,
+    slug: formulario.slug,
+    resumo: formulario.resumo,
+    corpo: formulario.corpo,
+    imagemUrl: formulario.imagemUrl === "" ? null : formulario.imagemUrl,
+    tag: formulario.tag === "" ? null : formulario.tag,
+    publicado: formulario.publicado,
+    publicadoEm,
+    atualizadoEm: null,
+  };
+}
+
+/**
  * Ordena as publicações como o painel as lista: da mais recente para a mais
  * antiga. Publicação sem data fica no fim, e não some — no painel é justamente
  * ela que precisa ser vista e corrigida.

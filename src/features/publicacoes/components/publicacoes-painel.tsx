@@ -33,7 +33,6 @@ export function PublicacoesPainel() {
   const { resultado, recarregar } = useCarga(listarNoPainel);
   const [idOcupado, setIdOcupado] = useState<string | null>(null);
 
-
   /**
    * Roda a ação da linha e recarrega a lista quando ela dá certo. Cada desfecho
    * avisa: sem retorno, alternar o estado de uma publicação é uma ação que não
@@ -71,7 +70,6 @@ export function PublicacoesPainel() {
         </Link>
       </div>
 
-
       {resultado === null ? (
         <div role="status">
           <SectionMessage>{textos.carregando}</SectionMessage>
@@ -91,7 +89,7 @@ export function PublicacoesPainel() {
               {
                 titulo: painel.avisos.naoAlternou,
                 sucesso: publicacao.publicado
-                  ? painel.avisos.rascunhoSalvo
+                  ? painel.avisos.tiradaDoAr
                   : painel.avisos.publicada,
               },
             )

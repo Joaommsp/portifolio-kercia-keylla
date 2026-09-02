@@ -10,9 +10,7 @@ import type { User } from "firebase/auth";
 import { vi } from "vitest";
 
 /** Usuária autenticada como o SDK a entrega, com o mínimo que o painel usa. */
-export function criarUsuarioFalso(
-  email = "keylla@exemplo.com.br",
-): User {
+export function criarUsuarioFalso(email = "keylla@exemplo.com.br"): User {
   return { uid: "uid-da-autora", email } as User;
 }
 

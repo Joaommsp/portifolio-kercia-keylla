@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { renderizarNoPainel } from "@/test/painel";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
@@ -65,14 +66,14 @@ beforeEach(() => {
 
 describe("PublicacaoEditor", () => {
   it("abre o formulário em branco quando o id é o de publicação nova", () => {
-    render(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
+    renderizarNoPainel(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
 
     expect(campo(textos.campos.titulo)).toHaveValue("");
     expect(obter).not.toHaveBeenCalled();
   });
 
   it("carrega a publicação existente no formulário", async () => {
-    render(<PublicacaoEditor id="p1" />);
+    renderizarNoPainel(<PublicacaoEditor id="p1" />);
 
     await waitFor(() =>
       expect(campo(textos.campos.titulo)).toHaveValue("A AT não é babá"),
@@ -83,7 +84,7 @@ describe("PublicacaoEditor", () => {
   it("avisa que a publicação não existe, em vez de mostrar tela em branco", async () => {
     obter.mockResolvedValue({ dados: null });
 
-    render(<PublicacaoEditor id="sumida" />);
+    renderizarNoPainel(<PublicacaoEditor id="sumida" />);
 
     expect(await screen.findByText(textos.naoEncontrada)).toBeInTheDocument();
     expect(
@@ -96,7 +97,7 @@ describe("PublicacaoEditor", () => {
       erro: "Você não tem permissão para esta operação.",
     });
 
-    render(<PublicacaoEditor id="p1" />);
+    renderizarNoPainel(<PublicacaoEditor id="p1" />);
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Você não tem permissão para esta operação.",
@@ -104,7 +105,7 @@ describe("PublicacaoEditor", () => {
   });
 
   it("cria a publicação e volta para a lista", async () => {
-    render(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
+    renderizarNoPainel(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
 
     fireEvent.change(campo(textos.campos.titulo), {
       target: { value: "Texto novo" },
@@ -125,7 +126,7 @@ describe("PublicacaoEditor", () => {
   });
 
   it("atualiza preservando a data de publicação já gravada", async () => {
-    render(<PublicacaoEditor id="p1" />);
+    renderizarNoPainel(<PublicacaoEditor id="p1" />);
 
     await waitFor(() =>
       expect(campo(textos.campos.titulo)).toHaveValue("A AT não é babá"),
@@ -150,7 +151,7 @@ describe("PublicacaoEditor", () => {
       erro: "Você não tem permissão para esta operação.",
     });
 
-    render(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
+    renderizarNoPainel(<PublicacaoEditor id={ID_NOVA_PUBLICACAO} />);
 
     fireEvent.change(campo(textos.campos.titulo), {
       target: { value: "Texto novo" },
@@ -178,9 +179,9 @@ describe("PublicacaoEditor", () => {
     expect(campo(textos.campos.titulo)).toHaveValue("Texto novo");
   });
 
-  it("pergunta antes de sair com alteração pendente", async () => {
+  it("segura a saída quando há alteração pendente", async () => {
     obter.mockResolvedValue({ dados: publicacao });
-    render(<PublicacaoEditor id="p1" />);
+    renderizarNoPainel(<PublicacaoEditor id="p1" />);
     await screen.findByLabelText(textos.campos.titulo);
 
     fireEvent.change(campo(textos.campos.titulo), {
@@ -188,22 +189,21 @@ describe("PublicacaoEditor", () => {
     });
 
     await userEvent.click(
-      screen.getByRole("button", { name: textos.acoes.voltar }),
+      screen.getByRole("link", { name: textos.acoes.voltar }),
     );
 
-    expect(
-      screen.getByRole("alertdialog", { name: painel.semSalvar.titulo }),
-    ).toBeInTheDocument();
+    // A pergunta é do cabeçalho do painel, que hospeda o diálogo; aqui o que
+    // importa é que a navegação não aconteceu por cima do texto não salvo.
     expect(empurrar).not.toHaveBeenCalled();
   });
 
   it("volta direto quando não há nada pendente", async () => {
     obter.mockResolvedValue({ dados: publicacao });
-    render(<PublicacaoEditor id="p1" />);
+    renderizarNoPainel(<PublicacaoEditor id="p1" />);
     await screen.findByLabelText(textos.campos.titulo);
 
     await userEvent.click(
-      screen.getByRole("button", { name: textos.acoes.voltar }),
+      screen.getByRole("link", { name: textos.acoes.voltar }),
     );
 
     expect(empurrar).toHaveBeenCalledWith(CAMINHO_PAINEL);

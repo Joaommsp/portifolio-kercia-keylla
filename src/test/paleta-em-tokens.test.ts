@@ -39,7 +39,8 @@ import { describe, expect, it } from "vitest";
 const RAIZ = join(process.cwd(), "src");
 
 /** Cor escrita à mão: hexadecimal ou função de cor do CSS. */
-const COR_LITERAL = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lch|lab)\(/g;
+const COR_LITERAL =
+  /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lch|lab)\(/g;
 
 /** Utilitários do Tailwind que recebem cor. */
 const UTILITARIOS_DE_COR =
@@ -71,7 +72,8 @@ const COR_EM_STYLE = new RegExp(
 );
 
 /** Valor de cor que não pinta nada por conta própria. */
-const VALOR_NEUTRO = /^(?:transparent|currentColor|inherit|initial|revert|unset|none)$/;
+const VALOR_NEUTRO =
+  /^(?:transparent|currentColor|inherit|initial|revert|unset|none)$/;
 
 /**
  * Classes de terceiro toleradas, arquivo a arquivo.
@@ -84,7 +86,10 @@ const VALOR_NEUTRO = /^(?:transparent|currentColor|inherit|initial|revert|unset|
  * mesmo jeito que qualquer outra classe de cor. Cor literal segue reprovando em
  * `src/components/ui/` como em qualquer outro lugar.
  */
-const CLASSES_DE_TERCEIRO_TOLERADAS: Record<string, Readonly<Record<string, number>>> = {
+const CLASSES_DE_TERCEIRO_TOLERADAS: Record<
+  string,
+  Readonly<Record<string, number>>
+> = {
   "components/ui/dialog.tsx": { "bg-black": 1 },
   "components/ui/alert-dialog.tsx": { "bg-black": 1 },
 };
@@ -107,7 +112,12 @@ function coresEmStyleInlineEm(fonte: string): string[] {
   return [...fonte.matchAll(STYLE_INLINE)].flatMap(([, corpo]) =>
     [...corpo.matchAll(COR_EM_STYLE)]
       .map(([, valor]) => valor.trim())
-      .filter((valor) => valor !== "" && !valor.includes("var(--") && !VALOR_NEUTRO.test(valor)),
+      .filter(
+        (valor) =>
+          valor !== "" &&
+          !valor.includes("var(--") &&
+          !VALOR_NEUTRO.test(valor),
+      ),
   );
 }
 
@@ -127,7 +137,9 @@ function arquivosDeCodigo(pasta: string): string[] {
   return readdirSync(pasta, { withFileTypes: true }).flatMap((entrada) => {
     const caminho = join(pasta, entrada.name);
     if (entrada.isDirectory()) {
-      return pasta === RAIZ && entrada.name === PASTA_DE_TESTE ? [] : arquivosDeCodigo(caminho);
+      return pasta === RAIZ && entrada.name === PASTA_DE_TESTE
+        ? []
+        : arquivosDeCodigo(caminho);
     }
     const ehCodigo = /\.tsx?$/.test(entrada.name);
     const ehTeste = /\.test\.tsx?$/.test(entrada.name);
@@ -148,10 +160,14 @@ const arquivos = arquivosLidos.map(({ caminho }) => caminho);
 /** Arquivos em que o detector achou algo, já sem o que a exceção tolera. */
 function infratoresDe(
   detectar: (fonte: string) => string[],
-  tolerar: (caminho: string, achados: string[]) => string[] = (_, achados) => achados,
+  tolerar: (caminho: string, achados: string[]) => string[] = (_, achados) =>
+    achados,
 ): { caminho: string; achados: string[] }[] {
   return arquivosLidos
-    .map(({ caminho, fonte }) => ({ caminho, achados: tolerar(caminho, detectar(fonte)) }))
+    .map(({ caminho, fonte }) => ({
+      caminho,
+      achados: tolerar(caminho, detectar(fonte)),
+    }))
     .filter(({ achados }) => achados.length > 0);
 }
 
@@ -177,7 +193,9 @@ describe("paleta em tokens (SIT-05)", () => {
   });
 
   it("não deixa classe da paleta padrão do Tailwind fora das exceções nomeadas", () => {
-    expect(infratoresDe(classesForaDaPaletaEm, semAsClassesDeTerceiro)).toEqual([]);
+    expect(infratoresDe(classesForaDaPaletaEm, semAsClassesDeTerceiro)).toEqual(
+      [],
+    );
   });
 
   it("não deixa cor escrita direto em style inline", () => {
@@ -185,9 +203,14 @@ describe("paleta em tokens (SIT-05)", () => {
   });
 
   it("mantém as exceções de terceiro apontando para código que existe", () => {
-    for (const [caminho, classes] of Object.entries(CLASSES_DE_TERCEIRO_TOLERADAS)) {
+    for (const [caminho, classes] of Object.entries(
+      CLASSES_DE_TERCEIRO_TOLERADAS,
+    )) {
       const arquivo = arquivosLidos.find((lido) => lido.caminho === caminho);
-      expect(arquivo, `exceção aponta para arquivo inexistente: ${caminho}`).toBeDefined();
+      expect(
+        arquivo,
+        `exceção aponta para arquivo inexistente: ${caminho}`,
+      ).toBeDefined();
 
       const achadas = classesForaDaPaletaEm(arquivo!.fonte);
       for (const [classe, quantidade] of Object.entries(classes)) {
@@ -203,36 +226,56 @@ describe("paleta em tokens (SIT-05)", () => {
 describe("detectores da trava", () => {
   it("acusa cor escrita à mão em className e em style inline", () => {
     expect(coresLiteraisEm('<p className="bg-[#EDF3E4]" />')).toHaveLength(1);
-    expect(coresLiteraisEm('<p style={{ color: "#8E7A32" }} />')).toHaveLength(1);
-    expect(coresLiteraisEm('<p className="text-[rgb(76,91,52)]" />')).toHaveLength(1);
-    expect(coresLiteraisEm("<p style={{ background: `hsl(80 20% 30%)` }} />")).toHaveLength(1);
+    expect(coresLiteraisEm('<p style={{ color: "#8E7A32" }} />')).toHaveLength(
+      1,
+    );
+    expect(
+      coresLiteraisEm('<p className="text-[rgb(76,91,52)]" />'),
+    ).toHaveLength(1);
+    expect(
+      coresLiteraisEm("<p style={{ background: `hsl(80 20% 30%)` }} />"),
+    ).toHaveLength(1);
   });
 
   it("acusa cor escondida na classe montada fora do JSX", () => {
-    expect(coresLiteraisEm('const variantes = cva("bg-[#EDF3E4] rounded-lg");')).toHaveLength(1);
-    expect(coresLiteraisEm('const CLASSE = "border-[oklch(0.5_0.1_120)]";')).toHaveLength(1);
+    expect(
+      coresLiteraisEm('const variantes = cva("bg-[#EDF3E4] rounded-lg");'),
+    ).toHaveLength(1);
+    expect(
+      coresLiteraisEm('const CLASSE = "border-[oklch(0.5_0.1_120)]";'),
+    ).toHaveLength(1);
     expect(coresLiteraisEm("/* fundo aprovado: #EDF3E4 */")).toHaveLength(1);
   });
 
   it("não acusa âncora, token de tema nem classe utilitária", () => {
-    expect(coresLiteraisEm('<a href="#contato" className="text-brass" />')).toEqual([]);
-    expect(coresLiteraisEm("<a href={`#${ancoras.topo}`}>Topo</a>")).toEqual([]);
-    expect(coresLiteraisEm('<p className="border-line bg-surface text-ink-soft" />')).toEqual([]);
-    expect(coresLiteraisEm("<p style={{ animationDelay: `${i * 60}ms` }} />")).toEqual([]);
     expect(
-      coresLiteraisEm('"hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]"'),
+      coresLiteraisEm('<a href="#contato" className="text-brass" />'),
+    ).toEqual([]);
+    expect(coresLiteraisEm("<a href={`#${ancoras.topo}`}>Topo</a>")).toEqual(
+      [],
+    );
+    expect(
+      coresLiteraisEm('<p className="border-line bg-surface text-ink-soft" />'),
+    ).toEqual([]);
+    expect(
+      coresLiteraisEm("<p style={{ animationDelay: `${i * 60}ms` }} />"),
+    ).toEqual([]);
+    expect(
+      coresLiteraisEm(
+        '"hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]"',
+      ),
     ).toEqual([]);
   });
 
   it("acusa classe da paleta padrão do Tailwind", () => {
-    expect(classesForaDaPaletaEm('<p className="bg-emerald-200 text-rose-600" />')).toEqual([
-      "bg-emerald-200",
-      "text-rose-600",
-    ]);
-    expect(classesForaDaPaletaEm('const v = cva("border-slate-300 hover:bg-white");')).toEqual([
-      "border-slate-300",
-      "bg-white",
-    ]);
+    expect(
+      classesForaDaPaletaEm('<p className="bg-emerald-200 text-rose-600" />'),
+    ).toEqual(["bg-emerald-200", "text-rose-600"]);
+    expect(
+      classesForaDaPaletaEm(
+        'const v = cva("border-slate-300 hover:bg-white");',
+      ),
+    ).toEqual(["border-slate-300", "bg-white"]);
   });
 
   it("não confunde token do tema com família do Tailwind", () => {
@@ -242,26 +285,38 @@ describe("detectores da trava", () => {
       ),
     ).toEqual([]);
     // `auto-` e `into-` terminam com os mesmos dois caracteres de `to-`.
-    expect(classesForaDaPaletaEm('<p className="auto-white grid-into-black" />')).toEqual([]);
+    expect(
+      classesForaDaPaletaEm('<p className="auto-white grid-into-black" />'),
+    ).toEqual([]);
   });
 
   it("acusa cor nomeada e hexadecimal em style inline", () => {
     expect(
-      coresEmStyleInlineEm('<p style={{ color: "white", background: "darkolivegreen" }} />'),
+      coresEmStyleInlineEm(
+        '<p style={{ color: "white", background: "darkolivegreen" }} />',
+      ),
     ).toEqual(["white", "darkolivegreen"]);
-    expect(coresEmStyleInlineEm('<p style={{ backgroundColor: "#8E7A32" }} />')).toEqual([
-      "#8E7A32",
-    ]);
+    expect(
+      coresEmStyleInlineEm('<p style={{ backgroundColor: "#8E7A32" }} />'),
+    ).toEqual(["#8E7A32"]);
   });
 
   it("não acusa token, valor neutro nem propriedade sem cor em style inline", () => {
-    expect(coresEmStyleInlineEm('<p style={{ color: "var(--ink)" }} />')).toEqual([]);
     expect(
-      coresEmStyleInlineEm('<p style={{ background: "linear-gradient(var(--olive), transparent)" }} />'),
+      coresEmStyleInlineEm('<p style={{ color: "var(--ink)" }} />'),
     ).toEqual([]);
-    expect(coresEmStyleInlineEm('<p style={{ borderColor: "transparent" }} />')).toEqual([]);
-    expect(coresEmStyleInlineEm("<p style={{ animationDelay: `${i * 60}ms` }} />")).toEqual([]);
+    expect(
+      coresEmStyleInlineEm(
+        '<p style={{ background: "linear-gradient(var(--olive), transparent)" }} />',
+      ),
+    ).toEqual([]);
+    expect(
+      coresEmStyleInlineEm('<p style={{ borderColor: "transparent" }} />'),
+    ).toEqual([]);
+    expect(
+      coresEmStyleInlineEm("<p style={{ animationDelay: `${i * 60}ms` }} />"),
+    ).toEqual([]);
     // Fora de `style` inline, "color:" é texto qualquer e não é auditado aqui.
-    expect(coresEmStyleInlineEm('const css = `color: white;`;')).toEqual([]);
+    expect(coresEmStyleInlineEm("const css = `color: white;`;")).toEqual([]);
   });
 });

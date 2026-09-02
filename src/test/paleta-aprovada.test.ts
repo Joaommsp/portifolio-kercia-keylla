@@ -83,8 +83,8 @@ function hexParaOklch(hex: string): Oklch {
  * despercebida se só a primeira fosse conferida.
  */
 function declaracoesDoToken(folha: string, nome: string): string[] {
-  return [...folha.matchAll(new RegExp(`--${nome}:\\s*([^;]+);`, "g"))].map(([, valor]) =>
-    valor.trim(),
+  return [...folha.matchAll(new RegExp(`--${nome}:\\s*([^;]+);`, "g"))].map(
+    ([, valor]) => valor.trim(),
   );
 }
 
@@ -108,7 +108,10 @@ describe("paleta aprovada nos tokens (SIT-05)", () => {
     (nome, hex) => {
       const declaracoes = declaracoesDoToken(FOLHA_DE_TEMA, nome);
 
-      expect(declaracoes, `--${nome} deveria ser declarado uma única vez`).toHaveLength(1);
+      expect(
+        declaracoes,
+        `--${nome} deveria ser declarado uma única vez`,
+      ).toHaveLength(1);
 
       const declarado = lerOklch(declaracoes[0]);
       expect(
@@ -117,11 +120,15 @@ describe("paleta aprovada nos tokens (SIT-05)", () => {
       ).not.toBeNull();
 
       const aprovado = hexParaOklch(hex);
-      expect(Math.abs(declarado!.luminancia - aprovado.luminancia)).toBeLessThanOrEqual(
-        FOLGA.luminancia,
+      expect(
+        Math.abs(declarado!.luminancia - aprovado.luminancia),
+      ).toBeLessThanOrEqual(FOLGA.luminancia);
+      expect(Math.abs(declarado!.croma - aprovado.croma)).toBeLessThanOrEqual(
+        FOLGA.croma,
       );
-      expect(Math.abs(declarado!.croma - aprovado.croma)).toBeLessThanOrEqual(FOLGA.croma);
-      expect(Math.abs(declarado!.matiz - aprovado.matiz)).toBeLessThanOrEqual(FOLGA.matiz);
+      expect(Math.abs(declarado!.matiz - aprovado.matiz)).toBeLessThanOrEqual(
+        FOLGA.matiz,
+      );
     },
   );
 
@@ -133,9 +140,12 @@ describe("paleta aprovada nos tokens (SIT-05)", () => {
   });
 
   it("acha o token pelo nome exato, sem confundir prefixo com sufixo", () => {
-    const folha = ":root { --olive: oklch(0.1 0.2 3); --olive-deep: oklch(0.4 0.5 6); }";
+    const folha =
+      ":root { --olive: oklch(0.1 0.2 3); --olive-deep: oklch(0.4 0.5 6); }";
 
-    expect(declaracoesDoToken(folha, "olive-deep")).toEqual(["oklch(0.4 0.5 6)"]);
+    expect(declaracoesDoToken(folha, "olive-deep")).toEqual([
+      "oklch(0.4 0.5 6)",
+    ]);
     expect(declaracoesDoToken(folha, "brass")).toEqual([]);
   });
 });

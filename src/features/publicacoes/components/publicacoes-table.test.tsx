@@ -54,8 +54,8 @@ describe("PublicacoesTable", () => {
       criarPublicacao({ id: "p2", titulo: "Outra", publicado: false }),
     ]);
 
-    expect(screen.getByText(textos.estados.publicado)).toBeInTheDocument();
-    expect(screen.getByText(textos.estados.rascunho)).toBeInTheDocument();
+    expect(screen.getByText(painel.estados.publicado)).toBeInTheDocument();
+    expect(screen.getByText(painel.estados.rascunho)).toBeInTheDocument();
   });
 
   it("mostra a data de publicação e avisa quando não há", () => {

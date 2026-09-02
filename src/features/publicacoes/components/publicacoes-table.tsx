@@ -28,6 +28,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { painel } from "@/content/site";
 import type { Publicacao } from "@/features/publicacoes/schemas";
 import { formatDateBROuNulo } from "@/lib/format";
+import { PROPS_NOVA_ABA } from "@/lib/link";
 import { caminhoDaEdicao, caminhoDaPublicacao } from "@/lib/rotas";
 
 const { listaDePublicacoes: textos } = painel;
@@ -84,8 +85,8 @@ export function PublicacoesTable({
               <CelulaDaTabela>
                 <Badge variant={publicacao.publicado ? "default" : "secondary"}>
                   {publicacao.publicado
-                    ? textos.estados.publicado
-                    : textos.estados.rascunho}
+                    ? painel.estados.publicado
+                    : painel.estados.rascunho}
                 </Badge>
               </CelulaDaTabela>
 
@@ -121,8 +122,7 @@ export function PublicacoesTable({
                 {publicacao.publicado ? (
                   <Link
                     href={caminhoDaPublicacao(publicacao.slug)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    {...PROPS_NOVA_ABA}
                     className={buttonVariants({ variant: "ghost", size: "sm" })}
                   >
                     {textos.acoes.verNoSite}

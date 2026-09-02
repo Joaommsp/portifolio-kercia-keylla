@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderizarNoPainel } from "@/test/painel";
 import { usePathname, useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
@@ -36,7 +37,7 @@ function definirSessao(sessao: Partial<Sessao>) {
 
 function renderizar(caminho: string = CAMINHO_PAINEL) {
   usePathnameFalso.mockReturnValue(caminho);
-  return render(<PainelGuard>{CONTEUDO_DO_PAINEL}</PainelGuard>);
+  return renderizarNoPainel(<PainelGuard>{CONTEUDO_DO_PAINEL}</PainelGuard>);
 }
 
 beforeEach(() => {

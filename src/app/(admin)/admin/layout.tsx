@@ -8,11 +8,14 @@
 
 import { Toaster } from "@/components/ui/sonner";
 import { PainelGuard } from "@/features/admin/components/painel-guard";
+import { ProvedorDePendencia } from "@/features/admin/pendencia";
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <>
-      <PainelGuard>{children}</PainelGuard>
+      <ProvedorDePendencia>
+        <PainelGuard>{children}</PainelGuard>
+      </ProvedorDePendencia>
       <Toaster position="bottom-right" />
     </>
   );

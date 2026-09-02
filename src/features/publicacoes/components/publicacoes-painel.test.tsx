@@ -90,7 +90,7 @@ describe("PublicacoesPainel", () => {
 
     expect(await screen.findByText("A AT não é babá")).toBeInTheDocument();
     expect(screen.getByText("Rascunho novo")).toBeInTheDocument();
-    expect(screen.getByText(textos.estados.rascunho)).toBeInTheDocument();
+    expect(screen.getByText(painel.estados.rascunho)).toBeInTheDocument();
   });
 
   it("mostra a mensagem do Firebase quando a leitura falha", async () => {

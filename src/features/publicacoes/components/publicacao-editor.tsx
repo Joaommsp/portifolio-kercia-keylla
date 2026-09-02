@@ -13,13 +13,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
 
-import { ConfirmarAcao } from "@/components/layout/confirmar-acao";
 import { SectionMessage } from "@/components/layout/section-message";
 import { Badge } from "@/components/ui/badge";
 import { painel } from "@/content/site";
+import { usePendencia } from "@/features/admin/pendencia";
 import { PublicacaoForm } from "@/features/publicacoes/components/publicacao-form";
 import { paraFormularioDePublicacao } from "@/features/publicacoes/converter";
 import {
@@ -33,11 +33,13 @@ import type {
 } from "@/features/publicacoes/schemas";
 import { useCarga } from "@/hooks/use-carga";
 import type { Resultado } from "@/lib/resultado";
+import { OPCOES_NOVA_ABA, PROPS_NOVA_ABA } from "@/lib/link";
 import {
   CAMINHO_PAINEL,
   ID_NOVA_PUBLICACAO,
   caminhoDaPublicacao,
 } from "@/lib/rotas";
+import { urlDoSite } from "@/lib/url";
 
 const { publicacao: textos } = painel;
 
@@ -47,27 +49,24 @@ const NOVA: Resultado<Publicacao | null> = { dados: null };
 export function PublicacaoEditor({ id }: { id: string }) {
   const router = useRouter();
   const ehNova = id === ID_NOVA_PUBLICACAO;
-  const [pendente, setPendente] = useState(false);
-  const [confirmandoSaida, setConfirmandoSaida] = useState(false);
+  // A pendência mora no contexto do painel: o cabeçalho também precisa dela
+  // para não navegar por cima de texto não salvo.
+  const pendencia = usePendencia();
 
   useEffect(() => {
-    if (!pendente) return;
+    if (!pendencia.temPendencia) return;
 
     // O diálogo cobre a saída pela interface; este aviso cobre fechar a aba e
     // voltar pelo navegador, que o React não intercepta.
-    const aoSair = (evento: BeforeUnloadEvent) => evento.preventDefault();
+    const aoSair = (evento: BeforeUnloadEvent) => {
+      evento.preventDefault();
+      // Navegador antigo ainda exige o valor de retorno para exibir o aviso.
+      evento.returnValue = "";
+    };
+
     window.addEventListener("beforeunload", aoSair);
     return () => window.removeEventListener("beforeunload", aoSair);
-  }, [pendente]);
-
-  function voltar() {
-    if (pendente) {
-      setConfirmandoSaida(true);
-      return;
-    }
-
-    router.push(CAMINHO_PAINEL);
-  }
+  }, [pendencia.temPendencia]);
 
   const ler = useCallback(() => obterNoPainel(id), [id]);
   const { resultado: lido } = useCarga(ehNova ? null : ler);
@@ -90,7 +89,7 @@ export function PublicacaoEditor({ id }: { id: string }) {
     if ("dados" in gravacao) {
       // A pendência morre com o salvamento: sem isto o diálogo de "sair sem
       // salvar" apareceria logo depois de gravar.
-      setPendente(false);
+      pendencia.marcar(false);
 
       if (formulario.publicado) {
         toast.success(painel.avisos.publicada, {
@@ -98,7 +97,11 @@ export function PublicacaoEditor({ id }: { id: string }) {
           action: {
             label: painel.avisos.verNoSite,
             onClick: () => {
-              window.open(caminhoDaPublicacao(formulario.slug), "_blank");
+              window.open(
+                caminhoDaPublicacao(formulario.slug),
+                "_blank",
+                OPCOES_NOVA_ABA,
+              );
             },
           },
         });
@@ -119,13 +122,18 @@ export function PublicacaoEditor({ id }: { id: string }) {
       <div className="flex flex-col gap-2">
         {/* Botão, não link: com alterações pendentes a saída passa pela
             pergunta antes de acontecer. */}
-        <button
-          type="button"
-          onClick={voltar}
+        {/* Continua um link — ctrl/meio-clique seguem funcionando —, mas a
+            navegação normal passa pela guarda de alterações. */}
+        <Link
+          href={CAMINHO_PAINEL}
+          onClick={(evento) => {
+            evento.preventDefault();
+            pendencia.tentarSair(() => router.push(CAMINHO_PAINEL));
+          }}
           className="self-start text-xs uppercase tracking-rotulo text-ink-soft transition-colors pointer-fino:hover:text-olive"
         >
           {textos.acoes.voltar}
-        </button>
+        </Link>
 
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="font-display text-3xl text-olive">
@@ -135,8 +143,8 @@ export function PublicacaoEditor({ id }: { id: string }) {
           {publicacao === null ? null : (
             <Badge variant={publicacao.publicado ? "default" : "outline"}>
               {publicacao.publicado
-                ? textos.estado.noAr
-                : textos.estado.rascunho}
+                ? painel.estados.publicado
+                : painel.estados.rascunho}
             </Badge>
           )}
         </div>
@@ -150,11 +158,10 @@ export function PublicacaoEditor({ id }: { id: string }) {
               : textos.endereco.ficara}{" "}
             <Link
               href={caminhoDaPublicacao(publicacao.slug)}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...PROPS_NOVA_ABA}
               className="font-semibold text-olive underline-offset-4 pointer-fino:hover:underline"
             >
-              {caminhoDaPublicacao(publicacao.slug)}
+              {urlDoSite(caminhoDaPublicacao(publicacao.slug))}
             </Link>
           </p>
         )}
@@ -167,7 +174,7 @@ export function PublicacaoEditor({ id }: { id: string }) {
       ) : "erro" in resultado ? (
         <SectionMessage tom="erro">{resultado.erro}</SectionMessage>
       ) : ehNova ? (
-        <PublicacaoForm aoSalvar={salvar} aoMudarPendencia={setPendente} />
+        <PublicacaoForm aoSalvar={salvar} aoMudarPendencia={pendencia.marcar} />
       ) : publicacao === null ? (
         <SectionMessage>{textos.naoEncontrada}</SectionMessage>
       ) : (
@@ -175,19 +182,9 @@ export function PublicacaoEditor({ id }: { id: string }) {
           valoresIniciais={paraFormularioDePublicacao(publicacao)}
           publicadoEm={publicacao.publicadoEm}
           aoSalvar={salvar}
-          aoMudarPendencia={setPendente}
+          aoMudarPendencia={pendencia.marcar}
         />
       )}
-
-      <ConfirmarAcao
-        aberto={confirmandoSaida}
-        titulo={painel.semSalvar.titulo}
-        descricao={painel.semSalvar.descricao}
-        rotuloConfirmar={painel.semSalvar.confirmar}
-        rotuloCancelar={painel.semSalvar.cancelar}
-        aoConfirmar={() => router.push(CAMINHO_PAINEL)}
-        aoFechar={() => setConfirmandoSaida(false)}
-      />
     </div>
   );
 }

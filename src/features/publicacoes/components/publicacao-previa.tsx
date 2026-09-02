@@ -1,55 +1,39 @@
-import { CorpoMarkdown } from "@/features/publicacoes/components/corpo-markdown";
 import { painel } from "@/content/site";
+import { PublicacaoArtigo } from "@/features/publicacoes/components/publicacao-artigo";
+import { paraPublicacaoDePrevia } from "@/features/publicacoes/converter";
 import type { PublicacaoFormulario } from "@/features/publicacoes/schemas";
-import { formatDateBR } from "@/lib/format";
 
 const { publicacao: textos } = painel;
 
 /**
  * Como a publicação vai aparecer no site, dentro do painel.
  *
- * Reusa o `CorpoMarkdown` da página pública em vez de renderizar markdown por
- * conta própria: uma segunda renderização divergiria da real no primeiro
- * ajuste, e a prévia deixaria de servir para conferir negrito, lista e link.
+ * Renderiza o `PublicacaoArtigo` — o MESMO componente da página pública —
+ * dentro de uma moldura tracejada. A tentação era montar um cabeçalho próprio
+ * aqui; ele já nasceria diferente do real (data, tamanho do título, imagem de
+ * topo), e a prévia deixaria de provar o que promete.
  */
 export function PublicacaoPrevia({
   formulario,
-  publicadoEm,
+  publicadoEm = null,
 }: {
   formulario: PublicacaoFormulario;
-  /** Data já gravada. Sem ela, a prévia mostra hoje — é o que valeria. */
+  /** Data já gravada. Rascunho ainda não tem, e o artigo sabe omitir. */
   publicadoEm?: Date | null;
 }) {
-  const titulo = formulario.titulo.trim();
-  const corpo = formulario.corpo.trim();
+  const publicacao = paraPublicacaoDePrevia(formulario, publicadoEm);
+  const semTitulo = publicacao.titulo.trim() === "";
+  const semTexto = publicacao.corpo.trim() === "";
 
   return (
-    <div className="rounded-xs border border-dashed border-line bg-ground px-6 py-7">
-      <p className="text-xs uppercase tracking-rotulo text-brass">
-        {formatDateBR(publicadoEm ?? new Date())}
-      </p>
-
-      <h2 className="mt-2 font-display text-3xl tracking-titulo text-olive">
-        {titulo === "" ? textos.previa.semTitulo : titulo}
-      </h2>
-
-      {formulario.resumo.trim() === "" ? null : (
-        <p className="mt-3 max-w-leitura text-ink-soft">{formulario.resumo}</p>
-      )}
-
-      {corpo === "" ? (
-        <p className="mt-6 text-sm text-ink-soft">{textos.previa.semTexto}</p>
-      ) : (
-        <div className="mt-6">
-          <CorpoMarkdown corpo={corpo} />
-        </div>
-      )}
-
-      {formulario.tag.trim() === "" ? null : (
-        <p className="mt-6 text-xs uppercase tracking-rotulo text-brass">
-          {formulario.tag}
-        </p>
-      )}
+    <div className="rounded-xs border border-dashed border-line bg-ground px-6 py-1 pb-7">
+      <PublicacaoArtigo
+        publicacao={{
+          ...publicacao,
+          titulo: semTitulo ? textos.previa.semTitulo : publicacao.titulo,
+          corpo: semTexto ? textos.previa.semTexto : publicacao.corpo,
+        }}
+      />
 
       <p className="mt-8 border-t border-line pt-4 text-xs text-ink-soft">
         {textos.previa.rodape}

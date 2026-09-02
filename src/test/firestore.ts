@@ -40,7 +40,10 @@ export function criarModuloFirestoreFalso() {
       restricoes: [] as RestricaoFalsa[],
     })),
     query: vi.fn(
-      (base: ConsultaFalsa, ...restricoes: RestricaoFalsa[]): ConsultaFalsa => ({
+      (
+        base: ConsultaFalsa,
+        ...restricoes: RestricaoFalsa[]
+      ): ConsultaFalsa => ({
         colecao: base.colecao,
         restricoes,
       }),
@@ -53,16 +56,15 @@ export function criarModuloFirestoreFalso() {
         valor,
       }),
     ),
-    orderBy: vi.fn(
-      (campo: string, direcao = "asc"): RestricaoFalsa => ({
-        tipo: "orderBy",
-        campo,
-        direcao,
-      }),
-    ),
-    limit: vi.fn(
-      (quantidade: number): RestricaoFalsa => ({ tipo: "limit", quantidade }),
-    ),
+    orderBy: vi.fn((campo: string, direcao = "asc"): RestricaoFalsa => ({
+      tipo: "orderBy",
+      campo,
+      direcao,
+    })),
+    limit: vi.fn((quantidade: number): RestricaoFalsa => ({
+      tipo: "limit",
+      quantidade,
+    })),
     getDocs: vi.fn(),
     getDoc: vi.fn(),
     doc: vi.fn((_db: unknown, colecao: string, id: string) => ({

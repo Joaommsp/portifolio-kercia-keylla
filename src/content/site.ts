@@ -595,7 +595,6 @@ export const painel = {
       data: "Publicado em",
       acoes: "Ações",
     },
-    estados: { publicado: "No ar", rascunho: "Rascunho" },
     semData: "Sem data",
     acoes: {
       criar: "Nova publicação",
@@ -638,7 +637,6 @@ export const painel = {
       rascunho: "Salvar rascunho",
       emAndamento: "Salvando…",
       voltar: "Voltar para a lista",
-      cancelar: "Cancelar",
     },
     abas: {
       escrever: "Escrever",
@@ -649,10 +647,6 @@ export const painel = {
       semTitulo: "Sem título ainda",
       semTexto: "O texto aparece aqui conforme você escreve.",
       rodape: "É assim que a publicação vai aparecer no site.",
-    },
-    estado: {
-      rascunho: "Rascunho",
-      noAr: "No ar",
     },
     endereco: {
       noAr: "No ar em",
@@ -673,10 +667,17 @@ export const painel = {
     confirmar: "Sair sem salvar",
     cancelar: "Continuar escrevendo",
   },
+  /** Estado de uma publicação. Um só par para o painel inteiro. */
+  estados: {
+    rascunho: "Rascunho",
+    publicado: "No ar",
+  },
   avisos: {
     publicada: "Publicação no ar",
-    publicadaDetalhe: "Já aparece no site.",
+    publicadaDetalhe: "Vai aparecer no site em alguns minutos.",
     rascunhoSalvo: "Rascunho salvo",
+    tiradaDoAr: "Publicação fora do ar",
+    naoSaiu: "Não deu para sair",
     rascunhoDetalhe: "Só você vê, até publicar.",
     verNoSite: "Ver no site",
     naoSalvou: "Não deu para salvar",
@@ -684,6 +685,7 @@ export const painel = {
     naoAlternou: "Não deu para mudar o estado",
     excluida: "Publicação excluída",
     entrouFalhou: "Não deu para entrar",
+    saindoComPendencia: "Você tem alterações não salvas.",
   },
   login: {
     titulo: "Entrar no painel",

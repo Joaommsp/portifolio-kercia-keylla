@@ -1,11 +1,21 @@
 /**
- * Atributos de link externo. Centraliza o `rel` seguro para nenhum destino de
- * terceiro depender de alguém lembrar de escrevê-lo.
+ * Atributos de quem abre em aba nova. Centraliza o `rel` seguro para nenhum
+ * destino depender de alguém lembrar de escrevê-lo.
+ *
+ * Vale também para destino interno aberto em aba nova — o painel faz isso para
+ * a autora conferir o texto no site sem perder o que está editando.
  */
+export const PROPS_NOVA_ABA = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
+
+/** Opções do `window.open` com a mesma proteção de `PROPS_NOVA_ABA`. */
+export const OPCOES_NOVA_ABA = "noopener,noreferrer";
+
+/** Atributos de link externo. */
 export function propsLinkExterno(externo: boolean) {
-  return externo
-    ? ({ target: "_blank", rel: "noopener noreferrer" } as const)
-    : {};
+  return externo ? PROPS_NOVA_ABA : {};
 }
 
 /**
