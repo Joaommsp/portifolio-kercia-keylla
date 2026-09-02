@@ -3,9 +3,9 @@ import { SectionHeading } from "@/components/layout/section-heading";
 import { ancoras, secaoPedagogia } from "@/content/site";
 
 /**
- * Trilha das frentes de formação. A linha que liga os números existe para
- * dizer que uma frente sustenta a próxima — some abaixo de `grade`, onde os
- * blocos deixam de ficar lado a lado e a linha perderia o sentido.
+ * Trilha das frentes de formação. O traço que liga os números existe para dizer
+ * que uma frente sustenta a próxima — some abaixo de `grade`, onde os blocos
+ * deixam de ficar lado a lado e ligá-los não diria nada.
  */
 export function Pedagogia() {
   return (
@@ -21,13 +21,15 @@ export function Pedagogia() {
         />
         <p className="max-w-chamada text-ink-soft">{secaoPedagogia.chamada}</p>
 
-        <ol className="relative mt-11 grid gap-9 cartao:grid-cols-2 grade:grid-cols-4 grade:gap-0">
-          <span
-            aria-hidden
-            className="absolute inset-x-0 top-4.5 hidden h-px bg-line grade:block"
-          />
+        <ol className="mt-11 grid gap-9 cartao:grid-cols-2 grade:grid-cols-4 grade:gap-0">
           {secaoPedagogia.frentes.map((frente, indice) => (
-            <li key={frente.titulo} className="relative grade:pr-6">
+            <li
+              key={frente.titulo}
+              // O traço sai de cada item, não da lista: assim ele para no
+              // último número em vez de sobrar uma coluna à direita, e a `ol`
+              // fica só com `li`, como o HTML exige.
+              className="relative grade:pr-6 grade:not-last:after:absolute grade:not-last:after:top-[calc(var(--spacing)*4.75)] grade:not-last:after:right-0 grade:not-last:after:left-9.5 grade:not-last:after:h-px grade:not-last:after:bg-line grade:not-last:after:content-['']"
+            >
               <span className="relative grid size-9.5 place-items-center rounded-full border border-brass bg-surface font-display text-sm tabular-nums text-brass">
                 {String(indice + 1).padStart(2, "0")}
               </span>

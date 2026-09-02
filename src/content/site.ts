@@ -59,7 +59,7 @@ export const navegacao = [
   { rotulo: "O que é uma AT", href: ancora(ancoras.at) },
   { rotulo: "Pedagogia", href: ancora(ancoras.pedagogia) },
   { rotulo: "Sobre", href: ancora(ancoras.sobre) },
-  { rotulo: "Formação", href: ancora(ancoras.formacao) },
+  { rotulo: "Certificações", href: ancora(ancoras.formacao) },
   { rotulo: "Publicações", href: ancora(ancoras.publicacoes) },
   { rotulo: "Contato", href: ancora(ancoras.contato) },
 ] as const;
@@ -153,9 +153,9 @@ export type FrenteDeFormacao = {
 };
 
 /**
- * As quatro frentes que sustentam o atendimento. A ordem é o argumento da
- * seção — a formação em educação vem antes do acompanhamento, não depois —,
- * por isso a numeração sai daqui e não de um contador do componente.
+ * As quatro frentes que sustentam o atendimento. A ORDEM é o argumento da
+ * seção — a formação em educação vem antes do acompanhamento, não depois — e
+ * por isso vive aqui; o número exibido é derivado dela na apresentação.
  */
 export const secaoPedagogia = {
   eyebrow: "Formação que sustenta a prática",
@@ -164,7 +164,7 @@ export const secaoPedagogia = {
     "Quatro frentes que se somam no mesmo atendimento — cada uma responde por uma parte do que a criança precisa.",
   frentes: [
     {
-      titulo: "Pedagogia",
+      titulo: "Pedagogia escolar",
       descricao:
         "A base de tudo: como a criança aprende, o que a trava e como o professor pode ser aliado. É daqui que vem a leitura de sala de aula que um acompanhamento sem formação em educação não alcança.",
     },
@@ -198,9 +198,15 @@ export const secaoSobre = {
   legendaFoto: "Foto em contexto",
 } as const;
 
+/**
+ * O REGISTRO da formação: instituição, ano e situação, vindos do Firestore.
+ * O argumento — o que cada frente faz no atendimento — é da seção Pedagogia
+ * (AD-044). Nomes de curso podem aparecer nas duas; os papéis é que não se
+ * misturam.
+ */
 export const secaoFormacao = {
   eyebrow: "Trajetória",
-  titulo: "Formação e certificações",
+  titulo: "Certificações",
   /** Acompanha o ano de uma formação ainda em curso: "2026 —". */
   sufixoEmAndamento: " —",
   rotulos: {

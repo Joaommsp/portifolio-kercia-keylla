@@ -51,7 +51,7 @@ export function Hero() {
               className="bg-linear-to-b from-olive/20 to-surface-2"
             />
 
-            <p className="absolute bottom-16 left-0 max-w-52 border border-line border-l-3 border-l-brass bg-surface px-4 py-3 font-display text-base leading-snug text-olive shadow-cartao duo:-left-14">
+            <p className="absolute bottom-16 left-0 max-w-nota border border-line border-l-3 border-l-brass bg-surface px-4 py-3 font-display text-base leading-snug text-olive shadow-cartao duo:-left-14">
               {perfil.selo}
             </p>
           </div>

@@ -154,4 +154,6 @@ A allowlist de uid fica nas rules — nunca em campo de documento, que a própri
 - AD-002: `features/` por domínio com `queries`/`mutations` separados, para impedir SDK de escrita no bundle público.
 - AD-003: `/publicacoes/[slug]` como rota real (SEO e compartilhamento), o resto do site permanece página única.
 - AD-004: conteúdo fixo centralizado em `src/content/site.ts`, com placeholders marcados até a entrega dos dados reais.
+- AD-044: fronteira entre as duas seções de formação — "Pedagogia" é o argumento (o que cada frente faz no atendimento, texto fixo); "Certificações" é o registro (instituição, ano e situação, vindos do Firestore). Um nome de curso pode aparecer nas duas; os papéis não se misturam.
+- AD-045: o selo circular do hero virou placa ancorada à esquerda do retrato — sobre a foto real o círculo competia com o rosto e o texto sumia no vestido branco.
 - AD-008: dois vocabulários de ação, por contexto — `ActionLink` (navegação e CTA do site público, visual do mockup) e `Button` do shadcn (ações do painel). Não unificar: o site é link, o painel é ação com estado de carregamento.

@@ -68,15 +68,16 @@
   --tracking-titulo: -0.02em;
   --tracking-marca: 0.02em;
   --tracking-rotulo: 0.14em;
-  /* Selo circular do hero: o texto corre em arco curto e precisa de menos
-     espaçamento que o rótulo para caber dentro do círculo. */
-  --tracking-selo: 0.08em;
   --tracking-sobretitulo: 0.22em;
   --tracking-papel: 0.34em;
 
   --breakpoint-cartao: 35rem;
   --breakpoint-duo: 51.25rem;
   --breakpoint-grade: 53.75rem;
+  /* Largura a partir da qual os seis rótulos do menu cabem em UMA linha. Abaixo
+     dela o menu quebra e transborda o cabeçalho — medido em 820px (três linhas)
+     e 880px (duas). Cresce se um item novo entrar na navegação. */
+  --breakpoint-menu: 60rem;
 
   --spacing-cabecalho: 4.25rem;
 

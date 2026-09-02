@@ -16,7 +16,7 @@ export function SiteHeader() {
         </a>
 
         <nav aria-label={cabecalho.rotuloNavegacao}>
-          <ul className="hidden items-center gap-7 duo:flex">
+          <ul className="hidden items-center gap-7 menu:flex">
             {navegacao.map((item) => (
               <li key={item.href}>
                 <a

@@ -5,35 +5,55 @@ import { secaoPedagogia } from "@/content/site";
 
 import { Pedagogia } from "./pedagogia";
 
-/** SIT-07 fixa quatro frentes — o número é da spec, não da constante. */
-const FRENTES_DA_SPEC = 4;
+/**
+ * SIT-07 fixa quatro frentes, nesta ordem — a ordem é o argumento da seção.
+ * Os valores são transcrição da spec, não leitura de `secaoPedagogia`: sem
+ * isso, reordenar ou renomear o conteúdo mantém a suíte verde (AD-037/AD-040).
+ */
+const FRENTES_DA_SPEC = [
+  "Pedagogia escolar",
+  "Pedagogia hospitalar",
+  "Educação e inclusão",
+  "Acompanhamento terapêutico",
+];
+const NUMEROS_DA_SPEC = ["01", "02", "03", "04"];
+
+function titulosNaOrdem() {
+  return screen
+    .getAllByRole("listitem")
+    .map(
+      (item) =>
+        within(item).getByRole("heading", { level: 3 }).textContent ?? "",
+    );
+}
 
 describe("Pedagogia", () => {
-  it("exibe as quatro frentes da spec", () => {
-    render(<Pedagogia />);
-
-    expect(screen.getAllByRole("listitem")).toHaveLength(FRENTES_DA_SPEC);
+  it("mantém o conteúdo fixo alinhado às quatro frentes da spec", () => {
+    expect(secaoPedagogia.frentes.map((frente) => frente.titulo)).toEqual(
+      FRENTES_DA_SPEC,
+    );
   });
 
-  it("numera as frentes na ordem em que sustentam a prática", () => {
+  it("exibe as frentes na ordem em que sustentam a prática", () => {
     render(<Pedagogia />);
 
-    const itens = screen.getAllByRole("listitem");
-    itens.forEach((item, indice) => {
-      const esperado = String(indice + 1).padStart(2, "0");
-      expect(within(item).getByText(esperado)).toBeInTheDocument();
-    });
+    expect(titulosNaOrdem()).toEqual(FRENTES_DA_SPEC);
   });
 
-  it("traz título e descrição de cada frente do conteúdo fixo", () => {
+  it("numera cada frente pela posição que ela ocupa", () => {
+    render(<Pedagogia />);
+
+    const numeros = screen
+      .getAllByRole("listitem")
+      .map((item) => item.textContent?.slice(0, 2) ?? "");
+
+    expect(numeros).toEqual(NUMEROS_DA_SPEC);
+  });
+
+  it("traz a descrição de cada frente do conteúdo fixo", () => {
     render(<Pedagogia />);
 
     for (const frente of secaoPedagogia.frentes) {
-      // Nível 3 desambigua da própria seção: a primeira frente se chama
-      // "Pedagogia", igual ao h2 que a contém.
-      expect(
-        screen.getByRole("heading", { level: 3, name: frente.titulo }),
-      ).toBeInTheDocument();
       expect(screen.getByText(frente.descricao)).toBeInTheDocument();
     }
   });

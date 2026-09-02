@@ -127,6 +127,16 @@ T36 → T46
 T27 → T47
 ```
 
+### Phase 10: Seção Pedagogia
+
+```
+T6 → T57
+T57 → T58
+T58 → T59
+T26 → T59
+T10 → T60
+```
+
 ### Phase 8: Lacunas da re-verificação
 
 ```
@@ -1244,3 +1254,85 @@ Os dois revisores rodaram sobre `b48c45d..16e1546`: **0 bloqueantes**. Aplicado 
 - Renomeados `TETO_DA_HOME_NA_SPEC` e `LIMITES_DE_PUBLICACAO_DA_SPEC`; docblock de `valores-da-spec.ts` passou a descrever a fronteira real (número da spec **que tem constante espelhada em produção**); removida a asserção constante-contra-constante de `queries.test.ts`, redundante com o `limit`; `"Publicação 7"` derivado do teto; descrição do pilar localizada pelo texto do conteúdo, não por `tagName`.
 
 Ficou de fora, por ser observação sem efeito na discriminação: mover `PILARES_DA_SPEC` para o módulo compartilhado (não há constante de produção espelhando o 6 dos pilares — o critério do módulo é justamente esse).
+
+---
+
+## Phase 10: Seção Pedagogia
+
+Pedida pelo usuário depois do UAT: o site apresentava a Keylla só como AT, e a
+formação em pedagogia — que é o que sustenta o trabalho — não aparecia na
+abertura. Mockup aprovado antes da implementação (trilha numerada de quatro
+frentes).
+
+### T57: Conteúdo das frentes de formação ✅
+
+**What**: Declarar `secaoPedagogia` com as quatro frentes, a âncora e o item de menu.
+**Where**: `src/content/site.ts`
+**Depends on**: T6
+**Requirement**: SIT-07
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Quatro frentes na ordem em que sustentam a prática
+- [x] Nenhum texto da seção escrito em componente
+- [x] `secaoFormacao` renomeada para "Certificações" (AD-044), sem competir no menu
+
+**Tests**: none
+**Gate**: build
+
+---
+
+### T58: Trilha das frentes ✅
+
+**What**: Seção que numera as frentes pela posição e liga os números no layout em colunas.
+**Where**: `src/features/site/sections/pedagogia.tsx`
+**Depends on**: T57
+**Requirement**: SIT-07
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Ordem e títulos asserido por literal da spec, não pela constante do conteúdo
+- [x] Traço sai de cada item, então a `ol` só tem `li` e a linha para no último número
+- [x] Some abaixo de `grade`, onde os blocos deixam de ficar lado a lado
+
+**Tests**: unit
+**Gate**: quick
+
+---
+
+### T59: Seção composta na home ✅
+
+**What**: Encaixar a seção entre os pilares e o Sobre, com o teste de ordem cobrindo os oito blocos.
+**Where**: `src/app/(site)/page.tsx`
+**Depends on**: T58, T26
+**Requirement**: SIT-01, SIT-07
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Ordem da home conforme SIT-01, com a seção nova em terceiro
+- [x] Teste de ordem reprova se a seção sair do lugar
+
+**Tests**: unit
+**Gate**: build
+
+---
+
+### T60: Placa no lugar do selo circular ✅
+
+**What**: Trocar o selo circular do hero por uma placa ancorada à esquerda do retrato.
+**Where**: `src/features/site/sections/hero.tsx`
+**Depends on**: T10
+**Requirement**: SIT-01
+
+**Tools**: MCP: NONE · Skill: NONE
+
+**Done when**:
+- [x] Fora do rosto no desktop, dentro do gutter no mobile, sem overflow em 360/414/768
+- [x] `perfil.selo` vira frase única — a quebra é do navegador, não escrita à mão
+- [x] `--tracking-selo`, criado só para o círculo, removido junto
+
+**Tests**: none (posição depende de layout, que jsdom não avalia — verificação por medição no navegador)
+**Gate**: build
